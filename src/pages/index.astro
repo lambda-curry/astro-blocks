@@ -19,6 +19,7 @@ const categories = [
 ];
 const heights: Record<string, number> = { "page-start": 820, section: 760, "page-end": 620, inline: 420 };
 const blocks = catalog.items.filter(({ usage }) => usage);
+const sections = blocks.filter(({ category }) => categories.some(({ id }) => id === category));
 const example = `npx shadcn@latest add ${catalog.repository}/hero-split#v${catalog.version}`;
 ---
 
@@ -26,12 +27,12 @@ const example = `npx shadcn@latest add ${catalog.repository}/hero-split#v${catal
   <HeroTypographic
     title="Polished Astro sections you copy, own and restyle"
     emphasis="own and restyle"
-    lede={`${blocks.length} native .astro blocks with scoped CSS, typed props and no client JavaScript. Add them with the shadcn CLI, or let the AI building your Site Boulder site add them for you.`}
+    lede={`${sections.length} native .astro sections with scoped CSS, typed props and no client JavaScript. Add them with the shadcn CLI, or let the AI building your Site Boulder site add them for you.`}
     actions={[
       { label: "Browse the blocks", href: "#blocks" },
       { label: "Read the source", href: `https://github.com/${catalog.repository}` },
     ]}
-    facts={[`${blocks.length} blocks`, "No client JavaScript", "shadcn-compatible", "MIT licensed"]}
+    facts={[`${sections.length} sections`, "No client JavaScript", "shadcn-compatible", "MIT licensed"]}
   />
 
   <section class="install" id="install" aria-labelledby="install-title">
