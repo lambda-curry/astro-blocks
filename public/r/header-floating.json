@@ -5,7 +5,7 @@
   "author": "Lambda Curry <https://github.com/lambda-curry>",
   "description": "A detached, rounded navigation bar that floats below the top edge with a translucent surface and a native popover menu on narrow screens.",
   "registryDependencies": [
-    "lambda-curry/astro-blocks/button#v0.1.1"
+    "lambda-curry/astro-blocks/button#v0.1.2"
   ],
   "files": [
     {

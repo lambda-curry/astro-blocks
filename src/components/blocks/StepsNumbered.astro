@@ -46,7 +46,8 @@ const StepHeading = `h${headingLevel + 1}` as "h3" | "h4";
 <style>
   .steps-numbered {
     container-type: inline-size;
-    padding-block: var(--section-gap, clamp(3rem, 8vw, 7rem));
+    /* Half the section gap on each side, so adjacent sections add up to one gap. */
+    padding-block: calc(var(--section-gap, clamp(3rem, 8vw, 7rem)) / 2);
     color: var(--color-text, #1b1f22);
   }
   .intro {

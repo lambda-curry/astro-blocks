@@ -5,7 +5,7 @@ Polished website sections for Astro, distributed as source you own. Every block 
 Astro Blocks is a [shadcn](https://ui.shadcn.com/docs/registry)-compatible registry. Installing a block copies ordinary, editable files into your project. Nothing stays linked: no runtime package, no hidden updates. Change anything.
 
 ```sh
-npx shadcn@latest add lambda-curry/astro-blocks/hero-split#v0.1.1
+npx shadcn@latest add lambda-curry/astro-blocks/hero-split#v0.1.2
 ```
 
 That writes `src/components/blocks/HeroSplit.astro` and its one dependency, `src/components/ui/Button.astro`. It works in any Astro project, without Tailwind, React or a `components.json`. Then:
@@ -37,15 +37,15 @@ import HeroSplit from "../components/blocks/HeroSplit.astro";
 List, search or inspect them from the CLI:
 
 ```sh
-npx shadcn@latest list lambda-curry/astro-blocks#v0.1.1
-npx shadcn@latest view lambda-curry/astro-blocks/timeline#v0.1.1
+npx shadcn@latest list lambda-curry/astro-blocks#v0.1.2
+npx shadcn@latest view lambda-curry/astro-blocks/timeline#v0.1.2
 ```
 
 Each item in [`registry.json`](registry.json) says when to use it and, as importantly, when not to. A numbered list is for a real sequence, a bento grid is for related items of different weight, and a giant footer wordmark is for a short name on an otherwise quiet site.
 
 ## Design
 
-- **Tokens, not themes.** Blocks read semantic custom properties: `--color-bg`, `--color-surface`, `--color-text`, `--color-muted`, `--color-accent`, `--color-on-accent`, `--font-display`, `--font-body`, the `--step-*` type scale, `--space-*`, `--radius-sm` and `--radius-lg`. Set them once, in your own theme, and every block follows. Each block also falls back to the neutral defaults in [`tokens.css`](src/styles/tokens.css) (`npx shadcn@latest add lambda-curry/astro-blocks/tokens#v0.1.1`), so nothing breaks without them.
+- **Tokens, not themes.** Blocks read semantic custom properties: `--color-bg`, `--color-surface`, `--color-text`, `--color-muted`, `--color-accent`, `--color-on-accent`, `--font-display`, `--font-body`, the `--step-*` type scale, `--space-*`, `--radius-sm` and `--radius-lg`. Set them once, in your own theme, and every block follows. Each block also falls back to the neutral defaults in [`tokens.css`](src/styles/tokens.css) (`npx shadcn@latest add lambda-curry/astro-blocks/tokens#v0.1.2`), so nothing breaks without them.
 - **Container queries.** Blocks lay out from the width they are given, so they work full-width or inside a narrow column.
 - **No client JavaScript.** Narrow-screen menus use the HTML `popover` attribute. The transparent header turns solid while scrolling through CSS scroll-driven animation where supported. The wordmark footer sizes the name with container units.
 - **Accessible by default.** One `h1` per page (heroes take `headingLevel`), visible focus, 44px targets, landmarks, alt text through props, and motion that respects `prefers-reduced-motion`.

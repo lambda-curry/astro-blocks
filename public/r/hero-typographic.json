@@ -5,7 +5,7 @@
   "author": "Lambda Curry <https://github.com/lambda-curry>",
   "description": "A large statement headline with one accented phrase, an optional lede and actions, and a ruled row of short facts.",
   "registryDependencies": [
-    "lambda-curry/astro-blocks/button#v0.1.1"
+    "lambda-curry/astro-blocks/button#v0.1.2"
   ],
   "files": [
     {
