@@ -1,6 +1,5 @@
 ---
 import HeaderTransparent from "../blocks/HeaderTransparent.astro";
-import HeroImmersive from "../blocks/HeroImmersive.astro";
 ---
 
 <HeaderTransparent
@@ -11,12 +10,4 @@ import HeroImmersive from "../blocks/HeroImmersive.astro";
     { label: "Journal", href: "/journal" },
   ]}
   action={{ label: "Plan a trip", href: "/plan" }}
-/>
-<HeroImmersive
-  title="Walk the dunes at first light"
-  lede="Small guided treks across the Kelso dunes, timed for the hour when the sand is cool and the shadows are long."
-  actions={[{ label: "See spring dates", href: "/trips" }, { label: "Meet the guides", href: "/guides" }]}
-  image={{ src: "/gallery/dune.svg", alt: "Layered dunes under a low evening sun", width: 1600, height: 1000 }}
-  position="60% 50%"
-  height="screen"
 />

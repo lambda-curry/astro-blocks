@@ -16,10 +16,11 @@ const categories = [
   { id: "walkthrough", label: "Walkthroughs", blurb: "Sequences, histories and step-by-step explanations." },
   { id: "features", label: "Features", blurb: "Offers and capabilities, as a ruled list or a grid of different weights." },
   { id: "footer", label: "Footers", blurb: "Endings from one quiet line to a closing invitation." },
+  { id: "primitive", label: "Primitives", blurb: "Small pieces the sections share, installed with them automatically." },
 ];
 const heights: Record<string, number> = { "page-start": 820, section: 760, "page-end": 620, inline: 420 };
 const blocks = catalog.items.filter(({ usage }) => usage);
-const sections = blocks.filter(({ category }) => categories.some(({ id }) => id === category));
+const sections = blocks.filter(({ category }) => category !== "primitive" && categories.some(({ id }) => id === category));
 const example = `npx shadcn@latest add ${catalog.repository}/hero-split#v${catalog.version}`;
 ---
 

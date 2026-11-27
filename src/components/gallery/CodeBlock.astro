@@ -35,9 +35,13 @@ const lines = code.trimEnd().split("\n").length;
     if (!button || !code || !navigator.clipboard) continue;
     button.hidden = false;
     button.addEventListener("click", async () => {
-      await navigator.clipboard.writeText(code.textContent ?? "");
-      button.textContent = "Copied";
-      setTimeout(() => (button.textContent = "Copy"), 1600);
+      try {
+        await navigator.clipboard.writeText(code.textContent ?? "");
+        button.textContent = "Copied";
+      } catch {
+        button.textContent = "Select the code to copy";
+      }
+      setTimeout(() => (button.textContent = "Copy"), 2400);
     });
   }
 </script>

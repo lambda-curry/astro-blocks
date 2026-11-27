@@ -51,9 +51,9 @@ const next = blocks[(index + 1) % blocks.length];
 <Base title={item.title} description={item.description}>
   <div class="detail">
     <nav class="crumbs" aria-label="Breadcrumb">
-      <a href={`/${query}#blocks`}>Blocks</a>
+      <a href={`/${query}#blocks`} data-theme-link>Blocks</a>
       <span aria-hidden="true">/</span>
-      <a href={`/${query}#${item.category}`}>{categoryLabels[item.category] ?? item.category}</a>
+      <a href={`/${query}#${item.category}`} data-theme-link>{categoryLabels[item.category] ?? item.category}</a>
     </nav>
     <header class="head">
       <h1>{item.title}</h1>
@@ -74,7 +74,7 @@ const next = blocks[(index + 1) % blocks.length];
       <div class="bar">
         <h2 id="preview-title">Live preview</h2>
         <ThemePicker current={theme} />
-        <a class="open" href={canvas} target="_blank" rel="noopener">Open full page <span aria-hidden="true">↗</span></a>
+        <a class="open" href={canvas} target="_blank" rel="noopener" data-theme-link>Open full page <span aria-hidden="true">↗</span></a>
       </div>
       <div class="frames">
         <figure>
@@ -119,8 +119,8 @@ const next = blocks[(index + 1) % blocks.length];
     </section>
 
     <nav class="pager" aria-label="More blocks">
-      <a href={`/blocks/${previous.name}${query}`} rel="prev"><span>Previous</span>{previous.title}</a>
-      <a href={`/blocks/${next.name}${query}`} rel="next"><span>Next</span>{next.title}</a>
+      <a href={`/blocks/${previous.name}${query}`} rel="prev" data-theme-link><span>Previous</span>{previous.title}</a>
+      <a href={`/blocks/${next.name}${query}`} rel="next" data-theme-link><span>Next</span>{next.title}</a>
     </nav>
   </div>
 </Base>

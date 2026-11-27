@@ -20,7 +20,7 @@ const query = theme === "default" ? "" : `?theme=${theme}`;
   <div class="thumb" inert>
     <Frame src={`/canvas/${name}${query}`} title={`${title} preview`} device="desktop" height={thumbnailHeight} thumbnail lazy />
   </div>
-  <h3 class="card-title"><a href={`/blocks/${name}${query}`}>{title}</a></h3>
+  <h3 class="card-title"><a href={`/blocks/${name}${query}`} data-theme-link>{title}</a></h3>
   <p class="card-text">{description}</p>
   <p class="card-name"><code>{name}</code></p>
 </article>

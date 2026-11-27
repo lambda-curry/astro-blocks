@@ -38,6 +38,11 @@ const { current } = Astro.props;
         apply(url);
         frame.src = url.pathname + url.search;
       }
+      for (const link of document.querySelectorAll<HTMLAnchorElement>("a[data-theme-link]")) {
+        const url = new URL(link.href, location.href);
+        apply(url);
+        link.href = url.pathname + url.search + url.hash;
+      }
       for (const other of document.querySelectorAll<HTMLAnchorElement>("[data-theme-picker] a[data-theme]")) {
         if (other.dataset.theme === theme) other.setAttribute("aria-current", "true");
         else other.removeAttribute("aria-current");

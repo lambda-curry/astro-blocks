@@ -9,7 +9,7 @@
 // Nothing is overwritten that the draft changed since it was last synced from here, except gallery
 // files this script owns. Tokens live in ~/.config/astro-blocks, never in the repository.
 import { createHash, randomBytes } from "node:crypto";
-import { mkdir, readFile, readdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import { createServer } from "node:http";
 import { homedir } from "node:os";
 import { dirname, join } from "node:path";
@@ -24,6 +24,7 @@ const option = (name) => {
 };
 const mcpUrl = new URL(option("--mcp") ?? "https://siteboulder.com/api/mcp");
 const tokenFile = join(homedir(), ".config", "astro-blocks", `${mcpUrl.host.replace(/[^a-z0-9.-]/gi, "_")}.json`);
+const pendingFile = `${tokenFile}.pending`;
 const scope = "openid offline_access site:read site:draft site:preview";
 const receipt = { calls: 0, requestBytes: 0, responseBytes: 0, phases: {} };
 
@@ -58,15 +59,48 @@ async function discover() {
   return { resource: resource.resource, ...(await (metadata.ok ? metadata : await fetch(new URL("/.well-known/oauth-authorization-server", issuer))).json()) };
 }
 
-async function saveTokens(tokens) {
-  await mkdir(dirname(tokenFile), { recursive: true, mode: 0o700 });
-  await writeFile(tokenFile, `${JSON.stringify(tokens, null, 2)}\n`, { mode: 0o600 });
+async function saveSecret(path, value) {
+  await mkdir(dirname(path), { recursive: true, mode: 0o700 });
+  await writeFile(path, `${JSON.stringify(value, null, 2)}\n`, { mode: 0o600 });
 }
+const saveTokens = (tokens) => saveSecret(tokenFile, tokens);
 
 async function login() {
   const server = await discover();
-  const port = Number(option("--port") ?? 8766);
-  const redirect = `http://127.0.0.1:${port}/callback`;
+  const codeUrl = option("--code-url");
+  // A browser on another machine can't reach the loopback redirect. Its final URL, pasted
+  // with --code-url, completes the authorization started by the previous login run.
+  const pending = codeUrl ? JSON.parse(await readFile(pendingFile, "utf8").catch(() => "null")) : await startAuthorization(server);
+  if (!pending) throw new Error("No pending authorization. Run login without --code-url first.");
+  const callback = codeUrl
+    ? new URL(codeUrl)
+    : await new Promise((resolve) => {
+        const listener = createServer((request, response) => {
+          const url = new URL(request.url, pending.redirect);
+          if (url.pathname !== "/callback") return response.writeHead(404).end();
+          response.writeHead(200, { "Content-Type": "text/plain" }).end("Site Boulder access approved. You can close this tab.");
+          listener.close();
+          resolve(url);
+        }).listen(new URL(pending.redirect).port, "127.0.0.1");
+      });
+  if (callback.searchParams.get("state") !== pending.state) throw new Error("OAuth state mismatch; start the login again.");
+  const code = callback.searchParams.get("code");
+  if (!code) throw new Error(`Authorization was not granted: ${callback.searchParams.get("error") ?? "no code"}`);
+  const tokens = await tokenRequest(server, {
+    grant_type: "authorization_code",
+    client_id: pending.clientId,
+    code,
+    redirect_uri: pending.redirect,
+    code_verifier: pending.verifier,
+    resource: server.resource,
+  });
+  await saveTokens({ clientId: pending.clientId, ...tokens });
+  await rm(pendingFile, { force: true });
+  console.log(`Saved access for ${mcpUrl.origin} to ${tokenFile}.`);
+}
+
+async function startAuthorization(server) {
+  const redirect = `http://127.0.0.1:${Number(option("--port") ?? 8766)}/callback`;
   const registration = await fetch(server.registration_endpoint, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -81,40 +115,23 @@ async function login() {
     }),
   });
   if (!registration.ok) throw new Error(`Client registration failed: HTTP ${registration.status} ${await registration.text()}`);
-  const clientId = (await registration.json()).client_id;
-  const verifier = randomBytes(48).toString("base64url");
-  const state = randomBytes(16).toString("hex");
+  const pending = { clientId: (await registration.json()).client_id, verifier: randomBytes(48).toString("base64url"), state: randomBytes(16).toString("hex"), redirect };
+  await saveSecret(pendingFile, pending);
   const authorize = new URL(server.authorization_endpoint);
   for (const [key, value] of Object.entries({
     response_type: "code",
-    client_id: clientId,
+    client_id: pending.clientId,
     redirect_uri: redirect,
     scope,
-    state,
+    state: pending.state,
     resource: server.resource,
-    code_challenge: createHash("sha256").update(verifier).digest("base64url"),
+    code_challenge: createHash("sha256").update(pending.verifier).digest("base64url"),
     code_challenge_method: "S256",
   }))
     authorize.searchParams.set(key, value);
   console.log(`Open this URL, sign in and approve access:\n\n${authorize}\n`);
-  console.log(`Waiting on ${redirect}. If the browser is on another machine, rerun with --code-url "<the URL it was redirected to>".`);
-  const callback = option("--code-url")
-    ? new URL(option("--code-url"))
-    : await new Promise((resolve) => {
-        const listener = createServer((request, response) => {
-          const url = new URL(request.url, redirect);
-          if (url.pathname !== "/callback") return response.writeHead(404).end();
-          response.writeHead(200, { "Content-Type": "text/plain" }).end("Site Boulder access approved. You can close this tab.");
-          listener.close();
-          resolve(url);
-        }).listen(port, "127.0.0.1");
-      });
-  if (callback.searchParams.get("state") !== state) throw new Error("OAuth state mismatch; start the login again.");
-  const code = callback.searchParams.get("code");
-  if (!code) throw new Error(`Authorization was not granted: ${callback.searchParams.get("error") ?? "no code"}`);
-  const tokens = await tokenRequest(server, { grant_type: "authorization_code", client_id: clientId, code, redirect_uri: redirect, code_verifier: verifier, resource: server.resource });
-  await saveTokens({ clientId, ...tokens });
-  console.log(`Saved access for ${mcpUrl.origin} to ${tokenFile}.`);
+  console.log(`Waiting on ${redirect}. If the browser is on another machine, stop this and run login again with --code-url "<the URL it was redirected to>".`);
+  return pending;
 }
 
 async function tokenRequest(server, form) {
@@ -137,7 +154,8 @@ async function accessToken() {
 
 let bearer;
 async function tool(name, args) {
-  const body = JSON.stringify({ jsonrpc: "2.0", id: ++receipt.calls, method: "tools/call", params: { name, arguments: args } });
+  const id = ++receipt.calls;
+  const body = JSON.stringify({ jsonrpc: "2.0", id, method: "tools/call", params: { name, arguments: args } });
   receipt.requestBytes += Buffer.byteLength(body);
   const response = await fetch(mcpUrl, {
     method: "POST",
@@ -147,7 +165,18 @@ async function tool(name, args) {
   const text = await response.text();
   receipt.responseBytes += Buffer.byteLength(text);
   if (!response.ok) throw new Error(`${name}: HTTP ${response.status} ${text.slice(0, 300)}`);
-  const message = JSON.parse(text.startsWith("event:") ? text.split("\n").find((line) => line.startsWith("data: ")).slice(6) : text);
+  const messages = response.headers.get("content-type")?.startsWith("text/event-stream")
+    ? text.split(/\r?\n\r?\n/).flatMap((event) => {
+        const data = event
+          .split(/\r?\n/)
+          .filter((line) => line.startsWith("data:"))
+          .map((line) => line.slice(5).replace(/^ /, ""))
+          .join("\n");
+        return data ? [JSON.parse(data)] : [];
+      })
+    : [JSON.parse(text)];
+  const message = messages.find((item) => item.id === id);
+  if (!message) throw new Error(`${name}: no JSON-RPC response for request ${id}`);
   if (message.error) throw new Error(`${name}: ${message.error.message}`);
   const result = message.result.structuredContent ?? JSON.parse(message.result.content[0].text);
   return { ...result, isError: Boolean(message.result.isError) };
@@ -170,6 +199,7 @@ async function sync() {
   const dryRun = flag("--dry-run");
   const catalog = JSON.parse(await readFile(join(root, "src/data/catalog.json"), "utf8"));
   let siteId = option("--site");
+  if (!siteId && dryRun) throw new Error("--dry-run needs an existing --site; it never creates a draft.");
   if (!siteId) {
     const name = option("--create");
     if (!name) throw new Error("Pass --site <id> or --create <name>.");

@@ -1,6 +1,5 @@
 ---
 import HeaderFloating from "../blocks/HeaderFloating.astro";
-import HeroSplit from "../blocks/HeroSplit.astro";
 ---
 
 <HeaderFloating
@@ -13,11 +12,3 @@ import HeroSplit from "../blocks/HeroSplit.astro";
   ]}
   action={{ label: "Start a project", href: "/contact" }}
 />
-<main style="inline-size: min(72rem, 100% - 2.5rem); margin-inline: auto;">
-  <HeroSplit
-    title="Rooms that hold the light all day"
-    lede="Fernhill is a four-person architecture studio designing homes and small workplaces around how sunlight moves through them."
-    actions={[{ label: "See the work", href: "/work" }, { label: "How we work", href: "/practice" }]}
-    image={{ src: "/gallery/atelier.svg", alt: "Sunlit studio interior with a tall arched window", width: 1200, height: 1500 }}
-  />
-</main>

@@ -1,6 +1,5 @@
 ---
 import HeaderEditorial from "../blocks/HeaderEditorial.astro";
-import HeroTypographic from "../blocks/HeroTypographic.astro";
 ---
 
 <HeaderEditorial
@@ -16,13 +15,3 @@ import HeroTypographic from "../blocks/HeroTypographic.astro";
   ]}
   action={{ label: "Subscribe", href: "/subscribe" }}
 />
-<main style="inline-size: min(72rem, 100% - 2.5rem); margin-inline: auto;">
-  <HeroTypographic
-    title="The quiet economy of small presses"
-    emphasis="small presses"
-    lede="How a dozen two-person publishers keep regional writing in print, told by the people who run them."
-    actions={[{ label: "Read the lead essay", href: "/essays/small-presses" }]}
-    align="center"
-    headingLevel={1}
-  />
-</main>

@@ -53,6 +53,7 @@ const width = device === "phone" ? 390 : 1280;
     min-inline-size: 0;
   }
   .viewport {
+    box-sizing: content-box;
     position: relative;
     inline-size: calc(var(--w) * var(--s) * 1px);
     block-size: calc(var(--h) * var(--s) * 1px);
@@ -83,37 +84,37 @@ const width = device === "phone" ? 390 : 1280;
   .device-desktop {
     --s: 0.22;
   }
-  @container (min-width: 320px) {
+  @container (min-width: 322px) {
     .device-desktop .viewport {
       --s: 0.25;
     }
   }
-  @container (min-width: 400px) {
+  @container (min-width: 402px) {
     .device-desktop .viewport {
       --s: 0.3125;
     }
   }
-  @container (min-width: 480px) {
+  @container (min-width: 482px) {
     .device-desktop .viewport {
       --s: 0.375;
     }
   }
-  @container (min-width: 640px) {
+  @container (min-width: 642px) {
     .device-desktop .viewport {
       --s: 0.5;
     }
   }
-  @container (min-width: 800px) {
+  @container (min-width: 802px) {
     .device-desktop .viewport {
       --s: 0.625;
     }
   }
-  @container (min-width: 960px) {
+  @container (min-width: 962px) {
     .device-desktop .viewport {
       --s: 0.75;
     }
   }
-  @container (min-width: 1120px) {
+  @container (min-width: 1122px) {
     .device-desktop .viewport {
       --s: 0.875;
     }
@@ -121,12 +122,12 @@ const width = device === "phone" ? 390 : 1280;
   .device-phone {
     --s: 0.72;
   }
-  @container (min-width: 300px) {
+  @container (min-width: 324px) {
     .device-phone .viewport {
       --s: 0.8;
     }
   }
-  @container (min-width: 404px) {
+  @container (min-width: 402px) {
     .device-phone .viewport {
       --s: 1;
     }

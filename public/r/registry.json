@@ -70,7 +70,7 @@
         "header"
       ],
       "registryDependencies": [
-        "lambda-curry/astro-blocks/button#v0.1.0"
+        "lambda-curry/astro-blocks/button#v0.1.1"
       ],
       "docs": "Import from src/components/blocks/HeaderFloating.astro. The narrow-screen menu uses the HTML popover attribute and needs no JavaScript.",
       "meta": {
@@ -106,7 +106,7 @@
         "header"
       ],
       "registryDependencies": [
-        "lambda-curry/astro-blocks/button#v0.1.0"
+        "lambda-curry/astro-blocks/button#v0.1.1"
       ],
       "docs": "Import from src/components/blocks/HeaderEditorial.astro.",
       "meta": {
@@ -142,7 +142,7 @@
         "header"
       ],
       "registryDependencies": [
-        "lambda-curry/astro-blocks/button#v0.1.0"
+        "lambda-curry/astro-blocks/button#v0.1.1"
       ],
       "docs": "Import from src/components/blocks/HeaderTransparent.astro and put a full-bleed opening such as hero-immersive directly after it.",
       "meta": {
@@ -179,7 +179,7 @@
         "header"
       ],
       "registryDependencies": [
-        "lambda-curry/astro-blocks/button#v0.1.0"
+        "lambda-curry/astro-blocks/button#v0.1.1"
       ],
       "docs": "Import from src/components/blocks/HeaderMinimal.astro.",
       "meta": {
@@ -214,7 +214,7 @@
         "hero"
       ],
       "registryDependencies": [
-        "lambda-curry/astro-blocks/button#v0.1.0"
+        "lambda-curry/astro-blocks/button#v0.1.1"
       ],
       "docs": "Import from src/components/blocks/HeroSplit.astro. Pass image, or use the media slot for a picture, video or SVG.",
       "meta": {
@@ -248,7 +248,7 @@
         "hero"
       ],
       "registryDependencies": [
-        "lambda-curry/astro-blocks/button#v0.1.0"
+        "lambda-curry/astro-blocks/button#v0.1.1"
       ],
       "docs": "Import from src/components/blocks/HeroImmersive.astro. It breaks out of a centered column and clips the page's horizontal overflow.",
       "meta": {
@@ -285,7 +285,7 @@
         "hero"
       ],
       "registryDependencies": [
-        "lambda-curry/astro-blocks/button#v0.1.0"
+        "lambda-curry/astro-blocks/button#v0.1.1"
       ],
       "docs": "Import from src/components/blocks/HeroTypographic.astro. Set emphasis to a phrase that appears in title.",
       "meta": {
@@ -448,7 +448,7 @@
         "features"
       ],
       "registryDependencies": [
-        "lambda-curry/astro-blocks/button#v0.1.0"
+        "lambda-curry/astro-blocks/button#v0.1.1"
       ],
       "docs": "Import from src/components/blocks/FeaturesEditorial.astro.",
       "meta": {
@@ -515,7 +515,7 @@
         "footer"
       ],
       "registryDependencies": [
-        "lambda-curry/astro-blocks/button#v0.1.0"
+        "lambda-curry/astro-blocks/button#v0.1.1"
       ],
       "docs": "Import from src/components/blocks/FooterColumns.astro. In a Site Boulder site, render it from SiteFooter.astro and pass the existing credit link.",
       "meta": {
@@ -583,7 +583,7 @@
         "footer"
       ],
       "registryDependencies": [
-        "lambda-curry/astro-blocks/button#v0.1.0"
+        "lambda-curry/astro-blocks/button#v0.1.1"
       ],
       "docs": "Import from src/components/blocks/FooterCta.astro. In a Site Boulder site, render it from SiteFooter.astro and pass the existing credit link.",
       "meta": {
