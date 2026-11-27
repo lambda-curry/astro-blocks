@@ -5,7 +5,7 @@
   "author": "Lambda Curry <https://github.com/lambda-curry>",
   "description": "A full-bleed photograph or artwork with the headline, lede and actions set in white over a contrast-safe gradient scrim.",
   "registryDependencies": [
-    "lambda-curry/astro-blocks/button#v0.1.1"
+    "lambda-curry/astro-blocks/button#v0.1.2"
   ],
   "files": [
     {

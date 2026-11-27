@@ -5,7 +5,7 @@
   "author": "Lambda Curry <https://github.com/lambda-curry>",
   "description": "A brand block with description and action beside titled link columns, over a bottom bar for copyright, legal links and a credit.",
   "registryDependencies": [
-    "lambda-curry/astro-blocks/button#v0.1.1"
+    "lambda-curry/astro-blocks/button#v0.1.2"
   ],
   "files": [
     {

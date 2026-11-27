@@ -5,7 +5,7 @@
   "author": "Lambda Curry <https://github.com/lambda-curry>",
   "description": "A header that overlays the opening image in light or dark ink, with a native popover menu on narrow screens and, where supported, a solid surface that fades in while scrolling.",
   "registryDependencies": [
-    "lambda-curry/astro-blocks/button#v0.1.1"
+    "lambda-curry/astro-blocks/button#v0.1.2"
   ],
   "files": [
     {
