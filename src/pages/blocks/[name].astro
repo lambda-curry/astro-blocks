@@ -1,0 +1,270 @@
+---
+import Base from "../../layouts/Base.astro";
+import CodeBlock from "../../components/gallery/CodeBlock.astro";
+import Frame from "../../components/gallery/Frame.astro";
+import PropsTable from "../../components/gallery/PropsTable.astro";
+import ThemePicker from "../../components/gallery/ThemePicker.astro";
+import catalog from "../../data/catalog.json";
+import themes from "../../data/gallery-themes.json";
+
+type CatalogItem = {
+  name: string;
+  title: string;
+  description: string;
+  category: string;
+  useWhen: string;
+  avoidWhen: string;
+  placement?: string;
+  dependencies: string[];
+  files: { target: string }[];
+  props?: { name: string; type: string; required: boolean; default?: string; description?: string }[];
+  types?: Record<string, string>;
+  slots?: string[];
+  passthrough?: string[];
+  usage?: string;
+  install: string;
+};
+
+// The exact installed files, read as text, so the source shown is the source rendered.
+const sources = {
+  ...import.meta.glob<string>("../../components/blocks/*.astro", { query: "?raw", import: "default", eager: true }),
+  ...import.meta.glob<string>("../../components/ui/*.astro", { query: "?raw", import: "default", eager: true }),
+};
+const items = catalog.items as CatalogItem[];
+const blocks = items.filter(({ usage }) => usage);
+const index = blocks.findIndex(({ name }) => name === Astro.params.name);
+if (index === -1) return new Response("Not found", { status: 404 });
+const item = blocks[index];
+const requested = Astro.url.searchParams.get("theme");
+const theme = themes.some(({ id }) => id === requested) ? requested! : "default";
+const query = theme === "default" ? "" : `?theme=${theme}`;
+const canvas = `/canvas/${item.name}${query}`;
+const heights: Record<string, number> = { "page-start": 820, section: 760, "page-end": 620, inline: 420 };
+const height = heights[item.placement ?? "section"] ?? 760;
+const categoryLabels: Record<string, string> = { header: "Headers", hero: "Heroes", walkthrough: "Walkthroughs", features: "Features", footer: "Footers", primitive: "Primitives" };
+const installs = [...new Set(items.filter(({ name }) => name === item.name || item.dependencies.includes(name)).flatMap(({ files }) => files.map(({ target }) => target)))];
+const files = item.files.map(({ target }) => ({ target, code: sources[`../../${target.replace(/^src\//, "")}`] }));
+const previous = blocks[(index - 1 + blocks.length) % blocks.length];
+const next = blocks[(index + 1) % blocks.length];
+---
+
+<Base title={item.title} description={item.description}>
+  <div class="detail">
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <a href={`/${query}#blocks`}>Blocks</a>
+      <span aria-hidden="true">/</span>
+      <a href={`/${query}#${item.category}`}>{categoryLabels[item.category] ?? item.category}</a>
+    </nav>
+    <header class="head">
+      <h1>{item.title}</h1>
+      <p class="lede">{item.description}</p>
+      <dl class="judgment">
+        <div>
+          <dt>Use when</dt>
+          <dd>{item.useWhen}</dd>
+        </div>
+        <div>
+          <dt>Avoid when</dt>
+          <dd>{item.avoidWhen}</dd>
+        </div>
+      </dl>
+    </header>
+
+    <section class="previews" aria-labelledby="preview-title">
+      <div class="bar">
+        <h2 id="preview-title">Live preview</h2>
+        <ThemePicker current={theme} />
+        <a class="open" href={canvas} target="_blank" rel="noopener">Open full page <span aria-hidden="true">↗</span></a>
+      </div>
+      <div class="frames">
+        <figure>
+          <Frame src={canvas} title={`${item.title} at desktop width`} device="desktop" height={height} />
+          <figcaption>Desktop, 1280px</figcaption>
+        </figure>
+        <figure>
+          <Frame src={canvas} title={`${item.title} at phone width`} device="phone" height={780} />
+          <figcaption>Phone, 390px</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="usage" aria-labelledby="install-title">
+      <h2 id="install-title">Install</h2>
+      <CodeBlock code={item.install} label="Any Astro project" />
+      <p class="note">
+        Writes {installs.map((target, position) => (
+          <>
+            {position > 0 && (position === installs.length - 1 ? " and " : ", ")}
+            <code>{target}</code>
+          </>
+        ))}. In a Site Boulder site, ask your AI to add <code>{item.name}</code> from Astro Blocks; it copies the same files with <code>registry_add</code>.
+      </p>
+      <h2>Usage</h2>
+      <CodeBlock code={item.usage!} label={`src/pages/index.astro`} />
+    </section>
+
+    {
+      item.props && (
+        <section class="api" aria-labelledby="props-title">
+          <h2 id="props-title">Props</h2>
+          <PropsTable props={item.props} types={item.types} slots={item.slots} passthrough={item.passthrough} />
+        </section>
+      )
+    }
+
+    <section class="source" aria-labelledby="source-title">
+      <h2 id="source-title">Source</h2>
+      <p class="note">Exactly the files an install writes. Edit them freely once they are in your project.</p>
+      {files.map(({ target, code }) => code && <CodeBlock code={code} label={target} collapsed />)}
+    </section>
+
+    <nav class="pager" aria-label="More blocks">
+      <a href={`/blocks/${previous.name}${query}`} rel="prev"><span>Previous</span>{previous.title}</a>
+      <a href={`/blocks/${next.name}${query}`} rel="next"><span>Next</span>{next.title}</a>
+    </nav>
+  </div>
+</Base>
+
+<style>
+  .detail {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(2.5rem, 6vw, 4rem);
+    padding-block: clamp(1.5rem, 4vw, 2.5rem) 0;
+  }
+  .crumbs {
+    display: flex;
+    gap: 0.5rem;
+    margin-block-end: -1.5rem;
+    color: var(--color-muted);
+    font-size: var(--step--1);
+  }
+  .crumbs a {
+    color: inherit;
+    text-underline-offset: 0.25em;
+  }
+  .head h1 {
+    margin: 0;
+    font-size: var(--step-5);
+    line-height: 1;
+  }
+  .lede {
+    max-inline-size: 46ch;
+    margin: 1rem 0 0;
+    color: var(--color-muted);
+    font-size: var(--step-1);
+    line-height: 1.45;
+  }
+  .judgment {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+    gap: 1rem 2rem;
+    margin: 2rem 0 0;
+  }
+  .judgment div {
+    padding-block-start: 0.75rem;
+    border-block-start: 2px solid var(--color-text);
+  }
+  .judgment div + div {
+    border-block-start-color: color-mix(in oklab, var(--color-text) 25%, transparent);
+  }
+  .judgment dt {
+    font-weight: var(--weight-action);
+  }
+  .judgment dd {
+    margin: 0.25rem 0 0;
+    color: var(--color-muted);
+  }
+  h2 {
+    margin: 0;
+    font-size: var(--step-2);
+  }
+  .bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 2rem;
+    margin-block-end: 1.25rem;
+  }
+  .bar h2 {
+    margin-inline-end: auto;
+  }
+  .open {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: 44px;
+    font-weight: var(--weight-action);
+    text-underline-offset: 0.25em;
+  }
+  .frames {
+    display: grid;
+    gap: 1.5rem;
+    align-items: start;
+  }
+  .frames figure {
+    min-inline-size: 0;
+    margin: 0;
+  }
+  .frames figcaption {
+    margin-block-start: 0.625rem;
+    color: var(--color-muted);
+    font-size: var(--step--1);
+    text-align: center;
+  }
+  @media (min-width: 64rem) {
+    .frames {
+      grid-template-columns: minmax(0, 1fr) 21rem;
+    }
+  }
+  .usage,
+  .api,
+  .source {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+    min-inline-size: 0;
+  }
+  .usage h2 + * {
+    margin-block-start: 0.25rem;
+  }
+  .usage h2:not(:first-child) {
+    margin-block-start: 1.5rem;
+  }
+  .note {
+    margin: 0;
+    color: var(--color-muted);
+    font-size: var(--step--1);
+  }
+  .note code {
+    font: 0.875em ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    overflow-wrap: anywhere;
+  }
+  .pager {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+    gap: 1rem;
+    padding-block-start: 1.5rem;
+    border-block-start: 1px solid color-mix(in oklab, var(--color-text) 14%, transparent);
+  }
+  .pager a {
+    display: grid;
+    gap: 0.125rem;
+    padding: 0.75rem 0;
+    color: var(--color-text);
+    font-size: var(--step-1);
+    font-weight: var(--weight-display);
+    text-decoration: none;
+  }
+  .pager a:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+  .pager a[rel="next"] {
+    text-align: end;
+  }
+  .pager span {
+    color: var(--color-muted);
+    font-size: var(--step--1);
+    font-weight: var(--weight-action);
+  }
+</style>

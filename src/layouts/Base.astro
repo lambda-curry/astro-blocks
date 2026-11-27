@@ -1,0 +1,60 @@
+---
+// Workbench stand-in for a Site Boulder draft's Base layout, with the same props and
+// page frame. The draft keeps its own Base, so this file is never synced.
+import SiteHeader from "../components/SiteHeader.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import site from "../data/site.json";
+import "../styles/tokens.css";
+import "../styles/theme.css";
+import "../styles/gallery-base.css";
+
+interface Props {
+  title?: string;
+  description?: string | null;
+}
+
+const { title = site.name, description = site.tagline } = Astro.props;
+const fullTitle = title === site.name ? title : `${title} — ${site.name}`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    {description && <meta name="description" content={description} />}
+  </head>
+  <body class="workbench">
+    <a class="skip-link" href="#main">Skip to content</a>
+    <SiteHeader name={site.name} logo={null} links={site.nav} />
+    <main class="site-shell site-main" id="main" tabindex="-1">
+      <slot />
+    </main>
+    <SiteFooter name={site.name} note={site.footer} links={site.social} />
+  </body>
+</html>
+
+<style is:global>
+  .workbench {
+    display: flex;
+    flex-direction: column;
+  }
+  .workbench .site-shell {
+    inline-size: min(var(--width-content), 100% - 2 * var(--space-gutter));
+    margin-inline: auto;
+  }
+  .workbench .site-main {
+    flex-grow: 1;
+  }
+  .workbench .skip-link {
+    position: absolute;
+    inset: 0.5rem auto auto 0.5rem;
+    z-index: 50;
+    padding: 0.65rem 1rem;
+    background: var(--color-bg);
+  }
+  .workbench .skip-link:not(:focus) {
+    clip-path: inset(50%);
+  }
+</style>

@@ -1,0 +1,134 @@
+---
+// A live example rendered at a real device width and scaled to fit, so viewport units,
+// sticky headers and popover menus behave exactly as they would on a phone or a desktop.
+interface Props {
+  src: string;
+  title: string;
+  device: "desktop" | "phone";
+  /** Height of the virtual viewport in CSS pixels. */
+  height?: number;
+  /** Thumbnails are decorative: no focus, no pointer, no screen reader announcement. */
+  thumbnail?: boolean;
+  lazy?: boolean;
+}
+
+const { src, title, device, height = device === "phone" ? 780 : 820, thumbnail = false, lazy = false } = Astro.props;
+const width = device === "phone" ? 390 : 1280;
+---
+
+<div class:list={["frame", `device-${device}`, { thumbnail }]} style={`--w: ${width}; --h: ${height}`}>
+  <div class="viewport">
+    <iframe
+      src={src}
+      title={title}
+      width={width}
+      height={height}
+      loading={lazy ? "lazy" : undefined}
+      tabindex={thumbnail ? -1 : undefined}
+      aria-hidden={thumbnail ? "true" : undefined}
+      data-frame
+      data-fit={thumbnail ? undefined : ""}></iframe>
+  </div>
+</div>
+
+<script>
+  // Fit interactive frames to their content once loaded (same-origin canvases only).
+  const fit = (frame: HTMLIFrameElement) => {
+    const page = frame.contentDocument?.documentElement;
+    if (!page) return;
+    const height = Math.min(Math.max(page.scrollHeight, 320), 2400);
+    frame.style.blockSize = `${height}px`;
+    frame.closest<HTMLElement>(".frame")?.style.setProperty("--h", String(height));
+  };
+  for (const frame of document.querySelectorAll<HTMLIFrameElement>("iframe[data-fit]")) {
+    frame.addEventListener("load", () => fit(frame));
+    if (frame.contentDocument?.readyState === "complete") fit(frame);
+  }
+</script>
+
+<style>
+  .frame {
+    --s: 0.25;
+    container-type: inline-size;
+    min-inline-size: 0;
+  }
+  .viewport {
+    position: relative;
+    inline-size: calc(var(--w) * var(--s) * 1px);
+    block-size: calc(var(--h) * var(--s) * 1px);
+    margin-inline: auto;
+    overflow: hidden;
+    border: 1px solid color-mix(in oklab, var(--color-text) 14%, transparent);
+    border-radius: var(--radius-lg);
+    background: var(--color-bg);
+    box-shadow: 0 18px 40px -28px rgb(0 0 0 / 0.45);
+  }
+  .device-phone .viewport {
+    border-radius: calc(var(--radius-lg) + 0.75rem);
+    border-width: 6px;
+    border-color: color-mix(in oklab, var(--color-text) 88%, transparent);
+  }
+  iframe {
+    display: block;
+    inline-size: calc(var(--w) * 1px);
+    block-size: calc(var(--h) * 1px);
+    max-inline-size: none;
+    border: 0;
+    transform: scale(var(--s));
+    transform-origin: 0 0;
+  }
+  .thumbnail iframe {
+    pointer-events: none;
+  }
+  .device-desktop {
+    --s: 0.22;
+  }
+  @container (min-width: 320px) {
+    .device-desktop .viewport {
+      --s: 0.25;
+    }
+  }
+  @container (min-width: 400px) {
+    .device-desktop .viewport {
+      --s: 0.3125;
+    }
+  }
+  @container (min-width: 480px) {
+    .device-desktop .viewport {
+      --s: 0.375;
+    }
+  }
+  @container (min-width: 640px) {
+    .device-desktop .viewport {
+      --s: 0.5;
+    }
+  }
+  @container (min-width: 800px) {
+    .device-desktop .viewport {
+      --s: 0.625;
+    }
+  }
+  @container (min-width: 960px) {
+    .device-desktop .viewport {
+      --s: 0.75;
+    }
+  }
+  @container (min-width: 1120px) {
+    .device-desktop .viewport {
+      --s: 0.875;
+    }
+  }
+  .device-phone {
+    --s: 0.72;
+  }
+  @container (min-width: 300px) {
+    .device-phone .viewport {
+      --s: 0.8;
+    }
+  }
+  @container (min-width: 404px) {
+    .device-phone .viewport {
+      --s: 1;
+    }
+  }
+</style>

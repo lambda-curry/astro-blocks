@@ -1,0 +1,152 @@
+---
+// Props, types and slots as derived from the component source by the registry build.
+interface Prop {
+  name: string;
+  type: string;
+  required: boolean;
+  default?: string;
+  description?: string;
+}
+interface Props {
+  props: Prop[];
+  types?: Record<string, string>;
+  slots?: string[];
+  passthrough?: string[];
+}
+
+const { props, types = {}, slots = [], passthrough = [] } = Astro.props;
+---
+
+<div class="props-table">
+  <div class="scroller">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Prop</th>
+          <th scope="col">Type</th>
+          <th scope="col">Default</th>
+          <th scope="col">Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          props.map((prop) => (
+            <tr>
+              <th scope="row">
+                <code>{prop.name}</code>
+                {prop.required && <span class="required">required</span>}
+              </th>
+              <td>
+                <code>{prop.type}</code>
+              </td>
+              <td>{prop.default ? <code>{prop.default}</code> : <span class="none">—</span>}</td>
+              <td>{prop.description}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+  {
+    Object.keys(types).length > 0 && (
+      <dl class="types">
+        {Object.entries(types).map(([name, shape]) => (
+          <div>
+            <dt>
+              <code>{name}</code>
+            </dt>
+            <dd>
+              <code>{shape}</code>
+            </dd>
+          </div>
+        ))}
+      </dl>
+    )
+  }
+  {
+    (slots.length > 0 || passthrough.length > 0) && (
+      <p class="extras">
+        {slots.length > 0 && (
+          <span>
+            Slots:{" "}
+            {slots.map((slot, index) => (
+              <>
+                {index > 0 && ", "}
+                <code>{slot}</code>
+              </>
+            ))}
+            .
+          </span>
+        )}{" "}
+        {passthrough.length > 0 && <span>Other attributes pass through to the {passthrough.map((tag) => `<${tag}>`).join(" or ")} element.</span>}
+      </p>
+    )
+  }
+</div>
+
+<style>
+  .scroller {
+    overflow-x: auto;
+    border: 1px solid color-mix(in oklab, var(--color-text) 12%, transparent);
+    border-radius: var(--radius-lg);
+  }
+  table {
+    inline-size: 100%;
+    min-inline-size: 40rem;
+    border-collapse: collapse;
+    font-size: var(--step--1);
+  }
+  th,
+  td {
+    padding: 0.75rem 1rem;
+    border-block-end: 1px solid color-mix(in oklab, var(--color-text) 10%, transparent);
+    text-align: start;
+    vertical-align: top;
+  }
+  thead th {
+    color: var(--color-muted);
+    font-weight: var(--weight-action);
+  }
+  tbody tr:last-child > * {
+    border-block-end: 0;
+  }
+  tbody th {
+    font-weight: 400;
+    white-space: nowrap;
+  }
+  code {
+    font: 0.8125rem / 1.5 ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
+  }
+  td code {
+    overflow-wrap: anywhere;
+  }
+  .required {
+    display: block;
+    color: var(--color-accent);
+    font-size: 0.75rem;
+    font-weight: var(--weight-action);
+  }
+  .none {
+    color: var(--color-muted);
+  }
+  .types {
+    display: grid;
+    gap: 0.5rem;
+    margin: 1rem 0 0;
+    font-size: var(--step--1);
+  }
+  .types div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 0.75rem;
+  }
+  .types dt,
+  .types dd {
+    margin: 0;
+  }
+  .extras {
+    margin: 1rem 0 0;
+    color: var(--color-muted);
+    font-size: var(--step--1);
+  }
+</style>

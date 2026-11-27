@@ -1,0 +1,83 @@
+---
+// One catalog item: a live desktop thumbnail and what the block is for.
+import Frame from "./Frame.astro";
+
+interface Props {
+  name: string;
+  title: string;
+  description: string;
+  tags: string[];
+  category: string;
+  theme: string;
+  thumbnailHeight: number;
+}
+
+const { name, title, description, tags, category, theme, thumbnailHeight } = Astro.props;
+const query = theme === "default" ? "" : `?theme=${theme}`;
+---
+
+<article class="block-card" data-card data-category={category} data-search={[name, title, description, ...tags].join(" ").toLowerCase()}>
+  <div class="thumb" inert>
+    <Frame src={`/canvas/${name}${query}`} title={`${title} preview`} device="desktop" height={thumbnailHeight} thumbnail lazy />
+  </div>
+  <h3 class="card-title"><a href={`/blocks/${name}${query}`}>{title}</a></h3>
+  <p class="card-text">{description}</p>
+  <p class="card-name"><code>{name}</code></p>
+</article>
+
+<style>
+  .block-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-inline-size: 0;
+  }
+  .thumb {
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+  }
+  .thumb :global(.viewport) {
+    max-block-size: 15rem;
+    box-shadow: none;
+  }
+  .card-title {
+    margin: 1rem 0 0;
+    font-size: var(--step-1);
+    line-height: 1.2;
+  }
+  .card-title a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .card-title a::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+  .card-title a:focus-visible {
+    outline: none;
+  }
+  .card-title a:focus-visible::after {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 6px;
+    border-radius: var(--radius-lg);
+  }
+  .block-card:hover .card-title a {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.2em;
+  }
+  .card-text {
+    margin: 0.375rem 0 0;
+    color: var(--color-muted);
+    font-size: var(--step--1);
+    line-height: 1.5;
+  }
+  .card-name {
+    margin: 0.625rem 0 0;
+  }
+  .card-name code {
+    color: var(--color-muted);
+    font: 0.75rem / 1.4 ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
+  }
+</style>

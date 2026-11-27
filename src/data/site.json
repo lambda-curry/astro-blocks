@@ -1,0 +1,11 @@
+{
+  "name": "Astro Blocks",
+  "tagline": "Polished Astro sections you copy, own and restyle.",
+  "nav": [
+    { "label": "Blocks", "url": "/#blocks" },
+    { "label": "Install", "url": "/#install" },
+    { "label": "GitHub", "url": "https://github.com/lambda-curry/astro-blocks" }
+  ],
+  "footer": "Open source under the MIT license.",
+  "social": [{ "label": "GitHub", "url": "https://github.com/lambda-curry/astro-blocks" }]
+}
