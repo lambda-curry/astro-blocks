@@ -1,0 +1,190 @@
+---
+// Astro Blocks — features-bento — MIT — https://github.com/lambda-curry/astro-blocks
+interface Tile {
+  title: string;
+  text?: string;
+  /** A small label above the title, such as a category or a number with its unit. */
+  label?: string;
+  image?: { src: string; alt: string; width?: number; height?: number };
+  /** large spans two columns and two rows on wide screens; wide spans two columns; tall spans two rows. */
+  size?: "default" | "large" | "wide" | "tall";
+  tone?: "surface" | "accent" | "outline";
+  href?: string;
+}
+interface Props {
+  title?: string;
+  intro?: string;
+  /** Four to seven related items of different weight. Give the most important one size large. On wide screens a row holds four cells: large fills four (two by two), wide and tall two, default one, so pick sizes that fill whole rows. */
+  items: Tile[];
+  headingLevel?: 2 | 3;
+}
+
+const { title, intro, items, headingLevel = 2 } = Astro.props;
+const Heading = `h${headingLevel}` as "h2" | "h3";
+const TileHeading = `h${headingLevel + 1}` as "h3" | "h4";
+---
+
+<section class="features-bento">
+  {
+    (title || intro) && (
+      <div class="intro">
+        {title && <Heading class="title">{title}</Heading>}
+        {intro && <p>{intro}</p>}
+      </div>
+    )
+  }
+  <ul class="grid">
+    {
+      items.map((tile) => (
+        <li class:list={["tile", `size-${tile.size ?? "default"}`, `tone-${tile.tone ?? "surface"}`, { linked: tile.href, "has-image": tile.image }]}>
+          {tile.image && (
+            <div class="tile-media">
+              <img src={tile.image.src} alt={tile.image.alt} width={tile.image.width} height={tile.image.height} loading="lazy" decoding="async" />
+            </div>
+          )}
+          <div class="tile-body">
+            {tile.label && <p class="tile-label">{tile.label}</p>}
+            <TileHeading class="tile-title">{tile.href ? <a href={tile.href}>{tile.title}</a> : tile.title}</TileHeading>
+            {tile.text && <p class="tile-text">{tile.text}</p>}
+          </div>
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<style>
+  .features-bento {
+    container-type: inline-size;
+    padding-block: var(--section-gap, clamp(3rem, 8vw, 7rem));
+    color: var(--color-text, #1b1f22);
+  }
+  .intro {
+    max-inline-size: 40rem;
+    margin-block-end: clamp(2rem, 5cqi, 3.5rem);
+  }
+  .title {
+    margin: 0;
+    font-family: var(--font-display, system-ui, sans-serif);
+    font-size: var(--step-3, clamp(1.75rem, 1.35rem + 1.8vw, 2.75rem));
+    font-weight: var(--weight-display, 650);
+    letter-spacing: var(--tracking-display, -0.022em);
+    line-height: var(--leading-display, 1.08);
+  }
+  .intro p {
+    margin: 1rem 0 0;
+    color: var(--color-muted, #555c62);
+    font-size: var(--step-1, clamp(1.2rem, 1.1rem + 0.5vw, 1.5rem));
+    line-height: 1.45;
+  }
+  .grid {
+    display: grid;
+    gap: 0.75rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .tile {
+    --_pad: clamp(1.25rem, 2.4cqi, 2rem);
+    --_muted: var(--color-muted, #555c62);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-block-size: 8rem;
+    overflow: clip;
+    padding: var(--_pad);
+    border-radius: var(--radius-lg, 1rem);
+    background: var(--color-surface, #f3f4f1);
+  }
+  .tone-accent {
+    --_muted: color-mix(in oklab, var(--color-on-accent, #ffffff) 82%, transparent);
+    background: var(--color-accent, #1f4f5f);
+    color: var(--color-on-accent, #ffffff);
+  }
+  .tone-outline {
+    background: transparent;
+    box-shadow: inset 0 0 0 1px color-mix(in oklab, currentColor 18%, transparent);
+  }
+  .tile-media {
+    flex: 1 1 9rem;
+    min-block-size: 9rem;
+    margin: calc(-1 * var(--_pad)) calc(-1 * var(--_pad)) 1.25rem;
+  }
+  .tile-media img {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+  .tile-label {
+    margin: 0 0 0.5rem;
+    color: var(--_muted);
+    font-size: var(--step--1, clamp(0.875rem, 0.84rem + 0.16vw, 0.95rem));
+    font-weight: var(--weight-action, 600);
+  }
+  .tile-title {
+    margin: 0;
+    font-family: var(--font-display, system-ui, sans-serif);
+    font-size: var(--step-1, clamp(1.2rem, 1.1rem + 0.5vw, 1.5rem));
+    font-weight: var(--weight-display, 650);
+    letter-spacing: var(--tracking-display, -0.022em);
+    line-height: 1.15;
+    text-wrap: balance;
+  }
+  .tile-title a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .tile-title a::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+  }
+  .linked:hover .tile-title a {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+  .tile-title a:focus-visible {
+    outline: none;
+  }
+  .tile-title a:focus-visible::after {
+    outline: 3px solid var(--color-focus, #1f4f5f);
+    outline-offset: 3px;
+  }
+  .tile-text {
+    margin: 0.5rem 0 0;
+    max-inline-size: 46ch;
+    color: var(--_muted);
+  }
+  .size-large .tile-title,
+  .tile:not(:has(.tile-text)) .tile-title {
+    font-size: var(--step-3, clamp(1.75rem, 1.35rem + 1.8vw, 2.75rem));
+  }
+  @container (min-width: 36rem) {
+    .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .tile {
+      min-block-size: 11rem;
+    }
+    .size-large,
+    .size-wide {
+      grid-column: span 2;
+    }
+  }
+  @container (min-width: 60rem) {
+    .grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-auto-rows: minmax(13rem, auto);
+      grid-auto-flow: dense;
+    }
+    .size-large {
+      grid-row: span 2;
+    }
+    .size-tall {
+      grid-row: span 2;
+    }
+  }
+</style>

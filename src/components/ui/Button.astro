@@ -79,6 +79,7 @@ const link = typeof attributes.href === "string" ? (attributes as HTMLAttributes
     text-underline-offset: 0.28em;
   }
   .quiet::after {
+    content: "→";
     content: "→" / "";
     transition: translate var(--duration, 160ms) var(--ease, cubic-bezier(0.2, 0.7, 0.2, 1));
   }

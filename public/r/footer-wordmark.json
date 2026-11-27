@@ -1,0 +1,35 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "footer-wordmark",
+  "title": "Wordmark footer",
+  "author": "Lambda Curry <https://github.com/lambda-curry>",
+  "description": "Footer links and a note above the site name set across the full width, sized from its length, with an inverse or plain tone.",
+  "files": [
+    {
+      "path": "src/components/blocks/FooterWordmark.astro",
+      "content": "---\n// Astro Blocks — footer-wordmark — MIT — https://github.com/lambda-curry/astro-blocks\ninterface Link {\n  label: string;\n  href: string;\n}\ninterface Props {\n  /** A short name. It is set across the full width, so names over about 16 characters get small. */\n  name: string;\n  links?: Link[];\n  note?: string;\n  /** A small credit link kept in the bottom row, such as the site builder's. */\n  credit?: Link;\n  year?: number;\n  tone?: \"inverse\" | \"plain\";\n  /** Share of the width the name should fill. Lower it if a wide display face overflows. */\n  fit?: number;\n}\n\nconst { name, links = [], note, credit, year = new Date().getFullYear(), tone = \"inverse\", fit = 0.92 } = Astro.props;\n// Approximate advance widths of a bold grotesque, in thousandths of an em, so the name can\n// be sized to the footer's width without client JavaScript. Other characters count as 600.\nconst widths: Record<string, number> = {\n  \" \": 278, \"&\": 722, \"'\": 238, \",\": 278, \"-\": 333, \".\": 278, \"!\": 333, \"?\": 611,\n  A: 722, B: 722, C: 722, D: 722, E: 667, F: 611, G: 778, H: 722, I: 278, J: 556, K: 722, L: 611, M: 833,\n  N: 722, O: 778, P: 667, Q: 778, R: 722, S: 667, T: 611, U: 722, V: 667, W: 944, X: 667, Y: 667, Z: 611,\n  a: 556, b: 611, c: 556, d: 611, e: 556, f: 333, g: 611, h: 611, i: 278, j: 278, k: 556, l: 278, m: 889,\n  n: 611, o: 611, p: 611, q: 611, r: 389, s: 556, t: 333, u: 611, v: 556, w: 778, x: 556, y: 556, z: 500,\n};\nconst tracking = -0.04;\nconst ems = [...name].reduce((sum, character) => sum + (widths[character] ?? (/\\d/.test(character) ? 556 : 600)) / 1000 + tracking, 0);\nconst size = (100 * fit) / Math.max(ems, 2);\n---\n\n<footer class:list={[\"footer-wordmark\", `tone-${tone}`]} style={`--_size: ${size.toFixed(3)}cqi`}>\n  <div class=\"shell\">\n    <div class=\"top\">\n      {note && <p class=\"note\">{note}</p>}\n      {\n        links.length > 0 && (\n          <nav aria-label=\"Footer\">\n            <ul>\n              {links.map(({ label, href }) => (\n                <li>\n                  <a href={href}>{label}</a>\n                </li>\n              ))}\n            </ul>\n          </nav>\n        )\n      }\n    </div>\n    <p class=\"wordmark\" aria-hidden=\"true\">{name}</p>\n    <div class=\"bottom\">\n      <p>© {year} {name}</p>\n      {\n        credit && (\n          <p class=\"credit\">\n            <a href={credit.href}>{credit.label}</a>\n          </p>\n        )\n      }\n    </div>\n  </div>\n</footer>\n\n<style>\n  .footer-wordmark {\n    --_muted: var(--color-muted, #555c62);\n    color: var(--color-text, #1b1f22);\n  }\n  .tone-inverse {\n    --_muted: color-mix(in oklab, var(--color-bg, #ffffff) 70%, transparent);\n    --color-focus: currentColor;\n    background: var(--color-text, #1b1f22);\n    color: var(--color-bg, #ffffff);\n  }\n  .tone-plain {\n    border-block-start: 1px solid color-mix(in oklab, currentColor 14%, transparent);\n  }\n  .shell {\n    container-type: inline-size;\n    inline-size: min(var(--width-wide, 90rem), 100% - 2 * var(--space-gutter, clamp(1.25rem, 4vw, 4rem)));\n    margin-inline: auto;\n    padding-block-start: clamp(2.5rem, 6vw, 4.5rem);\n  }\n  .top {\n    display: flex;\n    flex-wrap: wrap;\n    align-items: start;\n    justify-content: space-between;\n    gap: 1rem 3rem;\n  }\n  .note {\n    margin: 0;\n    max-inline-size: 34ch;\n    color: var(--_muted);\n  }\n  ul {\n    display: flex;\n    flex-wrap: wrap;\n    gap: 0 1.5rem;\n    margin: 0;\n    padding: 0;\n    list-style: none;\n  }\n  a {\n    display: inline-flex;\n    align-items: center;\n    min-block-size: 44px;\n    color: inherit;\n    text-underline-offset: 0.25em;\n  }\n  nav a {\n    text-decoration: none;\n  }\n  nav a:hover {\n    text-decoration: underline;\n  }\n  a:focus-visible {\n    outline: 3px solid var(--color-focus, #1f4f5f);\n    outline-offset: 2px;\n  }\n  .wordmark {\n    margin: clamp(2rem, 6cqi, 4.5rem) 0 0;\n    overflow-x: clip;\n    font-family: var(--font-display, system-ui, sans-serif);\n    font-size: var(--_size);\n    font-weight: var(--weight-display, 650);\n    letter-spacing: -0.04em;\n    line-height: 0.86;\n    white-space: nowrap;\n  }\n  .bottom {\n    display: flex;\n    flex-wrap: wrap;\n    align-items: center;\n    justify-content: space-between;\n    gap: 0 1.5rem;\n    padding-block: 1rem;\n    color: var(--_muted);\n    font-size: var(--step--1, clamp(0.875rem, 0.84rem + 0.16vw, 0.95rem));\n  }\n  .bottom p {\n    margin: 0;\n  }\n</style>\n",
+      "type": "registry:file",
+      "target": "~/src/components/blocks/FooterWordmark.astro"
+    }
+  ],
+  "meta": {
+    "version": "0.1.0",
+    "tags": [
+      "footer",
+      "wordmark",
+      "oversized",
+      "brand",
+      "expressive",
+      "studio",
+      "portfolio"
+    ],
+    "useWhen": "The name is short and the rest of the site is quiet, so the footer can be the one expressive brand moment.",
+    "avoidWhen": "The header already shows a large wordmark, or the name runs past about sixteen characters. A repeated giant wordmark reads as filler.",
+    "placement": "page-end"
+  },
+  "docs": "Import from src/components/blocks/FooterWordmark.astro. Use a short name; tune fit if the face is unusually wide.",
+  "categories": [
+    "footer"
+  ],
+  "type": "registry:item"
+}

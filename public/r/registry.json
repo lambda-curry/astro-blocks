@@ -97,6 +97,79 @@
       ]
     },
     {
+      "name": "header-editorial",
+      "type": "registry:item",
+      "title": "Editorial header",
+      "description": "A magazine masthead: a centered wordmark with tagline, a top line for an issue or place, and section links between double rules that wrap instead of hiding.",
+      "author": "Lambda Curry <https://github.com/lambda-curry>",
+      "categories": [
+        "header"
+      ],
+      "registryDependencies": [
+        "lambda-curry/astro-blocks/button#v0.1.0"
+      ],
+      "docs": "Import from src/components/blocks/HeaderEditorial.astro.",
+      "meta": {
+        "version": "0.1.0",
+        "tags": [
+          "navigation",
+          "masthead",
+          "editorial",
+          "publication",
+          "centered",
+          "no javascript",
+          "writing"
+        ],
+        "useWhen": "The site publishes writing or has distinct sections, and the name deserves to be the loudest thing at the top.",
+        "avoidWhen": "The site needs a primary action in the header more than a wordmark, or the name is long. Use header-floating or header-minimal.",
+        "placement": "page-start"
+      },
+      "files": [
+        {
+          "path": "src/components/blocks/HeaderEditorial.astro",
+          "type": "registry:file",
+          "target": "~/src/components/blocks/HeaderEditorial.astro"
+        }
+      ]
+    },
+    {
+      "name": "header-transparent",
+      "type": "registry:item",
+      "title": "Transparent header",
+      "description": "A header that overlays the opening image in light or dark ink, with a native popover menu on narrow screens and, where supported, a solid surface that fades in while scrolling.",
+      "author": "Lambda Curry <https://github.com/lambda-curry>",
+      "categories": [
+        "header"
+      ],
+      "registryDependencies": [
+        "lambda-curry/astro-blocks/button#v0.1.0"
+      ],
+      "docs": "Import from src/components/blocks/HeaderTransparent.astro and put a full-bleed opening such as hero-immersive directly after it.",
+      "meta": {
+        "version": "0.1.0",
+        "tags": [
+          "navigation",
+          "transparent",
+          "overlay",
+          "immersive",
+          "popover menu",
+          "photography",
+          "hospitality",
+          "travel"
+        ],
+        "useWhen": "The page opens with a full-bleed photograph or artwork that should start at the very top.",
+        "avoidWhen": "The opening is text on a plain background, or the image is busy where the header sits. Use header-minimal or header-floating.",
+        "placement": "page-start"
+      },
+      "files": [
+        {
+          "path": "src/components/blocks/HeaderTransparent.astro",
+          "type": "registry:file",
+          "target": "~/src/components/blocks/HeaderTransparent.astro"
+        }
+      ]
+    },
+    {
       "name": "header-minimal",
       "type": "registry:item",
       "title": "Minimal header",
@@ -166,6 +239,43 @@
       ]
     },
     {
+      "name": "hero-immersive",
+      "type": "registry:item",
+      "title": "Immersive hero",
+      "description": "A full-bleed photograph or artwork with the headline, lede and actions set in white over a contrast-safe gradient scrim.",
+      "author": "Lambda Curry <https://github.com/lambda-curry>",
+      "categories": [
+        "hero"
+      ],
+      "registryDependencies": [
+        "lambda-curry/astro-blocks/button#v0.1.0"
+      ],
+      "docs": "Import from src/components/blocks/HeroImmersive.astro. It breaks out of a centered column and clips the page's horizontal overflow.",
+      "meta": {
+        "version": "0.1.0",
+        "tags": [
+          "opening",
+          "full bleed",
+          "photography",
+          "image led",
+          "dark",
+          "travel",
+          "hospitality",
+          "events"
+        ],
+        "useWhen": "There is a striking, high-quality photograph or artwork of the real place, product or experience.",
+        "avoidWhen": "The image is a stock photo, low resolution, or bright across the bottom third. Use hero-split, which frames the image beside the text.",
+        "placement": "section"
+      },
+      "files": [
+        {
+          "path": "src/components/blocks/HeroImmersive.astro",
+          "type": "registry:file",
+          "target": "~/src/components/blocks/HeroImmersive.astro"
+        }
+      ]
+    },
+    {
       "name": "hero-typographic",
       "type": "registry:item",
       "title": "Typographic hero",
@@ -196,6 +306,305 @@
           "path": "src/components/blocks/HeroTypographic.astro",
           "type": "registry:file",
           "target": "~/src/components/blocks/HeroTypographic.astro"
+        }
+      ]
+    },
+    {
+      "name": "steps-numbered",
+      "type": "registry:item",
+      "title": "Numbered steps",
+      "description": "An ordered list of two to five steps with large numerals, set side by side on wide screens or one per line for longer text.",
+      "author": "Lambda Curry <https://github.com/lambda-curry>",
+      "categories": [
+        "walkthrough"
+      ],
+      "docs": "Import from src/components/blocks/StepsNumbered.astro.",
+      "meta": {
+        "version": "0.1.0",
+        "tags": [
+          "process",
+          "how it works",
+          "sequence",
+          "onboarding",
+          "booking",
+          "service"
+        ],
+        "useWhen": "Visitors need to understand a real sequence, such as how booking, a project or a course of care unfolds.",
+        "avoidWhen": "The items have no inherent order. Numbering unordered features is decoration; use features-editorial instead.",
+        "placement": "section"
+      },
+      "files": [
+        {
+          "path": "src/components/blocks/StepsNumbered.astro",
+          "type": "registry:file",
+          "target": "~/src/components/blocks/StepsNumbered.astro"
+        }
+      ]
+    },
+    {
+      "name": "timeline",
+      "type": "registry:item",
+      "title": "Timeline",
+      "description": "A vertical timeline of dated entries on a rail, with an optional current entry and labels in their own column on wide screens.",
+      "author": "Lambda Curry <https://github.com/lambda-curry>",
+      "categories": [
+        "walkthrough"
+      ],
+      "docs": "Import from src/components/blocks/Timeline.astro.",
+      "meta": {
+        "version": "0.1.0",
+        "tags": [
+          "history",
+          "milestones",
+          "dates",
+          "story",
+          "roadmap",
+          "phases"
+        ],
+        "useWhen": "Dates or phases carry the meaning: a company history, a project schedule or an event programme.",
+        "avoidWhen": "There are fewer than three entries, or the dates add nothing. A paragraph is clearer.",
+        "placement": "section"
+      },
+      "files": [
+        {
+          "path": "src/components/blocks/Timeline.astro",
+          "type": "registry:file",
+          "target": "~/src/components/blocks/Timeline.astro"
+        }
+      ]
+    },
+    {
+      "name": "alternating-rows",
+      "type": "registry:item",
+      "title": "Alternating rows",
+      "description": "Rows that pair an image, or a large typographic figure, with a short text, alternating sides on wide screens.",
+      "author": "Lambda Curry <https://github.com/lambda-curry>",
+      "categories": [
+        "walkthrough"
+      ],
+      "docs": "Import from src/components/blocks/AlternatingRows.astro.",
+      "meta": {
+        "version": "0.1.0",
+        "tags": [
+          "walkthrough",
+          "zigzag",
+          "image and text",
+          "services",
+          "phases",
+          "figures"
+        ],
+        "useWhen": "Each point has its own real image or one striking number, and the points read in order.",
+        "avoidWhen": "The rows would all use similar stock images, or there are more than five rows.",
+        "placement": "section"
+      },
+      "files": [
+        {
+          "path": "src/components/blocks/AlternatingRows.astro",
+          "type": "registry:file",
+          "target": "~/src/components/blocks/AlternatingRows.astro"
+        }
+      ]
+    },
+    {
+      "name": "features-bento",
+      "type": "registry:item",
+      "title": "Bento features",
+      "description": "An asymmetric grid of related features with one large tile, wide and tall tiles, accent and outline tones, and whole-tile links.",
+      "author": "Lambda Curry <https://github.com/lambda-curry>",
+      "categories": [
+        "features"
+      ],
+      "docs": "Import from src/components/blocks/FeaturesBento.astro. Give the most important item size large.",
+      "meta": {
+        "version": "0.1.0",
+        "tags": [
+          "features",
+          "grid",
+          "bento",
+          "product",
+          "software",
+          "stats",
+          "asymmetric"
+        ],
+        "useWhen": "Four to seven related capabilities differ in importance, and one deserves the largest tile.",
+        "avoidWhen": "The items are unrelated, equal in weight, or exactly three. A bento grid of unrelated boxes reads as filler; use features-editorial.",
+        "placement": "section"
+      },
+      "files": [
+        {
+          "path": "src/components/blocks/FeaturesBento.astro",
+          "type": "registry:file",
+          "target": "~/src/components/blocks/FeaturesBento.astro"
+        }
+      ]
+    },
+    {
+      "name": "features-editorial",
+      "type": "registry:item",
+      "title": "Editorial features",
+      "description": "A large heading and intro that stay in view beside a ruled list of offers, each with a title, a sentence or two and an optional label.",
+      "author": "Lambda Curry <https://github.com/lambda-curry>",
+      "categories": [
+        "features"
+      ],
+      "registryDependencies": [
+        "lambda-curry/astro-blocks/button#v0.1.0"
+      ],
+      "docs": "Import from src/components/blocks/FeaturesEditorial.astro.",
+      "meta": {
+        "version": "0.1.0",
+        "tags": [
+          "features",
+          "services",
+          "list",
+          "editorial",
+          "sticky",
+          "practice",
+          "menu"
+        ],
+        "useWhen": "Services or offers need a sentence each, and reading them in order matters more than visual variety.",
+        "avoidWhen": "There are only one or two items, or each needs an image. Use alternating-rows.",
+        "placement": "section"
+      },
+      "files": [
+        {
+          "path": "src/components/blocks/FeaturesEditorial.astro",
+          "type": "registry:file",
+          "target": "~/src/components/blocks/FeaturesEditorial.astro"
+        }
+      ]
+    },
+    {
+      "name": "footer-minimal",
+      "type": "registry:item",
+      "title": "Minimal footer",
+      "description": "One quiet line: copyright, a short note such as an address or hours, a few links and an optional credit.",
+      "author": "Lambda Curry <https://github.com/lambda-curry>",
+      "categories": [
+        "footer"
+      ],
+      "docs": "Import from src/components/blocks/FooterMinimal.astro. In a Site Boulder site, render it from SiteFooter.astro and pass the existing credit link.",
+      "meta": {
+        "version": "0.1.0",
+        "tags": [
+          "footer",
+          "minimal",
+          "quiet",
+          "local business",
+          "personal"
+        ],
+        "useWhen": "The site is small, and the footer only needs to answer where, when and who.",
+        "avoidWhen": "The site has many pages that visitors look for at the bottom. Use footer-columns.",
+        "placement": "page-end"
+      },
+      "files": [
+        {
+          "path": "src/components/blocks/FooterMinimal.astro",
+          "type": "registry:file",
+          "target": "~/src/components/blocks/FooterMinimal.astro"
+        }
+      ]
+    },
+    {
+      "name": "footer-columns",
+      "type": "registry:item",
+      "title": "Column footer",
+      "description": "A brand block with description and action beside titled link columns, over a bottom bar for copyright, legal links and a credit.",
+      "author": "Lambda Curry <https://github.com/lambda-curry>",
+      "categories": [
+        "footer"
+      ],
+      "registryDependencies": [
+        "lambda-curry/astro-blocks/button#v0.1.0"
+      ],
+      "docs": "Import from src/components/blocks/FooterColumns.astro. In a Site Boulder site, render it from SiteFooter.astro and pass the existing credit link.",
+      "meta": {
+        "version": "0.1.0",
+        "tags": [
+          "footer",
+          "columns",
+          "sitemap",
+          "organization",
+          "product",
+          "software"
+        ],
+        "useWhen": "The site has enough pages that a footer sitemap genuinely helps visitors.",
+        "avoidWhen": "There are fewer than six links in total. Use footer-minimal.",
+        "placement": "page-end"
+      },
+      "files": [
+        {
+          "path": "src/components/blocks/FooterColumns.astro",
+          "type": "registry:file",
+          "target": "~/src/components/blocks/FooterColumns.astro"
+        }
+      ]
+    },
+    {
+      "name": "footer-wordmark",
+      "type": "registry:item",
+      "title": "Wordmark footer",
+      "description": "Footer links and a note above the site name set across the full width, sized from its length, with an inverse or plain tone.",
+      "author": "Lambda Curry <https://github.com/lambda-curry>",
+      "categories": [
+        "footer"
+      ],
+      "docs": "Import from src/components/blocks/FooterWordmark.astro. Use a short name; tune fit if the face is unusually wide.",
+      "meta": {
+        "version": "0.1.0",
+        "tags": [
+          "footer",
+          "wordmark",
+          "oversized",
+          "brand",
+          "expressive",
+          "studio",
+          "portfolio"
+        ],
+        "useWhen": "The name is short and the rest of the site is quiet, so the footer can be the one expressive brand moment.",
+        "avoidWhen": "The header already shows a large wordmark, or the name runs past about sixteen characters. A repeated giant wordmark reads as filler.",
+        "placement": "page-end"
+      },
+      "files": [
+        {
+          "path": "src/components/blocks/FooterWordmark.astro",
+          "type": "registry:file",
+          "target": "~/src/components/blocks/FooterWordmark.astro"
+        }
+      ]
+    },
+    {
+      "name": "footer-cta",
+      "type": "registry:item",
+      "title": "Call-to-action footer",
+      "description": "A closing band with one invitation and up to two actions, merged with a compact footer row, in inverse, accent or surface tone.",
+      "author": "Lambda Curry <https://github.com/lambda-curry>",
+      "categories": [
+        "footer"
+      ],
+      "registryDependencies": [
+        "lambda-curry/astro-blocks/button#v0.1.0"
+      ],
+      "docs": "Import from src/components/blocks/FooterCta.astro. In a Site Boulder site, render it from SiteFooter.astro and pass the existing credit link.",
+      "meta": {
+        "version": "0.1.0",
+        "tags": [
+          "footer",
+          "call to action",
+          "closing",
+          "booking",
+          "conversion",
+          "service"
+        ],
+        "useWhen": "Every page should end by offering the same next step, such as booking or getting in touch.",
+        "avoidWhen": "The page already ends with a strong call to action, or there is no concrete next step to offer.",
+        "placement": "page-end"
+      },
+      "files": [
+        {
+          "path": "src/components/blocks/FooterCta.astro",
+          "type": "registry:file",
+          "target": "~/src/components/blocks/FooterCta.astro"
         }
       ]
     }

@@ -1,0 +1,39 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "header-transparent",
+  "title": "Transparent header",
+  "author": "Lambda Curry <https://github.com/lambda-curry>",
+  "description": "A header that overlays the opening image in light or dark ink, with a native popover menu on narrow screens and, where supported, a solid surface that fades in while scrolling.",
+  "registryDependencies": [
+    "lambda-curry/astro-blocks/button#v0.1.0"
+  ],
+  "files": [
+    {
+      "path": "src/components/blocks/HeaderTransparent.astro",
+      "content": "---\n// Astro Blocks — header-transparent — MIT — https://github.com/lambda-curry/astro-blocks\nimport Button from \"../ui/Button.astro\";\n\ninterface Link {\n  label: string;\n  href: string;\n}\ninterface Props {\n  /** Site name. Used as the home link text, or as the logo's alt text. */\n  brand: string;\n  homeHref?: string;\n  logo?: { src: string; alt?: string; width?: number; height?: number };\n  links?: Link[];\n  action?: Link;\n  /** light: white text for dark imagery. dark: text color for light imagery. */\n  tone?: \"light\" | \"dark\";\n  /** Pin the header and fade in a solid surface while scrolling, where the browser supports scroll-driven animation. */\n  solidOnScroll?: boolean;\n  /** Unique id for the narrow-screen menu when a page has two headers. */\n  menuId?: string;\n}\n\nconst { brand, homeHref = \"/\", logo, links = [], action, tone = \"light\", solidOnScroll = true, menuId = \"site-menu\" } = Astro.props;\nconst trim = (path: string) => path.replace(/\\/$/, \"\") || \"/\";\nconst here = trim(Astro.url.pathname);\nconst isCurrent = (href: string) => (href.startsWith(\"/\") && !href.startsWith(\"//\") && trim(href) === here ? \"page\" : undefined);\n---\n\n<header class:list={[\"header-transparent\", `tone-${tone}`, { \"solid-on-scroll\": solidOnScroll }]}>\n  <div class=\"row\">\n    <a class=\"brand\" href={homeHref}>\n      {logo ? <img src={logo.src} alt={logo.alt ?? brand} width={logo.width} height={logo.height} /> : brand}\n    </a>\n    {\n      links.length > 0 && (\n        <nav aria-label=\"Primary\">\n          <button class=\"toggle\" type=\"button\" popovertarget={menuId}>\n            Menu\n          </button>\n          <ul class=\"links\" id={menuId} popover>\n            {links.map(({ label, href }) => (\n              <li>\n                <a class=\"nav-link\" href={href} aria-current={isCurrent(href)}>\n                  {label}\n                </a>\n              </li>\n            ))}\n            {action && (\n              <li class=\"menu-action\">\n                <Button href={action.href}>{action.label}</Button>\n              </li>\n            )}\n          </ul>\n        </nav>\n      )\n    }\n    {action && <Button class=\"action\" variant=\"outline\" href={action.href}>{action.label}</Button>}\n  </div>\n</header>\n\n<style>\n  .header-transparent {\n    --_ink: #ffffff;\n    --color-focus: var(--_ink);\n    container-type: inline-size;\n    position: absolute;\n    inset: 0 0 auto;\n    z-index: 30;\n    color: var(--_ink);\n  }\n  .tone-light {\n    background: linear-gradient(to bottom, rgb(0 0 0 / 0.42), transparent);\n  }\n  .tone-dark {\n    --_ink: var(--color-text, #1b1f22);\n  }\n  .row {\n    display: flex;\n    align-items: center;\n    gap: 0.5rem 1.5rem;\n    inline-size: min(var(--width-content, 72rem), 100% - 2 * var(--space-gutter, clamp(1.25rem, 4vw, 4rem)));\n    min-block-size: 4.5rem;\n    margin-inline: auto;\n    padding-block: 0.75rem;\n  }\n  .brand {\n    display: inline-flex;\n    align-items: center;\n    min-block-size: 44px;\n    margin-inline-end: auto;\n    color: inherit;\n    font-family: var(--font-display, system-ui, sans-serif);\n    font-size: var(--step-1, clamp(1.2rem, 1.1rem + 0.5vw, 1.5rem));\n    font-weight: var(--weight-display, 650);\n    letter-spacing: var(--tracking-display, -0.022em);\n    line-height: 1;\n    text-decoration: none;\n  }\n  .brand img {\n    display: block;\n    max-block-size: 2.25rem;\n    inline-size: auto;\n  }\n  nav {\n    display: flex;\n    align-items: center;\n  }\n  .toggle {\n    min-block-size: 44px;\n    padding-inline: 1rem;\n    border: 1px solid color-mix(in oklab, currentColor 45%, transparent);\n    border-radius: var(--radius-sm, 0.375rem);\n    background: transparent;\n    color: inherit;\n    font: inherit;\n    font-size: var(--step--1, clamp(0.875rem, 0.84rem + 0.16vw, 0.95rem));\n    font-weight: var(--weight-action, 600);\n    cursor: pointer;\n  }\n  .links {\n    list-style: none;\n  }\n  .nav-link {\n    display: flex;\n    align-items: center;\n    min-block-size: 44px;\n    padding-inline: 0.75rem;\n    color: inherit;\n    font-size: var(--step--1, clamp(0.875rem, 0.84rem + 0.16vw, 0.95rem));\n    font-weight: var(--weight-action, 600);\n    text-decoration: none;\n  }\n  .nav-link:hover,\n  .nav-link[aria-current=\"page\"] {\n    text-decoration: underline;\n    text-decoration-thickness: 2px;\n    text-underline-offset: 0.45em;\n  }\n  .links:popover-open {\n    position: fixed;\n    inset: 5rem 0.75rem auto;\n    display: grid;\n    gap: 0.125rem;\n    inline-size: auto;\n    margin: 0;\n    padding: 0.5rem;\n    border: 1px solid color-mix(in oklab, var(--color-text, #1b1f22) 12%, transparent);\n    border-radius: var(--radius-lg, 1rem);\n    background: var(--color-bg, #ffffff);\n    color: var(--color-text, #1b1f22);\n    box-shadow: 0 24px 60px -18px rgb(0 0 0 / 0.35);\n    --color-focus: var(--color-accent, #1f4f5f);\n  }\n  .links:popover-open .nav-link {\n    padding-inline: 1rem;\n    font-size: var(--step-0, clamp(1rem, 0.96rem + 0.2vw, 1.125rem));\n    font-weight: 400;\n  }\n  .links::backdrop {\n    background: transparent;\n  }\n  .menu-action {\n    display: none;\n  }\n  .action {\n    white-space: nowrap;\n  }\n  :focus-visible {\n    outline: 3px solid currentColor;\n    outline-offset: 2px;\n  }\n  @container (max-width: 29.999rem) {\n    .row > .action {\n      display: none;\n    }\n    .links:popover-open .menu-action {\n      display: grid;\n      margin-block-start: 0.5rem;\n    }\n  }\n  @container (min-width: 46rem) {\n    .toggle {\n      display: none;\n    }\n    .links {\n      position: static;\n      display: flex;\n      gap: 0.125rem;\n      inline-size: auto;\n      block-size: auto;\n      margin: 0;\n      padding: 0;\n      overflow: visible;\n      border: 0;\n      background: none;\n      color: inherit;\n    }\n  }\n  @supports (animation-timeline: scroll()) {\n    .solid-on-scroll {\n      position: fixed;\n      animation: header-transparent-solid linear both;\n      animation-timeline: scroll(root);\n      animation-range: 0 12rem;\n    }\n  }\n  @keyframes header-transparent-solid {\n    to {\n      --color-focus: var(--color-accent, #1f4f5f);\n      background: color-mix(in oklab, var(--color-bg, #ffffff) 92%, transparent);\n      color: var(--color-text, #1b1f22);\n      box-shadow: 0 1px 0 color-mix(in oklab, var(--color-text, #1b1f22) 12%, transparent);\n      backdrop-filter: blur(12px);\n    }\n  }\n</style>\n",
+      "type": "registry:file",
+      "target": "~/src/components/blocks/HeaderTransparent.astro"
+    }
+  ],
+  "meta": {
+    "version": "0.1.0",
+    "tags": [
+      "navigation",
+      "transparent",
+      "overlay",
+      "immersive",
+      "popover menu",
+      "photography",
+      "hospitality",
+      "travel"
+    ],
+    "useWhen": "The page opens with a full-bleed photograph or artwork that should start at the very top.",
+    "avoidWhen": "The opening is text on a plain background, or the image is busy where the header sits. Use header-minimal or header-floating.",
+    "placement": "page-start"
+  },
+  "docs": "Import from src/components/blocks/HeaderTransparent.astro and put a full-bleed opening such as hero-immersive directly after it.",
+  "categories": [
+    "header"
+  ],
+  "type": "registry:item"
+}

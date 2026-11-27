@@ -1,0 +1,15 @@
+---
+import FeaturesEditorial from "../blocks/FeaturesEditorial.astro";
+---
+
+<FeaturesEditorial
+  title="What we treat"
+  intro="Most people come to us with one of these. If yours isn't here, ask; we will tell you honestly if we are the right clinic."
+  action={{ label: "Ask about your injury", href: "/contact" }}
+  items={[
+    { title: "Sports injuries", text: "Sprains, strains and overuse injuries, with a return-to-play plan you can test yourself against.", label: "Most common" },
+    { title: "Back and neck pain", text: "Assessment of posture, load and work habits alongside hands-on treatment.", href: "/back-pain" },
+    { title: "After surgery", text: "Rehabilitation after joint replacement or ligament repair, coordinated with your surgeon." },
+    { title: "Pelvic health", text: "Pre- and postnatal care with a specialist clinician in a private room.", label: "Women's health" },
+  ]}
+/>

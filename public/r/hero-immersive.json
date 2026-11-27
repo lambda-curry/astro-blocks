@@ -1,0 +1,39 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "hero-immersive",
+  "title": "Immersive hero",
+  "author": "Lambda Curry <https://github.com/lambda-curry>",
+  "description": "A full-bleed photograph or artwork with the headline, lede and actions set in white over a contrast-safe gradient scrim.",
+  "registryDependencies": [
+    "lambda-curry/astro-blocks/button#v0.1.0"
+  ],
+  "files": [
+    {
+      "path": "src/components/blocks/HeroImmersive.astro",
+      "content": "---\n// Astro Blocks — hero-immersive — MIT — https://github.com/lambda-curry/astro-blocks\nimport Button from \"../ui/Button.astro\";\n\ninterface Action {\n  label: string;\n  href: string;\n  variant?: \"solid\" | \"outline\" | \"quiet\";\n}\ninterface Props {\n  title: string;\n  lede?: string;\n  actions?: Action[];\n  /** A full-bleed photograph or artwork. Use the media slot instead for a picture or video element. */\n  image?: { src: string; alt: string; width?: number; height?: number };\n  /** CSS object-position for the image, to keep the subject in frame as the crop changes. */\n  position?: string;\n  height?: \"screen\" | \"tall\" | \"medium\";\n  /** How strongly the image darkens behind the text. Keep strong unless the image is already dark at the bottom. */\n  scrim?: \"strong\" | \"soft\";\n  align?: \"start\" | \"center\";\n  headingLevel?: 1 | 2;\n}\n\nconst {\n  title,\n  lede,\n  actions = [],\n  image,\n  position = \"center\",\n  height = \"tall\",\n  scrim = \"strong\",\n  align = \"start\",\n  headingLevel = 1,\n} = Astro.props;\nconst Heading = `h${headingLevel}` as \"h1\" | \"h2\";\n---\n\n<section class:list={[\"hero-immersive\", `height-${height}`, `scrim-${scrim}`, `align-${align}`]} style={`--_position: ${position}`}>\n  <div class=\"media\">\n    <slot name=\"media\">\n      {image && <img src={image.src} alt={image.alt} width={image.width} height={image.height} loading=\"eager\" fetchpriority=\"high\" decoding=\"async\" />}\n    </slot>\n  </div>\n  <div class=\"content\">\n    <Heading class=\"title\">{title}</Heading>\n    {lede && <p class=\"lede\">{lede}</p>}\n    <slot />\n    {\n      actions.length > 0 && (\n        <div class=\"actions\">\n          {actions.map(({ label, href, variant }, index) => (\n            <Button href={href} size=\"lg\" variant={variant ?? (index === 0 ? \"solid\" : \"outline\")}>\n              {label}\n            </Button>\n          ))}\n        </div>\n      )\n    }\n    {Astro.slots.has(\"meta\") && <div class=\"meta\"><slot name=\"meta\" /></div>}\n  </div>\n</section>\n\n<style>\n  /* Full bleed from inside any centered column. Clipping the page's horizontal overflow\n     keeps classic scrollbars from adding a sideways scroll. */\n  :global(body) {\n    overflow-x: clip;\n  }\n  .hero-immersive.hero-immersive {\n    margin-block: 0;\n  }\n  .hero-immersive {\n    --_height: min(88svh, 54rem);\n    position: relative;\n    isolation: isolate;\n    display: grid;\n    align-items: end;\n    min-block-size: var(--_height);\n    margin-inline: calc(50% - 50vw);\n    overflow: clip;\n    background: var(--color-text, #1b1f22);\n    color: #ffffff;\n  }\n  .height-screen {\n    --_height: max(32rem, 100svh);\n  }\n  .height-medium {\n    --_height: min(68svh, 40rem);\n  }\n  .media {\n    position: absolute;\n    inset: 0;\n    z-index: -2;\n  }\n  .media > :global(*) {\n    display: block;\n    inline-size: 100%;\n    block-size: 100%;\n    max-inline-size: none;\n    object-fit: cover;\n    object-position: var(--_position, center);\n  }\n  .hero-immersive::before {\n    content: \"\";\n    position: absolute;\n    inset: 0;\n    z-index: -1;\n    background: linear-gradient(to top, rgb(0 0 0 / 0.8) 0%, rgb(0 0 0 / 0.5) 45%, rgb(0 0 0 / 0.14) 100%);\n  }\n  .scrim-soft::before {\n    background: linear-gradient(to top, rgb(0 0 0 / 0.6) 0%, rgb(0 0 0 / 0.22) 50%, transparent 100%);\n  }\n  .content {\n    container-type: inline-size;\n    inline-size: min(var(--width-content, 72rem), 100% - 2 * var(--space-gutter, clamp(1.25rem, 4vw, 4rem)));\n    margin-inline: auto;\n    padding-block: clamp(7rem, 22svh, 12rem) clamp(2.75rem, 8vw, 5.5rem);\n    text-shadow: 0 1px 28px rgb(0 0 0 / 0.28);\n  }\n  .align-center .content {\n    display: grid;\n    justify-items: center;\n    text-align: center;\n  }\n  .title {\n    margin: 0;\n    max-inline-size: 16ch;\n    font-family: var(--font-display, system-ui, sans-serif);\n    font-size: clamp(2.6rem, 1.2rem + 6cqi, 6.75rem);\n    font-weight: var(--weight-display, 650);\n    letter-spacing: var(--tracking-display, -0.022em);\n    line-height: 0.98;\n    text-wrap: balance;\n  }\n  .lede {\n    margin: 1.25rem 0 0;\n    max-inline-size: 40ch;\n    color: rgb(255 255 255 / 0.88);\n    font-size: var(--step-1, clamp(1.2rem, 1.1rem + 0.5vw, 1.5rem));\n    line-height: 1.45;\n    text-wrap: pretty;\n  }\n  .actions {\n    display: flex;\n    flex-wrap: wrap;\n    align-items: center;\n    gap: 0.75rem 1rem;\n    margin-block-start: 2.25rem;\n    text-shadow: none;\n    --color-focus: #ffffff;\n  }\n  .align-center .actions {\n    justify-content: center;\n  }\n  .meta {\n    margin-block-start: 2.5rem;\n    color: rgb(255 255 255 / 0.8);\n    font-size: var(--step--1, clamp(0.875rem, 0.84rem + 0.16vw, 0.95rem));\n  }\n  .meta > :global(*) {\n    margin: 0;\n  }\n</style>\n",
+      "type": "registry:file",
+      "target": "~/src/components/blocks/HeroImmersive.astro"
+    }
+  ],
+  "meta": {
+    "version": "0.1.0",
+    "tags": [
+      "opening",
+      "full bleed",
+      "photography",
+      "image led",
+      "dark",
+      "travel",
+      "hospitality",
+      "events"
+    ],
+    "useWhen": "There is a striking, high-quality photograph or artwork of the real place, product or experience.",
+    "avoidWhen": "The image is a stock photo, low resolution, or bright across the bottom third. Use hero-split, which frames the image beside the text.",
+    "placement": "section"
+  },
+  "docs": "Import from src/components/blocks/HeroImmersive.astro. It breaks out of a centered column and clips the page's horizontal overflow.",
+  "categories": [
+    "hero"
+  ],
+  "type": "registry:item"
+}

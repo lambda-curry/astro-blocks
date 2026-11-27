@@ -1,0 +1,147 @@
+---
+// Astro Blocks — footer-wordmark — MIT — https://github.com/lambda-curry/astro-blocks
+interface Link {
+  label: string;
+  href: string;
+}
+interface Props {
+  /** A short name. It is set across the full width, so names over about 16 characters get small. */
+  name: string;
+  links?: Link[];
+  note?: string;
+  /** A small credit link kept in the bottom row, such as the site builder's. */
+  credit?: Link;
+  year?: number;
+  tone?: "inverse" | "plain";
+  /** Share of the width the name should fill. Lower it if a wide display face overflows. */
+  fit?: number;
+}
+
+const { name, links = [], note, credit, year = new Date().getFullYear(), tone = "inverse", fit = 0.92 } = Astro.props;
+// Approximate advance widths of a bold grotesque, in thousandths of an em, so the name can
+// be sized to the footer's width without client JavaScript. Other characters count as 600.
+const widths: Record<string, number> = {
+  " ": 278, "&": 722, "'": 238, ",": 278, "-": 333, ".": 278, "!": 333, "?": 611,
+  A: 722, B: 722, C: 722, D: 722, E: 667, F: 611, G: 778, H: 722, I: 278, J: 556, K: 722, L: 611, M: 833,
+  N: 722, O: 778, P: 667, Q: 778, R: 722, S: 667, T: 611, U: 722, V: 667, W: 944, X: 667, Y: 667, Z: 611,
+  a: 556, b: 611, c: 556, d: 611, e: 556, f: 333, g: 611, h: 611, i: 278, j: 278, k: 556, l: 278, m: 889,
+  n: 611, o: 611, p: 611, q: 611, r: 389, s: 556, t: 333, u: 611, v: 556, w: 778, x: 556, y: 556, z: 500,
+};
+const tracking = -0.04;
+const ems = [...name].reduce((sum, character) => sum + (widths[character] ?? (/\d/.test(character) ? 556 : 600)) / 1000 + tracking, 0);
+const size = (100 * fit) / Math.max(ems, 2);
+---
+
+<footer class:list={["footer-wordmark", `tone-${tone}`]} style={`--_size: ${size.toFixed(3)}cqi`}>
+  <div class="shell">
+    <div class="top">
+      {note && <p class="note">{note}</p>}
+      {
+        links.length > 0 && (
+          <nav aria-label="Footer">
+            <ul>
+              {links.map(({ label, href }) => (
+                <li>
+                  <a href={href}>{label}</a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        )
+      }
+    </div>
+    <p class="wordmark" aria-hidden="true">{name}</p>
+    <div class="bottom">
+      <p>© {year} {name}</p>
+      {
+        credit && (
+          <p class="credit">
+            <a href={credit.href}>{credit.label}</a>
+          </p>
+        )
+      }
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer-wordmark {
+    --_muted: var(--color-muted, #555c62);
+    color: var(--color-text, #1b1f22);
+  }
+  .tone-inverse {
+    --_muted: color-mix(in oklab, var(--color-bg, #ffffff) 70%, transparent);
+    --color-focus: currentColor;
+    background: var(--color-text, #1b1f22);
+    color: var(--color-bg, #ffffff);
+  }
+  .tone-plain {
+    border-block-start: 1px solid color-mix(in oklab, currentColor 14%, transparent);
+  }
+  .shell {
+    container-type: inline-size;
+    inline-size: min(var(--width-wide, 90rem), 100% - 2 * var(--space-gutter, clamp(1.25rem, 4vw, 4rem)));
+    margin-inline: auto;
+    padding-block-start: clamp(2.5rem, 6vw, 4.5rem);
+  }
+  .top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: start;
+    justify-content: space-between;
+    gap: 1rem 3rem;
+  }
+  .note {
+    margin: 0;
+    max-inline-size: 34ch;
+    color: var(--_muted);
+  }
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 1.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  a {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: 44px;
+    color: inherit;
+    text-underline-offset: 0.25em;
+  }
+  nav a {
+    text-decoration: none;
+  }
+  nav a:hover {
+    text-decoration: underline;
+  }
+  a:focus-visible {
+    outline: 3px solid var(--color-focus, #1f4f5f);
+    outline-offset: 2px;
+  }
+  .wordmark {
+    margin: clamp(2rem, 6cqi, 4.5rem) 0 0;
+    overflow-x: clip;
+    font-family: var(--font-display, system-ui, sans-serif);
+    font-size: var(--_size);
+    font-weight: var(--weight-display, 650);
+    letter-spacing: -0.04em;
+    line-height: 0.86;
+    white-space: nowrap;
+  }
+  .bottom {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0 1.5rem;
+    padding-block: 1rem;
+    color: var(--_muted);
+    font-size: var(--step--1, clamp(0.875rem, 0.84rem + 0.16vw, 0.95rem));
+  }
+  .bottom p {
+    margin: 0;
+  }
+</style>

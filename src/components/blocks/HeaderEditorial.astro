@@ -1,0 +1,158 @@
+---
+// Astro Blocks — header-editorial — MIT — https://github.com/lambda-curry/astro-blocks
+import Button from "../ui/Button.astro";
+
+interface Link {
+  label: string;
+  href: string;
+}
+interface Props {
+  /** Publication or site name, set as a large centered wordmark. */
+  brand: string;
+  homeHref?: string;
+  logo?: { src: string; alt?: string; width?: number; height?: number };
+  /** One line under the wordmark, such as what the publication covers. */
+  tagline?: string;
+  /** A short line at the top left, such as an issue, date or place. */
+  meta?: string;
+  /** Sections. They stay visible and wrap onto more lines on narrow screens. */
+  links?: Link[];
+  /** One action at the top right, such as Subscribe. */
+  action?: Link;
+}
+
+const { brand, homeHref = "/", logo, tagline, meta, links = [], action } = Astro.props;
+const trim = (path: string) => path.replace(/\/$/, "") || "/";
+const here = trim(Astro.url.pathname);
+const isCurrent = (href: string) => (href.startsWith("/") && !href.startsWith("//") && trim(href) === here ? "page" : undefined);
+---
+
+<header class="header-editorial">
+  <div class="shell">
+    {
+      (meta || action) && (
+        <div class="topline">
+          {meta && <p class="meta">{meta}</p>}
+          {action && (
+            <Button class="action" variant="quiet" href={action.href}>
+              {action.label}
+            </Button>
+          )}
+        </div>
+      )
+    }
+    <div class="masthead">
+      <a class="wordmark" href={homeHref}>
+        {logo ? <img src={logo.src} alt={logo.alt ?? brand} width={logo.width} height={logo.height} /> : brand}
+      </a>
+      {tagline && <p class="tagline">{tagline}</p>}
+    </div>
+    {
+      links.length > 0 && (
+        <nav aria-label="Sections">
+          <ul>
+            {links.map(({ label, href }) => (
+              <li>
+                <a href={href} aria-current={isCurrent(href)}>
+                  {label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )
+    }
+  </div>
+</header>
+
+<style>
+  .header-editorial {
+    container-type: inline-size;
+    color: var(--color-text, #1b1f22);
+  }
+  .shell {
+    inline-size: min(var(--width-content, 72rem), 100% - 2 * var(--space-gutter, clamp(1.25rem, 4vw, 4rem)));
+    margin-inline: auto;
+  }
+  .topline {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0 1.5rem;
+    min-block-size: 3rem;
+    border-block-end: 1px solid color-mix(in oklab, currentColor 14%, transparent);
+    font-size: var(--step--1, clamp(0.875rem, 0.84rem + 0.16vw, 0.95rem));
+  }
+  .meta {
+    margin: 0;
+    color: var(--color-muted, #555c62);
+  }
+  .action {
+    margin-inline-start: auto;
+  }
+  .masthead {
+    display: grid;
+    justify-items: center;
+    gap: 0.5rem;
+    padding-block: clamp(1.25rem, 4cqi, 2.5rem) clamp(1rem, 3cqi, 1.75rem);
+    text-align: center;
+  }
+  .wordmark {
+    color: inherit;
+    font-family: var(--font-display, system-ui, sans-serif);
+    font-size: clamp(2.25rem, 0.9rem + 6.2cqi, 6rem);
+    font-weight: var(--weight-display, 650);
+    letter-spacing: var(--tracking-display, -0.022em);
+    line-height: 0.95;
+    text-decoration: none;
+    text-wrap: balance;
+  }
+  .wordmark img {
+    display: block;
+    max-block-size: clamp(3rem, 8cqi, 6rem);
+    inline-size: auto;
+  }
+  .tagline {
+    margin: 0;
+    max-inline-size: 48ch;
+    color: var(--color-muted, #555c62);
+    font-size: var(--step-0, clamp(1rem, 0.96rem + 0.2vw, 1.125rem));
+    text-wrap: balance;
+  }
+  nav {
+    border-block: 3px double color-mix(in oklab, currentColor 55%, transparent);
+  }
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0 clamp(0.25rem, 2cqi, 1.5rem);
+    margin: 0;
+    padding: 0.25rem 0;
+    list-style: none;
+  }
+  nav a {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: 44px;
+    padding-inline: 0.5rem;
+    color: inherit;
+    font-size: var(--step--1, clamp(0.875rem, 0.84rem + 0.16vw, 0.95rem));
+    font-weight: var(--weight-action, 600);
+    letter-spacing: 0.06em;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+  nav a:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.4em;
+  }
+  nav a[aria-current="page"] {
+    color: var(--color-accent, #1f4f5f);
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-focus, #1f4f5f);
+    outline-offset: 2px;
+  }
+</style>

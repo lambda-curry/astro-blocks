@@ -1,0 +1,27 @@
+---
+import AlternatingRows from "../blocks/AlternatingRows.astro";
+---
+
+<AlternatingRows
+  title="How a Fernhill project runs"
+  intro="Three phases, each with a clear handover, so you always know what comes next."
+  rows={[
+    {
+      title: "Survey and brief",
+      text: "We spend a morning and an evening in the space before drawing anything, recording where the light falls and how you use each room.",
+      figure: "2 visits",
+      figureLabel: "before the first sketch",
+    },
+    {
+      title: "Design",
+      text: "Drawings and a light study for every main room, revised with you until the plan feels obvious.",
+      image: { src: "/gallery/atelier.svg", alt: "A sunlit room with an arched window and a long table", width: 1200, height: 1500 },
+      link: { label: "See a finished study", href: "/work/light-study" },
+    },
+    {
+      title: "Build",
+      text: "We stay on as architects through construction, visiting site weekly and answering the builder's questions the same day.",
+      image: { src: "/gallery/field.svg", alt: "A small farmhouse in rolling green fields", width: 1200, height: 900 },
+    },
+  ]}
+/>

@@ -1,0 +1,19 @@
+---
+import FooterColumns from "../blocks/FooterColumns.astro";
+---
+
+<FooterColumns
+  name="Orbit"
+  description="Plain-language product analytics for teams without a data department."
+  action={{ label: "Start free", href: "/signup" }}
+  columns={[
+    { title: "Product", links: [{ label: "Weekly report", href: "/report" }, { label: "Alerts", href: "/alerts" }, { label: "Pricing", href: "/pricing" }] },
+    { title: "Company", links: [{ label: "About", href: "/about" }, { label: "Customers", href: "/customers" }, { label: "Careers", href: "/careers" }] },
+    { title: "Resources", links: [{ label: "Docs", href: "/docs" }, { label: "Security", href: "/security" }, { label: "Status", href: "/status" }] },
+  ]}
+  legal={[
+    { label: "Privacy", href: "/privacy" },
+    { label: "Terms", href: "/terms" },
+  ]}
+  credit={{ label: "Built with Site Boulder", href: "https://siteboulder.com/" }}
+/>

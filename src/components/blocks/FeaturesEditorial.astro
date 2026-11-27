@@ -1,0 +1,155 @@
+---
+// Astro Blocks — features-editorial — MIT — https://github.com/lambda-curry/astro-blocks
+import Button from "../ui/Button.astro";
+
+interface Item {
+  title: string;
+  text: string;
+  /** A short label beside the title, such as who it is for or a price. */
+  label?: string;
+  href?: string;
+}
+interface Props {
+  title: string;
+  intro?: string;
+  action?: { label: string; href: string };
+  /** Three to seven offers or services, each with a sentence or two. */
+  items: Item[];
+  headingLevel?: 2 | 3;
+}
+
+const { title, intro, action, items, headingLevel = 2 } = Astro.props;
+const Heading = `h${headingLevel}` as "h2" | "h3";
+const ItemHeading = `h${headingLevel + 1}` as "h3" | "h4";
+---
+
+<section class="features-editorial">
+  <div class="inner">
+    <div class="lead">
+      <Heading class="title">{title}</Heading>
+      {intro && <p class="intro">{intro}</p>}
+      {
+        action && (
+          <Button class="action" variant="quiet" href={action.href}>
+            {action.label}
+          </Button>
+        )
+      }
+    </div>
+    <ul class="items">
+      {
+        items.map((item) => (
+          <li class="item">
+            <div class="item-head">
+              <ItemHeading class="item-title">{item.href ? <a href={item.href}>{item.title}</a> : item.title}</ItemHeading>
+              {item.label && <p class="item-label">{item.label}</p>}
+            </div>
+            <p class="item-text">{item.text}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .features-editorial {
+    container-type: inline-size;
+    padding-block: var(--section-gap, clamp(3rem, 8vw, 7rem));
+    color: var(--color-text, #1b1f22);
+  }
+  .inner {
+    display: grid;
+    gap: clamp(2rem, 5cqi, 3rem);
+  }
+  .title {
+    margin: 0;
+    max-inline-size: 14ch;
+    font-family: var(--font-display, system-ui, sans-serif);
+    font-size: var(--step-4, clamp(2.15rem, 1.5rem + 2.8vw, 3.6rem));
+    font-weight: var(--weight-display, 650);
+    letter-spacing: var(--tracking-display, -0.022em);
+    line-height: 1;
+    text-wrap: balance;
+  }
+  .intro {
+    margin: 1.25rem 0 0;
+    max-inline-size: 34ch;
+    color: var(--color-muted, #555c62);
+    font-size: var(--step-1, clamp(1.2rem, 1.1rem + 0.5vw, 1.5rem));
+    line-height: 1.45;
+  }
+  .action {
+    margin-block-start: 1.5rem;
+  }
+  .items {
+    margin: 0;
+    padding: 0;
+    border-block-end: 1px solid color-mix(in oklab, currentColor 16%, transparent);
+    list-style: none;
+  }
+  .item {
+    display: grid;
+    gap: 0.5rem 2rem;
+    padding-block: clamp(1.25rem, 3cqi, 2rem);
+    border-block-start: 1px solid color-mix(in oklab, currentColor 16%, transparent);
+  }
+  .item-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.25rem 1rem;
+  }
+  .item-title {
+    margin: 0;
+    font-family: var(--font-display, system-ui, sans-serif);
+    font-size: var(--step-2, clamp(1.45rem, 1.2rem + 1vw, 2rem));
+    font-weight: var(--weight-display, 650);
+    letter-spacing: var(--tracking-display, -0.022em);
+    line-height: 1.12;
+  }
+  .item-title a {
+    color: inherit;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.18em;
+  }
+  .item-title a:hover {
+    color: var(--color-accent, #1f4f5f);
+  }
+  .item-title a:focus-visible {
+    outline: 3px solid var(--color-focus, #1f4f5f);
+    outline-offset: 3px;
+  }
+  .item-label {
+    margin: 0;
+    color: var(--color-accent, #1f4f5f);
+    font-size: var(--step--1, clamp(0.875rem, 0.84rem + 0.16vw, 0.95rem));
+    font-weight: var(--weight-action, 600);
+    white-space: nowrap;
+  }
+  .item-text {
+    margin: 0;
+    max-inline-size: 52ch;
+    color: var(--color-muted, #555c62);
+  }
+  @container (min-width: 56rem) {
+    .inner {
+      grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.4fr);
+      align-items: start;
+      gap: clamp(3rem, 7cqi, 7rem);
+    }
+    .lead {
+      position: sticky;
+      inset-block-start: 6rem;
+    }
+    .item {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+      align-items: baseline;
+    }
+    .item-head {
+      flex-direction: column;
+      justify-content: start;
+    }
+  }
+</style>

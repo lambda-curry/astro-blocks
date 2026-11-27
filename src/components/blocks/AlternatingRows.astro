@@ -1,0 +1,190 @@
+---
+// Astro Blocks — alternating-rows — MIT — https://github.com/lambda-curry/astro-blocks
+interface Row {
+  title: string;
+  text: string;
+  /** A real image for this row. */
+  image?: { src: string; alt: string; width?: number; height?: number };
+  /** Without an image, a short figure set large instead, such as "48 hrs" or "3 visits". */
+  figure?: string;
+  /** What the figure measures, read with it by screen readers. */
+  figureLabel?: string;
+  link?: { label: string; href: string };
+}
+interface Props {
+  title?: string;
+  intro?: string;
+  rows: Row[];
+  /** Which side the first row's media sits on wide screens. */
+  start?: "media" | "text";
+  /** CSS aspect-ratio of each media frame. */
+  ratio?: string;
+  headingLevel?: 2 | 3;
+}
+
+const { title, intro, rows, start = "media", ratio = "4 / 3", headingLevel = 2 } = Astro.props;
+const Heading = `h${headingLevel}` as "h2" | "h3";
+const RowHeading = `h${headingLevel + 1}` as "h3" | "h4";
+---
+
+<section class:list={["alternating-rows", `start-${start}`]} style={`--_ratio: ${ratio}`}>
+  {
+    (title || intro) && (
+      <div class="intro">
+        {title && <Heading class="title">{title}</Heading>}
+        {intro && <p>{intro}</p>}
+      </div>
+    )
+  }
+  <div class="rows">
+    {
+      rows.map((row) => (
+        <article class:list={["row", { "text-only": !row.image && !row.figure }]}>
+          {row.image ? (
+            <div class="media">
+              <img src={row.image.src} alt={row.image.alt} width={row.image.width} height={row.image.height} loading="lazy" decoding="async" />
+            </div>
+          ) : (
+            row.figure && (
+              <div class="media figure">
+                <p class="figure-value">
+                  {row.figure}
+                  {row.figureLabel && <span class="figure-label">{row.figureLabel}</span>}
+                </p>
+              </div>
+            )
+          )}
+          <div class="text">
+            <RowHeading class="row-title">{row.title}</RowHeading>
+            <p class="row-text">{row.text}</p>
+            {row.link && (
+              <a class="row-link" href={row.link.href}>
+                {row.link.label}
+              </a>
+            )}
+          </div>
+        </article>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .alternating-rows {
+    container-type: inline-size;
+    padding-block: var(--section-gap, clamp(3rem, 8vw, 7rem));
+    color: var(--color-text, #1b1f22);
+  }
+  .intro {
+    max-inline-size: 40rem;
+    margin-block-end: clamp(2.5rem, 6cqi, 4.5rem);
+  }
+  .title {
+    margin: 0;
+    font-family: var(--font-display, system-ui, sans-serif);
+    font-size: var(--step-3, clamp(1.75rem, 1.35rem + 1.8vw, 2.75rem));
+    font-weight: var(--weight-display, 650);
+    letter-spacing: var(--tracking-display, -0.022em);
+    line-height: var(--leading-display, 1.08);
+  }
+  .intro p {
+    margin: 1rem 0 0;
+    color: var(--color-muted, #555c62);
+    font-size: var(--step-1, clamp(1.2rem, 1.1rem + 0.5vw, 1.5rem));
+    line-height: 1.45;
+  }
+  .rows {
+    display: grid;
+    gap: clamp(3rem, 8cqi, 6.5rem);
+  }
+  .row {
+    display: grid;
+    gap: 1.5rem;
+    align-items: center;
+  }
+  .media {
+    overflow: clip;
+    aspect-ratio: var(--_ratio, 4 / 3);
+    border-radius: var(--radius-lg, 1rem);
+    background: var(--color-surface, #f3f4f1);
+  }
+  .media img {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+  .figure {
+    display: grid;
+    place-items: center;
+    padding: 1.5rem;
+    background: color-mix(in oklab, var(--color-accent, #1f4f5f) 9%, var(--color-surface, #f3f4f1));
+  }
+  .figure-value {
+    display: grid;
+    justify-items: center;
+    gap: 0.5rem;
+    margin: 0;
+    color: var(--color-accent, #1f4f5f);
+    font-family: var(--font-display, system-ui, sans-serif);
+    font-size: clamp(2.75rem, 1rem + 7cqi, 6rem);
+    font-variant-numeric: lining-nums;
+    font-weight: var(--weight-display, 650);
+    letter-spacing: var(--tracking-display, -0.022em);
+    line-height: 0.95;
+    text-align: center;
+  }
+  .figure-label {
+    color: var(--color-muted, #555c62);
+    font-family: var(--font-body, system-ui, sans-serif);
+    font-size: var(--step--1, clamp(0.875rem, 0.84rem + 0.16vw, 0.95rem));
+    font-weight: var(--weight-action, 600);
+    letter-spacing: normal;
+  }
+  .row-title {
+    margin: 0;
+    font-family: var(--font-display, system-ui, sans-serif);
+    font-size: var(--step-2, clamp(1.45rem, 1.2rem + 1vw, 2rem));
+    font-weight: var(--weight-display, 650);
+    letter-spacing: var(--tracking-display, -0.022em);
+    line-height: 1.12;
+    text-wrap: balance;
+  }
+  .row-text {
+    margin: 0.75rem 0 0;
+    max-inline-size: 48ch;
+    color: var(--color-muted, #555c62);
+  }
+  .row-link {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: 44px;
+    margin-block-start: 0.5rem;
+    color: var(--color-link, #1f4f5f);
+    font-weight: var(--weight-action, 600);
+    text-underline-offset: 0.28em;
+  }
+  .row-link::after {
+    content: "→";
+    content: "→" / "";
+    margin-inline-start: 0.35em;
+  }
+  .row-link:focus-visible {
+    outline: 3px solid var(--color-focus, #1f4f5f);
+    outline-offset: 3px;
+  }
+  @container (min-width: 48rem) {
+    .row:not(.text-only) {
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+      gap: clamp(2rem, 6cqi, 5.5rem);
+    }
+    .start-media .row:nth-child(even) .media,
+    .start-text .row:nth-child(odd) .media {
+      order: 2;
+    }
+    .start-media .row:nth-child(even):not(.text-only),
+    .start-text .row:nth-child(odd):not(.text-only) {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+    }
+  }
+</style>

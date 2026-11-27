@@ -1,0 +1,33 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "footer-minimal",
+  "title": "Minimal footer",
+  "author": "Lambda Curry <https://github.com/lambda-curry>",
+  "description": "One quiet line: copyright, a short note such as an address or hours, a few links and an optional credit.",
+  "files": [
+    {
+      "path": "src/components/blocks/FooterMinimal.astro",
+      "content": "---\n// Astro Blocks — footer-minimal — MIT — https://github.com/lambda-curry/astro-blocks\ninterface Link {\n  label: string;\n  href: string;\n}\ninterface Props {\n  name: string;\n  links?: Link[];\n  /** One short line, such as an address or opening hours. */\n  note?: string;\n  /** A small credit link kept at the end of the row, such as the site builder's. */\n  credit?: Link;\n  /** The copyright year. Defaults to the current year. */\n  year?: number;\n}\n\nconst { name, links = [], note, credit, year = new Date().getFullYear() } = Astro.props;\n---\n\n<footer class=\"footer-minimal\">\n  <div class=\"row\">\n    <p class=\"copyright\">© {year} {name}</p>\n    {note && <p class=\"note\">{note}</p>}\n    {\n      links.length > 0 && (\n        <nav aria-label=\"Footer\">\n          <ul>\n            {links.map(({ label, href }) => (\n              <li>\n                <a href={href}>{label}</a>\n              </li>\n            ))}\n          </ul>\n        </nav>\n      )\n    }\n    {\n      credit && (\n        <p class=\"credit\">\n          <a href={credit.href}>{credit.label}</a>\n        </p>\n      )\n    }\n  </div>\n</footer>\n\n<style>\n  .footer-minimal {\n    container-type: inline-size;\n    border-block-start: 1px solid color-mix(in oklab, currentColor 14%, transparent);\n    color: var(--color-muted, #555c62);\n    font-size: var(--step--1, clamp(0.875rem, 0.84rem + 0.16vw, 0.95rem));\n  }\n  .row {\n    display: flex;\n    flex-wrap: wrap;\n    align-items: center;\n    gap: 0.25rem 1.75rem;\n    inline-size: min(var(--width-content, 72rem), 100% - 2 * var(--space-gutter, clamp(1.25rem, 4vw, 4rem)));\n    margin-inline: auto;\n    padding-block: 1.25rem;\n  }\n  p {\n    margin: 0;\n  }\n  .copyright {\n    color: var(--color-text, #1b1f22);\n    font-weight: var(--weight-action, 600);\n  }\n  ul {\n    display: flex;\n    flex-wrap: wrap;\n    gap: 0 1.25rem;\n    margin: 0;\n    padding: 0;\n    list-style: none;\n  }\n  a {\n    display: inline-flex;\n    align-items: center;\n    min-block-size: 44px;\n    color: inherit;\n    text-underline-offset: 0.25em;\n  }\n  a:hover {\n    color: var(--color-text, #1b1f22);\n  }\n  a:focus-visible {\n    outline: 3px solid var(--color-focus, #1f4f5f);\n    outline-offset: 2px;\n  }\n  @container (min-width: 40rem) {\n    .credit {\n      margin-inline-start: auto;\n    }\n  }\n</style>\n",
+      "type": "registry:file",
+      "target": "~/src/components/blocks/FooterMinimal.astro"
+    }
+  ],
+  "meta": {
+    "version": "0.1.0",
+    "tags": [
+      "footer",
+      "minimal",
+      "quiet",
+      "local business",
+      "personal"
+    ],
+    "useWhen": "The site is small, and the footer only needs to answer where, when and who.",
+    "avoidWhen": "The site has many pages that visitors look for at the bottom. Use footer-columns.",
+    "placement": "page-end"
+  },
+  "docs": "Import from src/components/blocks/FooterMinimal.astro. In a Site Boulder site, render it from SiteFooter.astro and pass the existing credit link.",
+  "categories": [
+    "footer"
+  ],
+  "type": "registry:item"
+}

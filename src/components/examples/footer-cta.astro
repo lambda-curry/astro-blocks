@@ -1,0 +1,19 @@
+---
+import FooterCta from "../blocks/FooterCta.astro";
+---
+
+<FooterCta
+  title="Book your first assessment"
+  text="Same-week appointments, and one clinician from the first session to the last."
+  actions={[
+    { label: "Book online", href: "/book" },
+    { label: "Call 555-0142", href: "tel:+15555550142" },
+  ]}
+  name="Tidewater Physio"
+  links={[
+    { label: "Clinicians", href: "/team" },
+    { label: "Prices", href: "/prices" },
+    { label: "Find us", href: "/visit" },
+  ]}
+  credit={{ label: "Built with Site Boulder", href: "https://siteboulder.com/" }}
+/>

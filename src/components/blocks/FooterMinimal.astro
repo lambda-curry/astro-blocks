@@ -1,0 +1,98 @@
+---
+// Astro Blocks — footer-minimal — MIT — https://github.com/lambda-curry/astro-blocks
+interface Link {
+  label: string;
+  href: string;
+}
+interface Props {
+  name: string;
+  links?: Link[];
+  /** One short line, such as an address or opening hours. */
+  note?: string;
+  /** A small credit link kept at the end of the row, such as the site builder's. */
+  credit?: Link;
+  /** The copyright year. Defaults to the current year. */
+  year?: number;
+}
+
+const { name, links = [], note, credit, year = new Date().getFullYear() } = Astro.props;
+---
+
+<footer class="footer-minimal">
+  <div class="row">
+    <p class="copyright">© {year} {name}</p>
+    {note && <p class="note">{note}</p>}
+    {
+      links.length > 0 && (
+        <nav aria-label="Footer">
+          <ul>
+            {links.map(({ label, href }) => (
+              <li>
+                <a href={href}>{label}</a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )
+    }
+    {
+      credit && (
+        <p class="credit">
+          <a href={credit.href}>{credit.label}</a>
+        </p>
+      )
+    }
+  </div>
+</footer>
+
+<style>
+  .footer-minimal {
+    container-type: inline-size;
+    border-block-start: 1px solid color-mix(in oklab, currentColor 14%, transparent);
+    color: var(--color-muted, #555c62);
+    font-size: var(--step--1, clamp(0.875rem, 0.84rem + 0.16vw, 0.95rem));
+  }
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem 1.75rem;
+    inline-size: min(var(--width-content, 72rem), 100% - 2 * var(--space-gutter, clamp(1.25rem, 4vw, 4rem)));
+    margin-inline: auto;
+    padding-block: 1.25rem;
+  }
+  p {
+    margin: 0;
+  }
+  .copyright {
+    color: var(--color-text, #1b1f22);
+    font-weight: var(--weight-action, 600);
+  }
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 1.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  a {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: 44px;
+    color: inherit;
+    text-underline-offset: 0.25em;
+  }
+  a:hover {
+    color: var(--color-text, #1b1f22);
+  }
+  a:focus-visible {
+    outline: 3px solid var(--color-focus, #1f4f5f);
+    outline-offset: 2px;
+  }
+  @container (min-width: 40rem) {
+    .credit {
+      margin-inline-start: auto;
+    }
+  }
+</style>
