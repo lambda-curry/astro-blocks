@@ -1,0 +1,16 @@
+---
+import HeroSplit from "../blocks/HeroSplit.astro";
+---
+
+<HeroSplit
+  title="Recover from injury with a plan you can follow"
+  lede="Tidewater Physio pairs each patient with one clinician for the whole course of care, from the first assessment to the last session."
+  actions={[
+    { label: "Book an assessment", href: "/book" },
+    { label: "Meet the clinicians", href: "/team" },
+  ]}
+  image={{ src: "/gallery/dune.svg", alt: "Dunes at dusk under a low sun", width: 1600, height: 1000 }}
+  ratio="1 / 1"
+>
+  <p slot="meta">Same-week appointments · Most insurance accepted</p>
+</HeroSplit>

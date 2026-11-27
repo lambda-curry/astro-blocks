@@ -1,0 +1,36 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "hero-typographic",
+  "title": "Typographic hero",
+  "author": "Lambda Curry <https://github.com/lambda-curry>",
+  "description": "A large statement headline with one accented phrase, an optional lede and actions, and a ruled row of short facts.",
+  "registryDependencies": [
+    "lambda-curry/astro-blocks/button#v0.1.0"
+  ],
+  "files": [
+    {
+      "path": "src/components/blocks/HeroTypographic.astro",
+      "content": "---\n// Astro Blocks — hero-typographic — MIT — https://github.com/lambda-curry/astro-blocks\nimport Button from \"../ui/Button.astro\";\n\ninterface Action {\n  label: string;\n  href: string;\n  variant?: \"solid\" | \"outline\" | \"quiet\";\n}\ninterface Props {\n  /** One statement sentence. The headline is the hero, so keep it under about 14 words. */\n  title: string;\n  /** A word or phrase from the title to set in the accent color. */\n  emphasis?: string;\n  lede?: string;\n  actions?: Action[];\n  /** Two to four short facts shown on a ruled line, such as place, hours or founding year. */\n  facts?: string[];\n  align?: \"start\" | \"center\";\n  headingLevel?: 1 | 2;\n}\n\nconst { title, emphasis, lede, actions = [], facts = [], align = \"start\", headingLevel = 1 } = Astro.props;\nconst Heading = `h${headingLevel}` as \"h1\" | \"h2\";\nconst at = emphasis ? title.indexOf(emphasis) : -1;\nconst [before, after] = at >= 0 && emphasis ? [title.slice(0, at), title.slice(at + emphasis.length)] : [title, \"\"];\n---\n\n<section class:list={[\"hero-typographic\", `align-${align}`]}>\n  <div class=\"inner\">\n    <Heading class=\"title\">\n      {before}{at >= 0 && <em>{emphasis}</em>}{after}\n    </Heading>\n    {lede && <p class=\"lede\">{lede}</p>}\n    <slot />\n    {\n      actions.length > 0 && (\n        <div class=\"actions\">\n          {actions.map(({ label, href, variant }, index) => (\n            <Button href={href} size=\"lg\" variant={variant ?? (index === 0 ? \"solid\" : \"quiet\")}>\n              {label}\n            </Button>\n          ))}\n        </div>\n      )\n    }\n    {\n      facts.length > 0 && (\n        <ul class=\"facts\">\n          {facts.map((fact) => (\n            <li>{fact}</li>\n          ))}\n        </ul>\n      )\n    }\n  </div>\n</section>\n\n<style>\n  .hero-typographic {\n    container-type: inline-size;\n    padding-block: clamp(2.5rem, 8vw, 7rem) clamp(2.5rem, 6vw, 5rem);\n    color: var(--color-text, #1b1f22);\n  }\n  .inner {\n    display: grid;\n    justify-items: start;\n  }\n  .align-center .inner {\n    justify-items: center;\n    text-align: center;\n  }\n  .title {\n    margin: 0;\n    max-inline-size: 17ch;\n    font-family: var(--font-display, system-ui, sans-serif);\n    font-size: clamp(2.6rem, 0.9rem + 7.4cqi, 8.25rem);\n    font-weight: var(--weight-display, 650);\n    letter-spacing: var(--tracking-display, -0.022em);\n    line-height: 0.98;\n    text-wrap: balance;\n  }\n  .title em {\n    color: var(--color-accent, #1f4f5f);\n    font-style: inherit;\n  }\n  .lede {\n    margin: clamp(1.25rem, 2.5cqi, 2rem) 0 0;\n    max-inline-size: 42ch;\n    color: var(--color-muted, #555c62);\n    font-size: var(--step-1, clamp(1.2rem, 1.1rem + 0.5vw, 1.5rem));\n    line-height: 1.45;\n    text-wrap: pretty;\n  }\n  .actions {\n    display: flex;\n    flex-wrap: wrap;\n    align-items: center;\n    gap: 0.75rem 1.75rem;\n    margin-block-start: 2.25rem;\n  }\n  .align-center .actions {\n    justify-content: center;\n  }\n  .facts {\n    display: flex;\n    flex-wrap: wrap;\n    gap: 0.375rem 2.5rem;\n    inline-size: 100%;\n    margin: clamp(3rem, 7cqi, 5.5rem) 0 0;\n    padding: 1rem 0 0;\n    border-block-start: 1px solid color-mix(in oklab, currentColor 16%, transparent);\n    color: var(--color-muted, #555c62);\n    font-size: var(--step--1, clamp(0.875rem, 0.84rem + 0.16vw, 0.95rem));\n    list-style: none;\n    text-align: start;\n  }\n  .align-center .facts {\n    justify-content: center;\n  }\n</style>\n",
+      "type": "registry:file",
+      "target": "~/src/components/blocks/HeroTypographic.astro"
+    }
+  ],
+  "meta": {
+    "version": "0.1.0",
+    "tags": [
+      "opening",
+      "type led",
+      "statement",
+      "no image",
+      "editorial",
+      "software"
+    ],
+    "useWhen": "The positioning sentence is the strongest material, or there is no imagery yet.",
+    "avoidWhen": "The headline runs past about fourteen words, or a photo of the real work would say more."
+  },
+  "docs": "Import from src/components/blocks/HeroTypographic.astro. Set emphasis to a phrase that appears in title.",
+  "categories": [
+    "hero"
+  ],
+  "type": "registry:item"
+}

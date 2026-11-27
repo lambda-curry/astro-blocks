@@ -1,0 +1,28 @@
+---
+// A bare page for one live example, framed by the gallery at phone and desktop widths.
+import "../styles/tokens.css";
+import "../styles/gallery-base.css";
+import "../styles/gallery-themes.css";
+import galleryThemes from "../data/gallery-themes.json";
+
+interface Props {
+  title: string;
+  theme?: string | null;
+}
+
+const { title, theme } = Astro.props;
+const known = galleryThemes.some(({ id }) => id === theme && id !== "default");
+---
+
+<!doctype html>
+<html lang="en" data-theme={known ? theme : undefined}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>{title} · Astro Blocks canvas</title>
+  </head>
+  <body class="canvas">
+    <slot />
+  </body>
+</html>

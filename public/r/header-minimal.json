@@ -1,0 +1,37 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "header-minimal",
+  "title": "Minimal header",
+  "author": "Lambda Curry <https://github.com/lambda-curry>",
+  "description": "A single quiet row: name, two to five links and an optional action. Links wrap onto their own row on narrow screens instead of hiding in a menu.",
+  "registryDependencies": [
+    "lambda-curry/astro-blocks/button#v0.1.0"
+  ],
+  "files": [
+    {
+      "path": "src/components/blocks/HeaderMinimal.astro",
+      "content": "---\n// Astro Blocks — header-minimal — MIT — https://github.com/lambda-curry/astro-blocks\nimport Button from \"../ui/Button.astro\";\n\ninterface Link {\n  label: string;\n  href: string;\n}\ninterface Props {\n  /** Site name. Used as the home link text, or as the logo's alt text. */\n  brand: string;\n  homeHref?: string;\n  logo?: { src: string; alt?: string; width?: number; height?: number };\n  /** Two to five links. They wrap onto their own row on narrow screens instead of hiding in a menu. */\n  links?: Link[];\n  action?: Link;\n  /** Draw a hairline under the header. */\n  divider?: boolean;\n}\n\nconst { brand, homeHref = \"/\", logo, links = [], action, divider = true } = Astro.props;\nconst trim = (path: string) => path.replace(/\\/$/, \"\") || \"/\";\nconst here = trim(Astro.url.pathname);\nconst isCurrent = (href: string) => (href.startsWith(\"/\") && !href.startsWith(\"//\") && trim(href) === here ? \"page\" : undefined);\n---\n\n<header class:list={[\"header-minimal\", { divider }]}>\n  <div class=\"row\">\n    <a class=\"brand\" href={homeHref}>\n      {logo ? <img src={logo.src} alt={logo.alt ?? brand} width={logo.width} height={logo.height} /> : brand}\n    </a>\n    {\n      links.length > 0 && (\n        <nav aria-label=\"Primary\">\n          <ul>\n            {links.map(({ label, href }) => (\n              <li>\n                <a href={href} aria-current={isCurrent(href)}>\n                  {label}\n                </a>\n              </li>\n            ))}\n          </ul>\n        </nav>\n      )\n    }\n    {action && <Button class=\"action\" variant=\"outline\" href={action.href}>{action.label}</Button>}\n  </div>\n</header>\n\n<style>\n  .header-minimal {\n    container-type: inline-size;\n    color: var(--color-text, #1b1f22);\n  }\n  .divider {\n    border-block-end: 1px solid color-mix(in oklab, currentColor 13%, transparent);\n  }\n  .row {\n    display: grid;\n    grid-template-columns: minmax(0, 1fr) auto;\n    align-items: center;\n    gap: 0 1.5rem;\n    inline-size: min(var(--width-content, 72rem), 100% - 2 * var(--space-gutter, clamp(1.25rem, 4vw, 4rem)));\n    margin-inline: auto;\n    padding-block: 0.75rem;\n  }\n  .brand {\n    display: inline-flex;\n    align-items: center;\n    justify-self: start;\n    min-block-size: 44px;\n    color: inherit;\n    font-family: var(--font-display, system-ui, sans-serif);\n    font-size: var(--step-1, clamp(1.2rem, 1.1rem + 0.5vw, 1.5rem));\n    font-weight: var(--weight-display, 650);\n    letter-spacing: var(--tracking-display, -0.022em);\n    line-height: 1.05;\n    text-decoration: none;\n    overflow-wrap: anywhere;\n  }\n  .brand img {\n    display: block;\n    max-block-size: 2.25rem;\n    inline-size: auto;\n  }\n  nav {\n    grid-column: 1 / -1;\n    grid-row: 2;\n    margin-inline: -0.625rem;\n  }\n  ul {\n    display: flex;\n    flex-wrap: wrap;\n    margin: 0;\n    padding: 0;\n    list-style: none;\n  }\n  nav a {\n    display: inline-flex;\n    align-items: center;\n    min-block-size: 44px;\n    padding-inline: 0.625rem;\n    color: var(--color-muted, #555c62);\n    text-decoration: none;\n  }\n  nav a:hover,\n  nav a[aria-current=\"page\"] {\n    color: inherit;\n  }\n  nav a[aria-current=\"page\"] {\n    text-decoration: underline;\n    text-decoration-color: var(--color-accent, #1f4f5f);\n    text-decoration-thickness: 2px;\n    text-underline-offset: 0.45em;\n  }\n  :focus-visible {\n    outline: 3px solid var(--color-focus, #1f4f5f);\n    outline-offset: 2px;\n  }\n  @container (min-width: 44rem) {\n    .row {\n      grid-template-columns: minmax(0, 1fr) auto auto;\n      padding-block: 1rem;\n    }\n    nav {\n      grid-column: auto;\n      grid-row: auto;\n      margin-inline: 0;\n    }\n  }\n</style>\n",
+      "type": "registry:file",
+      "target": "~/src/components/blocks/HeaderMinimal.astro"
+    }
+  ],
+  "meta": {
+    "version": "0.1.0",
+    "tags": [
+      "navigation",
+      "minimal",
+      "quiet",
+      "no javascript",
+      "local business",
+      "personal"
+    ],
+    "useWhen": "There are only a few destinations and every one should stay visible, especially on phones.",
+    "avoidWhen": "There are more than five links, or the header should overlay imagery.",
+    "placement": "page-start"
+  },
+  "docs": "Import from src/components/blocks/HeaderMinimal.astro.",
+  "categories": [
+    "header"
+  ],
+  "type": "registry:item"
+}

@@ -1,0 +1,33 @@
+---
+// Renders one example exactly as a site would. The gallery frames this page at real widths.
+import Canvas from "../../layouts/Canvas.astro";
+import catalog from "../../data/catalog.json";
+
+const examples = import.meta.glob<{ default: (props: Record<string, never>) => unknown }>("../../components/examples/*.astro", { eager: true });
+const name = Astro.params.name ?? "";
+const item = catalog.items.find((entry) => entry.name === name);
+const match = Object.entries(examples).find(([path]) => path.endsWith(`/${name}.astro`));
+if (!item || !match) return new Response("Not found", { status: 404 });
+const Example = match[1].default;
+// Sections and inline pieces sit inside a page's content column; headers and footers span the page.
+const shell = item.placement === "section" || item.placement === "inline";
+---
+
+<Canvas title={item.title} theme={Astro.url.searchParams.get("theme")}>
+  {
+    shell ? (
+      <main class="canvas-shell">
+        <Example />
+      </main>
+    ) : (
+      <Example />
+    )
+  }
+</Canvas>
+
+<style>
+  .canvas-shell {
+    inline-size: min(var(--width-content, 72rem), 100% - 2 * var(--space-gutter, clamp(1.25rem, 4vw, 4rem)));
+    margin-inline: auto;
+  }
+</style>

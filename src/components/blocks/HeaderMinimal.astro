@@ -1,0 +1,132 @@
+---
+// Astro Blocks — header-minimal — MIT — https://github.com/lambda-curry/astro-blocks
+import Button from "../ui/Button.astro";
+
+interface Link {
+  label: string;
+  href: string;
+}
+interface Props {
+  /** Site name. Used as the home link text, or as the logo's alt text. */
+  brand: string;
+  homeHref?: string;
+  logo?: { src: string; alt?: string; width?: number; height?: number };
+  /** Two to five links. They wrap onto their own row on narrow screens instead of hiding in a menu. */
+  links?: Link[];
+  action?: Link;
+  /** Draw a hairline under the header. */
+  divider?: boolean;
+}
+
+const { brand, homeHref = "/", logo, links = [], action, divider = true } = Astro.props;
+const trim = (path: string) => path.replace(/\/$/, "") || "/";
+const here = trim(Astro.url.pathname);
+const isCurrent = (href: string) => (href.startsWith("/") && !href.startsWith("//") && trim(href) === here ? "page" : undefined);
+---
+
+<header class:list={["header-minimal", { divider }]}>
+  <div class="row">
+    <a class="brand" href={homeHref}>
+      {logo ? <img src={logo.src} alt={logo.alt ?? brand} width={logo.width} height={logo.height} /> : brand}
+    </a>
+    {
+      links.length > 0 && (
+        <nav aria-label="Primary">
+          <ul>
+            {links.map(({ label, href }) => (
+              <li>
+                <a href={href} aria-current={isCurrent(href)}>
+                  {label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )
+    }
+    {action && <Button class="action" variant="outline" href={action.href}>{action.label}</Button>}
+  </div>
+</header>
+
+<style>
+  .header-minimal {
+    container-type: inline-size;
+    color: var(--color-text, #1b1f22);
+  }
+  .divider {
+    border-block-end: 1px solid color-mix(in oklab, currentColor 13%, transparent);
+  }
+  .row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0 1.5rem;
+    inline-size: min(var(--width-content, 72rem), 100% - 2 * var(--space-gutter, clamp(1.25rem, 4vw, 4rem)));
+    margin-inline: auto;
+    padding-block: 0.75rem;
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    justify-self: start;
+    min-block-size: 44px;
+    color: inherit;
+    font-family: var(--font-display, system-ui, sans-serif);
+    font-size: var(--step-1, clamp(1.2rem, 1.1rem + 0.5vw, 1.5rem));
+    font-weight: var(--weight-display, 650);
+    letter-spacing: var(--tracking-display, -0.022em);
+    line-height: 1.05;
+    text-decoration: none;
+    overflow-wrap: anywhere;
+  }
+  .brand img {
+    display: block;
+    max-block-size: 2.25rem;
+    inline-size: auto;
+  }
+  nav {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    margin-inline: -0.625rem;
+  }
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  nav a {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: 44px;
+    padding-inline: 0.625rem;
+    color: var(--color-muted, #555c62);
+    text-decoration: none;
+  }
+  nav a:hover,
+  nav a[aria-current="page"] {
+    color: inherit;
+  }
+  nav a[aria-current="page"] {
+    text-decoration: underline;
+    text-decoration-color: var(--color-accent, #1f4f5f);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.45em;
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-focus, #1f4f5f);
+    outline-offset: 2px;
+  }
+  @container (min-width: 44rem) {
+    .row {
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      padding-block: 1rem;
+    }
+    nav {
+      grid-column: auto;
+      grid-row: auto;
+      margin-inline: 0;
+    }
+  }
+</style>

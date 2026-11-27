@@ -1,0 +1,414 @@
+{
+  "name": "astro-blocks",
+  "version": "0.1.0",
+  "repository": "lambda-curry/astro-blocks",
+  "items": [
+    {
+      "name": "tokens",
+      "title": "Semantic tokens",
+      "description": "The color, type, space, shape and motion custom properties every block reads, with neutral defaults.",
+      "category": "foundation",
+      "version": "0.1.0",
+      "tags": [
+        "theme",
+        "tokens",
+        "css variables"
+      ],
+      "useWhen": "A project has no theme yet and you want one place to set colors, fonts, type scale, spacing and radius for every block.",
+      "avoidWhen": "The site already defines these roles, as every Site Boulder starter does. Keep the site's own tokens.",
+      "dependencies": [],
+      "files": [
+        {
+          "target": "src/styles/tokens.css",
+          "bytes": 1765,
+          "sha256": "580a43290e984c5aabc59934a08c9a06ee257e25bff23f60907f4e2289830547"
+        }
+      ],
+      "install": "npx shadcn@latest add lambda-curry/astro-blocks/tokens#v0.1.0"
+    },
+    {
+      "name": "button",
+      "title": "Button",
+      "description": "A link or button with solid, outline and quiet variants that read the accent, radius and action-weight tokens.",
+      "category": "primitive",
+      "version": "0.1.0",
+      "tags": [
+        "action",
+        "cta",
+        "link"
+      ],
+      "useWhen": "You need consistent primary and secondary actions across sections.",
+      "avoidWhen": "A plain text link reads better, such as inside running prose.",
+      "placement": "inline",
+      "dependencies": [],
+      "files": [
+        {
+          "target": "src/components/ui/Button.astro",
+          "bytes": 2914,
+          "sha256": "3e059f7c22fa582700c854d001296716018df3a4148afe4248d538b9c04f1bb3"
+        }
+      ],
+      "import": "../components/ui/Button.astro",
+      "props": [
+        {
+          "name": "variant",
+          "type": "\"solid\" | \"outline\" | \"quiet\"",
+          "required": false,
+          "default": "\"solid\"",
+          "description": "solid: filled with the accent. outline: a quiet border in the current text color. quiet: an underlined text link with an arrow."
+        },
+        {
+          "name": "size",
+          "type": "\"md\" | \"lg\"",
+          "required": false,
+          "default": "\"md\""
+        },
+        {
+          "name": "href",
+          "type": "string",
+          "required": false,
+          "description": "Renders a link. Omit it to render a button."
+        }
+      ],
+      "passthrough": [
+        "a",
+        "button"
+      ],
+      "slots": [
+        "default"
+      ],
+      "clientScript": false,
+      "usage": "---\nimport Button from \"../components/ui/Button.astro\";\n---\n\n<div style=\"display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.5rem; padding: 3rem 1.5rem;\">\n  <Button href=\"/start\">Book a visit</Button>\n  <Button href=\"/menu\" variant=\"outline\">See the menu</Button>\n  <Button href=\"/story\" variant=\"quiet\">Read our story</Button>\n  <Button size=\"lg\" href=\"/start\">Large solid</Button>\n  <Button type=\"submit\" variant=\"outline\">A real button</Button>\n</div>\n",
+      "install": "npx shadcn@latest add lambda-curry/astro-blocks/button#v0.1.0"
+    },
+    {
+      "name": "header-floating",
+      "title": "Floating header",
+      "description": "A detached, rounded navigation bar that floats below the top edge with a translucent surface and a native popover menu on narrow screens.",
+      "category": "header",
+      "version": "0.1.0",
+      "tags": [
+        "navigation",
+        "floating",
+        "sticky",
+        "translucent",
+        "popover menu",
+        "product",
+        "studio"
+      ],
+      "useWhen": "The site has four to six destinations plus one primary action, and the page below has imagery or color the bar can float over.",
+      "avoidWhen": "The site is a quiet single page, or the brand needs a large masthead. Use header-minimal or header-editorial instead.",
+      "placement": "page-start",
+      "dependencies": [
+        "button"
+      ],
+      "files": [
+        {
+          "target": "src/components/blocks/HeaderFloating.astro",
+          "bytes": 6479,
+          "sha256": "8aa10c0ed6ea2c7faf88e5946ad681f0c2db9cc6fca44fa02ebf68b347e55b57"
+        }
+      ],
+      "import": "../components/blocks/HeaderFloating.astro",
+      "props": [
+        {
+          "name": "brand",
+          "type": "string",
+          "required": true,
+          "description": "Site name. Used as the home link text, or as the logo's alt text."
+        },
+        {
+          "name": "homeHref",
+          "type": "string",
+          "required": false,
+          "default": "\"/\""
+        },
+        {
+          "name": "logo",
+          "type": "{ src: string; alt?: string; width?: number; height?: number }",
+          "required": false
+        },
+        {
+          "name": "links",
+          "type": "Link[]",
+          "required": false,
+          "default": "[]"
+        },
+        {
+          "name": "action",
+          "type": "Link",
+          "required": false,
+          "description": "One primary action. It sits in the bar and moves into the menu on the narrowest screens."
+        },
+        {
+          "name": "sticky",
+          "type": "boolean",
+          "required": false,
+          "default": "true",
+          "description": "Keep the bar pinned below the top edge while scrolling."
+        },
+        {
+          "name": "menuId",
+          "type": "string",
+          "required": false,
+          "default": "\"site-menu\"",
+          "description": "Unique id for the narrow-screen menu when a page has two headers."
+        }
+      ],
+      "types": {
+        "Link": "{ label: string; href: string }"
+      },
+      "slots": [],
+      "clientScript": false,
+      "usage": "---\nimport HeaderFloating from \"../components/blocks/HeaderFloating.astro\";\nimport HeroSplit from \"../components/blocks/HeroSplit.astro\";\n---\n\n<HeaderFloating\n  brand=\"Fernhill Studio\"\n  links={[\n    { label: \"Work\", href: \"/work\" },\n    { label: \"Practice\", href: \"/practice\" },\n    { label: \"Journal\", href: \"/journal\" },\n    { label: \"Contact\", href: \"/contact\" },\n  ]}\n  action={{ label: \"Start a project\", href: \"/contact\" }}\n/>\n<main style=\"inline-size: min(72rem, 100% - 2.5rem); margin-inline: auto;\">\n  <HeroSplit\n    title=\"Rooms that hold the light all day\"\n    lede=\"Fernhill is a four-person architecture studio designing homes and small workplaces around how sunlight moves through them.\"\n    actions={[{ label: \"See the work\", href: \"/work\" }, { label: \"How we work\", href: \"/practice\" }]}\n    image={{ src: \"/gallery/atelier.svg\", alt: \"Sunlit studio interior with a tall arched window\", width: 1200, height: 1500 }}\n  />\n</main>\n",
+      "install": "npx shadcn@latest add lambda-curry/astro-blocks/header-floating#v0.1.0"
+    },
+    {
+      "name": "header-minimal",
+      "title": "Minimal header",
+      "description": "A single quiet row: name, two to five links and an optional action. Links wrap onto their own row on narrow screens instead of hiding in a menu.",
+      "category": "header",
+      "version": "0.1.0",
+      "tags": [
+        "navigation",
+        "minimal",
+        "quiet",
+        "no javascript",
+        "local business",
+        "personal"
+      ],
+      "useWhen": "There are only a few destinations and every one should stay visible, especially on phones.",
+      "avoidWhen": "There are more than five links, or the header should overlay imagery.",
+      "placement": "page-start",
+      "dependencies": [
+        "button"
+      ],
+      "files": [
+        {
+          "target": "src/components/blocks/HeaderMinimal.astro",
+          "bytes": 3620,
+          "sha256": "152afe814c217f4cbbd9759ee84464c99dddbc60f184cb071e2a93888e3bf43f"
+        }
+      ],
+      "import": "../components/blocks/HeaderMinimal.astro",
+      "props": [
+        {
+          "name": "brand",
+          "type": "string",
+          "required": true,
+          "description": "Site name. Used as the home link text, or as the logo's alt text."
+        },
+        {
+          "name": "homeHref",
+          "type": "string",
+          "required": false,
+          "default": "\"/\""
+        },
+        {
+          "name": "logo",
+          "type": "{ src: string; alt?: string; width?: number; height?: number }",
+          "required": false
+        },
+        {
+          "name": "links",
+          "type": "Link[]",
+          "required": false,
+          "default": "[]",
+          "description": "Two to five links. They wrap onto their own row on narrow screens instead of hiding in a menu."
+        },
+        {
+          "name": "action",
+          "type": "Link",
+          "required": false
+        },
+        {
+          "name": "divider",
+          "type": "boolean",
+          "required": false,
+          "default": "true",
+          "description": "Draw a hairline under the header."
+        }
+      ],
+      "types": {
+        "Link": "{ label: string; href: string }"
+      },
+      "slots": [],
+      "clientScript": false,
+      "usage": "---\nimport HeaderMinimal from \"../components/blocks/HeaderMinimal.astro\";\nimport HeroTypographic from \"../components/blocks/HeroTypographic.astro\";\n---\n\n<HeaderMinimal\n  brand=\"Quarry Bread\"\n  links={[\n    { label: \"Menu\", href: \"/menu\" },\n    { label: \"Wholesale\", href: \"/wholesale\" },\n    { label: \"Visit\", href: \"/visit\" },\n  ]}\n  action={{ label: \"Order for Saturday\", href: \"/order\" }}\n/>\n<main style=\"inline-size: min(72rem, 100% - 2.5rem); margin-inline: auto;\">\n  <HeroTypographic\n    title=\"Slow-fermented bread, baked before the street wakes up\"\n    emphasis=\"before the street wakes up\"\n    actions={[{ label: \"See this week's bakes\", href: \"/menu\" }]}\n    facts={[\"14 Mill Lane\", \"Wed–Sun · 7–2\", \"Since 2016\"]}\n  />\n</main>\n",
+      "install": "npx shadcn@latest add lambda-curry/astro-blocks/header-minimal#v0.1.0"
+    },
+    {
+      "name": "hero-split",
+      "title": "Split hero",
+      "description": "Headline, lede and actions beside one framed image or artwork, stacking copy-first on narrow screens.",
+      "category": "hero",
+      "version": "0.1.0",
+      "tags": [
+        "opening",
+        "image",
+        "two column",
+        "service",
+        "practice",
+        "product"
+      ],
+      "useWhen": "There is one strong, real image or artwork that shows the actual work, and a clear first action.",
+      "avoidWhen": "There is no genuine image. Use hero-typographic rather than a stock or decorative picture.",
+      "placement": "section",
+      "dependencies": [
+        "button"
+      ],
+      "files": [
+        {
+          "target": "src/components/blocks/HeroSplit.astro",
+          "bytes": 4006,
+          "sha256": "b995f6af9ea20f1e7a04c6b137163103ad0b4aff6f4ea6a0c34bf006d9353619"
+        }
+      ],
+      "import": "../components/blocks/HeroSplit.astro",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "lede",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "actions",
+          "type": "Action[]",
+          "required": false,
+          "default": "[]",
+          "description": "The first action is the primary one; keep it to one or two."
+        },
+        {
+          "name": "image",
+          "type": "{ src: string; alt: string; width?: number; height?: number }",
+          "required": false,
+          "description": "One real image. Use the media slot instead for a picture, video or SVG artwork."
+        },
+        {
+          "name": "mediaSide",
+          "type": "\"start\" | \"end\"",
+          "required": false,
+          "default": "\"end\""
+        },
+        {
+          "name": "ratio",
+          "type": "string",
+          "required": false,
+          "default": "\"4 / 5\"",
+          "description": "CSS aspect-ratio of the media frame on wide screens."
+        },
+        {
+          "name": "align",
+          "type": "\"center\" | \"end\"",
+          "required": false,
+          "default": "\"center\"",
+          "description": "Vertical alignment of the copy against the media."
+        },
+        {
+          "name": "headingLevel",
+          "type": "1 | 2",
+          "required": false,
+          "default": "1"
+        }
+      ],
+      "types": {
+        "Action": "{ label: string; href: string; variant?: \"solid\" | \"outline\" | \"quiet\" }"
+      },
+      "slots": [
+        "default",
+        "meta",
+        "media"
+      ],
+      "clientScript": false,
+      "usage": "---\nimport HeroSplit from \"../components/blocks/HeroSplit.astro\";\n---\n\n<HeroSplit\n  title=\"Recover from injury with a plan you can follow\"\n  lede=\"Tidewater Physio pairs each patient with one clinician for the whole course of care, from the first assessment to the last session.\"\n  actions={[\n    { label: \"Book an assessment\", href: \"/book\" },\n    { label: \"Meet the clinicians\", href: \"/team\" },\n  ]}\n  image={{ src: \"/gallery/dune.svg\", alt: \"Dunes at dusk under a low sun\", width: 1600, height: 1000 }}\n  ratio=\"1 / 1\"\n>\n  <p slot=\"meta\">Same-week appointments · Most insurance accepted</p>\n</HeroSplit>\n",
+      "install": "npx shadcn@latest add lambda-curry/astro-blocks/hero-split#v0.1.0"
+    },
+    {
+      "name": "hero-typographic",
+      "title": "Typographic hero",
+      "description": "A large statement headline with one accented phrase, an optional lede and actions, and a ruled row of short facts.",
+      "category": "hero",
+      "version": "0.1.0",
+      "tags": [
+        "opening",
+        "type led",
+        "statement",
+        "no image",
+        "editorial",
+        "software"
+      ],
+      "useWhen": "The positioning sentence is the strongest material, or there is no imagery yet.",
+      "avoidWhen": "The headline runs past about fourteen words, or a photo of the real work would say more.",
+      "placement": "section",
+      "dependencies": [
+        "button"
+      ],
+      "files": [
+        {
+          "target": "src/components/blocks/HeroTypographic.astro",
+          "bytes": 3378,
+          "sha256": "87e4e6bf48e3262ffcff86a5cb3170013cb327cce289ac34f43cf5ec38d6f7c7"
+        }
+      ],
+      "import": "../components/blocks/HeroTypographic.astro",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "required": true,
+          "description": "One statement sentence. The headline is the hero, so keep it under about 14 words."
+        },
+        {
+          "name": "emphasis",
+          "type": "string",
+          "required": false,
+          "description": "A word or phrase from the title to set in the accent color."
+        },
+        {
+          "name": "lede",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "actions",
+          "type": "Action[]",
+          "required": false,
+          "default": "[]"
+        },
+        {
+          "name": "facts",
+          "type": "string[]",
+          "required": false,
+          "default": "[]",
+          "description": "Two to four short facts shown on a ruled line, such as place, hours or founding year."
+        },
+        {
+          "name": "align",
+          "type": "\"start\" | \"center\"",
+          "required": false,
+          "default": "\"start\""
+        },
+        {
+          "name": "headingLevel",
+          "type": "1 | 2",
+          "required": false,
+          "default": "1"
+        }
+      ],
+      "types": {
+        "Action": "{ label: string; href: string; variant?: \"solid\" | \"outline\" | \"quiet\" }"
+      },
+      "slots": [
+        "default"
+      ],
+      "clientScript": false,
+      "usage": "---\nimport HeroTypographic from \"../components/blocks/HeroTypographic.astro\";\n---\n\n<HeroTypographic\n  title=\"Analytics your whole team can actually read\"\n  emphasis=\"actually read\"\n  lede=\"Orbit turns product events into one plain-language weekly report, so decisions stop waiting for the data team.\"\n  actions={[\n    { label: \"Start free\", href: \"/signup\" },\n    { label: \"Read a sample report\", href: \"/sample\" },\n  ]}\n  facts={[\"No SQL required\", \"SOC 2 Type II\", \"Setup in an afternoon\"]}\n/>\n",
+      "install": "npx shadcn@latest add lambda-curry/astro-blocks/hero-typographic#v0.1.0"
+    }
+  ]
+}

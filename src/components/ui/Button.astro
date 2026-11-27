@@ -1,0 +1,104 @@
+---
+// Astro Blocks — button — MIT — https://github.com/lambda-curry/astro-blocks
+import type { HTMLAttributes } from "astro/types";
+
+type Look = {
+  /** solid: filled with the accent. outline: a quiet border in the current text color. quiet: an underlined text link with an arrow. */
+  variant?: "solid" | "outline" | "quiet";
+  size?: "md" | "lg";
+};
+type Props = Look &
+  (
+    | ({
+        /** Renders a link. Omit it to render a button. */
+        href: string;
+      } & Omit<HTMLAttributes<"a">, "href">)
+    | ({ href?: undefined } & HTMLAttributes<"button">)
+  );
+
+const { variant = "solid", size = "md", class: className, ...attributes } = Astro.props;
+const classes = ["ab-button", variant, size, className];
+const link = typeof attributes.href === "string" ? (attributes as HTMLAttributes<"a">) : null;
+---
+
+{
+  link ? (
+    <a {...link} class:list={classes}>
+      <slot />
+    </a>
+  ) : (
+    <button type="button" {...(attributes as HTMLAttributes<"button">)} class:list={classes}>
+      <slot />
+    </button>
+  )
+}
+
+<style>
+  .ab-button {
+    --_bg: var(--color-accent, #1f4f5f);
+    --_fg: var(--color-on-accent, #ffffff);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
+    min-block-size: 44px;
+    padding: 0.62em 1.15em;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm, 0.375rem);
+    background: var(--_bg);
+    color: var(--_fg);
+    font: inherit;
+    font-weight: var(--weight-action, 600);
+    line-height: 1.2;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      background-color var(--duration, 160ms) var(--ease, cubic-bezier(0.2, 0.7, 0.2, 1)),
+      border-color var(--duration, 160ms) var(--ease, cubic-bezier(0.2, 0.7, 0.2, 1)),
+      translate var(--duration, 160ms) var(--ease, cubic-bezier(0.2, 0.7, 0.2, 1));
+  }
+  .solid:hover {
+    background: color-mix(in oklab, var(--_bg) 84%, #000);
+  }
+  .outline {
+    --_bg: transparent;
+    --_fg: currentColor;
+    border-color: color-mix(in oklab, currentColor 40%, transparent);
+  }
+  .outline:hover {
+    border-color: currentColor;
+    background: color-mix(in oklab, currentColor 7%, transparent);
+  }
+  .quiet {
+    --_bg: transparent;
+    --_fg: inherit;
+    padding-inline: 0;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.28em;
+  }
+  .quiet::after {
+    content: "→" / "";
+    transition: translate var(--duration, 160ms) var(--ease, cubic-bezier(0.2, 0.7, 0.2, 1));
+  }
+  .quiet:hover::after {
+    translate: 0.2em 0;
+  }
+  .lg {
+    min-block-size: 52px;
+    padding: 0.8em 1.45em;
+    font-size: 1.0625em;
+  }
+  .quiet.lg {
+    padding-inline: 0;
+  }
+  .ab-button:focus-visible {
+    outline: 3px solid var(--color-focus, #1f4f5f);
+    outline-offset: 3px;
+  }
+  button.ab-button:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+</style>

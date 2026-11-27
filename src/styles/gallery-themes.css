@@ -1,0 +1,53 @@
+/* Gallery demo themes. Each one only redefines semantic tokens, so every block
+   restyles from the same source. Site themes belong in the site's own theme.css. */
+:root[data-theme="ink"] {
+  color-scheme: dark;
+  --color-bg: #101213;
+  --color-surface: #1a1d1f;
+  --color-text: #eef0ec;
+  --color-muted: #a5aca8;
+  --color-accent: #c8f53a;
+  --color-on-accent: #121410;
+  --color-border: #545c60;
+  --font-body: ui-sans-serif, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-display: ui-sans-serif, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --weight-display: 600;
+  --tracking-display: -0.035em;
+  --radius-sm: 0.25rem;
+  --radius-lg: 0.625rem;
+}
+
+:root[data-theme="paper"] {
+  --color-bg: #f3f1ea;
+  --color-surface: #e8e5dc;
+  --color-text: #1b1a17;
+  --color-muted: #5a5850;
+  --color-accent: #2a3fd1;
+  --color-on-accent: #ffffff;
+  --color-border: #8f8b80;
+  --font-body: Charter, "Bitstream Charter", "Sitka Text", Cambria, serif;
+  --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, "URW Palladio L", P052, Georgia, serif;
+  --weight-display: 500;
+  --weight-action: 600;
+  --tracking-display: -0.012em;
+  --leading-display: 1.04;
+  --radius-sm: 0;
+  --radius-lg: 0;
+}
+
+:root[data-theme="grove"] {
+  color-scheme: dark;
+  --color-bg: #163225;
+  --color-surface: #1e4131;
+  --color-text: #f4f0e4;
+  --color-muted: #c4cbb9;
+  --color-accent: #f2b134;
+  --color-on-accent: #1b1a10;
+  --color-border: #6a8574;
+  --font-body: Seravek, "Gill Sans Nova", Ubuntu, Calibri, "DejaVu Sans", sans-serif;
+  --font-display: Seravek, "Gill Sans Nova", Ubuntu, Calibri, "DejaVu Sans", sans-serif;
+  --weight-display: 700;
+  --tracking-display: -0.025em;
+  --radius-sm: 0.75rem;
+  --radius-lg: 1.5rem;
+}

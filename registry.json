@@ -1,0 +1,203 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "astro-blocks",
+  "homepage": "https://github.com/lambda-curry/astro-blocks",
+  "items": [
+    {
+      "name": "tokens",
+      "type": "registry:item",
+      "title": "Semantic tokens",
+      "description": "The color, type, space, shape and motion custom properties every block reads, with neutral defaults.",
+      "author": "Lambda Curry <https://github.com/lambda-curry>",
+      "categories": [
+        "foundation"
+      ],
+      "docs": "Import src/styles/tokens.css once in your layout, then override the roles in your own theme. Blocks fall back to the same values, so this item is optional.",
+      "meta": {
+        "version": "0.1.0",
+        "tags": [
+          "theme",
+          "tokens",
+          "css variables"
+        ],
+        "useWhen": "A project has no theme yet and you want one place to set colors, fonts, type scale, spacing and radius for every block.",
+        "avoidWhen": "The site already defines these roles, as every Site Boulder starter does. Keep the site's own tokens."
+      },
+      "files": [
+        {
+          "path": "src/styles/tokens.css",
+          "type": "registry:file",
+          "target": "~/src/styles/tokens.css"
+        }
+      ]
+    },
+    {
+      "name": "button",
+      "type": "registry:item",
+      "title": "Button",
+      "description": "A link or button with solid, outline and quiet variants that read the accent, radius and action-weight tokens.",
+      "author": "Lambda Curry <https://github.com/lambda-curry>",
+      "categories": [
+        "primitive"
+      ],
+      "docs": "Import from src/components/ui/Button.astro. Pass href for a link; omit it for a button.",
+      "meta": {
+        "version": "0.1.0",
+        "tags": [
+          "action",
+          "cta",
+          "link"
+        ],
+        "useWhen": "You need consistent primary and secondary actions across sections.",
+        "avoidWhen": "A plain text link reads better, such as inside running prose.",
+        "placement": "inline"
+      },
+      "files": [
+        {
+          "path": "src/components/ui/Button.astro",
+          "type": "registry:file",
+          "target": "~/src/components/ui/Button.astro"
+        }
+      ]
+    },
+    {
+      "name": "header-floating",
+      "type": "registry:item",
+      "title": "Floating header",
+      "description": "A detached, rounded navigation bar that floats below the top edge with a translucent surface and a native popover menu on narrow screens.",
+      "author": "Lambda Curry <https://github.com/lambda-curry>",
+      "categories": [
+        "header"
+      ],
+      "registryDependencies": [
+        "lambda-curry/astro-blocks/button#v0.1.0"
+      ],
+      "docs": "Import from src/components/blocks/HeaderFloating.astro. The narrow-screen menu uses the HTML popover attribute and needs no JavaScript.",
+      "meta": {
+        "version": "0.1.0",
+        "tags": [
+          "navigation",
+          "floating",
+          "sticky",
+          "translucent",
+          "popover menu",
+          "product",
+          "studio"
+        ],
+        "useWhen": "The site has four to six destinations plus one primary action, and the page below has imagery or color the bar can float over.",
+        "avoidWhen": "The site is a quiet single page, or the brand needs a large masthead. Use header-minimal or header-editorial instead.",
+        "placement": "page-start"
+      },
+      "files": [
+        {
+          "path": "src/components/blocks/HeaderFloating.astro",
+          "type": "registry:file",
+          "target": "~/src/components/blocks/HeaderFloating.astro"
+        }
+      ]
+    },
+    {
+      "name": "header-minimal",
+      "type": "registry:item",
+      "title": "Minimal header",
+      "description": "A single quiet row: name, two to five links and an optional action. Links wrap onto their own row on narrow screens instead of hiding in a menu.",
+      "author": "Lambda Curry <https://github.com/lambda-curry>",
+      "categories": [
+        "header"
+      ],
+      "registryDependencies": [
+        "lambda-curry/astro-blocks/button#v0.1.0"
+      ],
+      "docs": "Import from src/components/blocks/HeaderMinimal.astro.",
+      "meta": {
+        "version": "0.1.0",
+        "tags": [
+          "navigation",
+          "minimal",
+          "quiet",
+          "no javascript",
+          "local business",
+          "personal"
+        ],
+        "useWhen": "There are only a few destinations and every one should stay visible, especially on phones.",
+        "avoidWhen": "There are more than five links, or the header should overlay imagery.",
+        "placement": "page-start"
+      },
+      "files": [
+        {
+          "path": "src/components/blocks/HeaderMinimal.astro",
+          "type": "registry:file",
+          "target": "~/src/components/blocks/HeaderMinimal.astro"
+        }
+      ]
+    },
+    {
+      "name": "hero-split",
+      "type": "registry:item",
+      "title": "Split hero",
+      "description": "Headline, lede and actions beside one framed image or artwork, stacking copy-first on narrow screens.",
+      "author": "Lambda Curry <https://github.com/lambda-curry>",
+      "categories": [
+        "hero"
+      ],
+      "registryDependencies": [
+        "lambda-curry/astro-blocks/button#v0.1.0"
+      ],
+      "docs": "Import from src/components/blocks/HeroSplit.astro. Pass image, or use the media slot for a picture, video or SVG.",
+      "meta": {
+        "version": "0.1.0",
+        "tags": [
+          "opening",
+          "image",
+          "two column",
+          "service",
+          "practice",
+          "product"
+        ],
+        "useWhen": "There is one strong, real image or artwork that shows the actual work, and a clear first action.",
+        "avoidWhen": "There is no genuine image. Use hero-typographic rather than a stock or decorative picture."
+      },
+      "files": [
+        {
+          "path": "src/components/blocks/HeroSplit.astro",
+          "type": "registry:file",
+          "target": "~/src/components/blocks/HeroSplit.astro"
+        }
+      ]
+    },
+    {
+      "name": "hero-typographic",
+      "type": "registry:item",
+      "title": "Typographic hero",
+      "description": "A large statement headline with one accented phrase, an optional lede and actions, and a ruled row of short facts.",
+      "author": "Lambda Curry <https://github.com/lambda-curry>",
+      "categories": [
+        "hero"
+      ],
+      "registryDependencies": [
+        "lambda-curry/astro-blocks/button#v0.1.0"
+      ],
+      "docs": "Import from src/components/blocks/HeroTypographic.astro. Set emphasis to a phrase that appears in title.",
+      "meta": {
+        "version": "0.1.0",
+        "tags": [
+          "opening",
+          "type led",
+          "statement",
+          "no image",
+          "editorial",
+          "software"
+        ],
+        "useWhen": "The positioning sentence is the strongest material, or there is no imagery yet.",
+        "avoidWhen": "The headline runs past about fourteen words, or a photo of the real work would say more."
+      },
+      "files": [
+        {
+          "path": "src/components/blocks/HeroTypographic.astro",
+          "type": "registry:file",
+          "target": "~/src/components/blocks/HeroTypographic.astro"
+        }
+      ]
+    }
+  ]
+}

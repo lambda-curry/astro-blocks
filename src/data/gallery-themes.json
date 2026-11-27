@@ -1,0 +1,6 @@
+[
+  { "id": "default", "label": "Default", "note": "The token defaults, close to a fresh Site Boulder starter" },
+  { "id": "ink", "label": "Ink", "note": "Dark, technical, acid accent" },
+  { "id": "paper", "label": "Paper", "note": "Editorial serif with square corners" },
+  { "id": "grove", "label": "Grove", "note": "Deep green with an amber accent and soft shapes" }
+]
