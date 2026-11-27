@@ -1,0 +1,15 @@
+---
+// Preview stage: the header-minimal usage example above a page opening. Not part of the usage.
+import Example from "./header-minimal.astro";
+import HeroTypographic from "../blocks/HeroTypographic.astro";
+---
+
+<Example />
+<main style="inline-size: min(72rem, 100% - 2.5rem); margin-inline: auto;">
+  <HeroTypographic
+    title="Slow-fermented bread, baked before the street wakes up"
+    emphasis="before the street wakes up"
+    actions={[{ label: "See this week's bakes", href: "/menu" }]}
+    facts={["14 Mill Lane", "Wed–Sun · 7–2", "Since 2016"]}
+  />
+</main>

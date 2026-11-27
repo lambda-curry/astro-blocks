@@ -45,4 +45,15 @@ npm run validate     # shadcn registry validate
 npm run shots -- --themes default,ink   # 390px and 1440px screenshots into qa/ (dev server running)
 ```
 
-Release: set `version` in `package.json`, update every `#v…` dependency ref and changed `meta.version` in `registry.json`, run `npm run registry`, merge, then tag `v<version>`.
+Release: set `version` in `package.json`, update every `#v…` dependency ref and changed `meta.version` in `registry.json`, run `npm run registry`, merge, then tag `v<version>`. Site Boulder pins a release with its own reviewed `sync-astro-blocks.mjs --ref v<version>`.
+
+## Gallery sync
+
+The gallery is a private Site Boulder draft built only through the customer MCP tools: `registry_add` installs the blocks (pinned to this version), and revisioned `edit_site` batches write the gallery files listed in `scripts/gallery-sync.mjs`. Repeat runs write only what changed, and the draft keeps its own `Base.astro` and `tokens.css`.
+
+```sh
+node scripts/gallery-sync.mjs login --mcp https://siteboulder.com/api/mcp   # one browser approval; token saved to ~/.config/astro-blocks
+node scripts/gallery-sync.mjs sync --mcp https://siteboulder.com/api/mcp --site <draft id> --preview
+```
+
+Bump the platform's pinned registry before syncing a new version, or `registry_add` refuses the version.

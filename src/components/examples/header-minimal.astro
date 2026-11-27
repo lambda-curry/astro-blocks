@@ -1,6 +1,5 @@
 ---
 import HeaderMinimal from "../blocks/HeaderMinimal.astro";
-import HeroTypographic from "../blocks/HeroTypographic.astro";
 ---
 
 <HeaderMinimal
@@ -12,11 +11,3 @@ import HeroTypographic from "../blocks/HeroTypographic.astro";
   ]}
   action={{ label: "Order for Saturday", href: "/order" }}
 />
-<main style="inline-size: min(72rem, 100% - 2.5rem); margin-inline: auto;">
-  <HeroTypographic
-    title="Slow-fermented bread, baked before the street wakes up"
-    emphasis="before the street wakes up"
-    actions={[{ label: "See this week's bakes", href: "/menu" }]}
-    facts={["14 Mill Lane", "Wed–Sun · 7–2", "Since 2016"]}
-  />
-</main>

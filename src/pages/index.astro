@@ -1,0 +1,266 @@
+---
+import Base from "../layouts/Base.astro";
+import HeroTypographic from "../components/blocks/HeroTypographic.astro";
+import FeaturesEditorial from "../components/blocks/FeaturesEditorial.astro";
+import BlockCard from "../components/gallery/BlockCard.astro";
+import CodeBlock from "../components/gallery/CodeBlock.astro";
+import ThemePicker from "../components/gallery/ThemePicker.astro";
+import catalog from "../data/catalog.json";
+import themes from "../data/gallery-themes.json";
+
+const requested = Astro.url.searchParams.get("theme");
+const theme = themes.some(({ id }) => id === requested) ? requested! : "default";
+const categories = [
+  { id: "header", label: "Headers", blurb: "Navigation that floats, overlays, sets a masthead or stays out of the way." },
+  { id: "hero", label: "Heroes", blurb: "Openings led by an image, a full-bleed photograph or a single sentence." },
+  { id: "walkthrough", label: "Walkthroughs", blurb: "Sequences, histories and step-by-step explanations." },
+  { id: "features", label: "Features", blurb: "Offers and capabilities, as a ruled list or a grid of different weights." },
+  { id: "footer", label: "Footers", blurb: "Endings from one quiet line to a closing invitation." },
+  { id: "primitive", label: "Primitives", blurb: "Small pieces the sections share, installed with them automatically." },
+];
+const heights: Record<string, number> = { "page-start": 820, section: 760, "page-end": 620, inline: 420 };
+const blocks = catalog.items.filter(({ usage }) => usage);
+const sections = blocks.filter(({ category }) => category !== "primitive" && categories.some(({ id }) => id === category));
+const example = `npx shadcn@latest add ${catalog.repository}/hero-split#v${catalog.version}`;
+---
+
+<Base title="Astro Blocks" description="Polished, open-source Astro sections you copy into your project, own and restyle.">
+  <HeroTypographic
+    title="Polished Astro sections you copy, own and restyle"
+    emphasis="own and restyle"
+    lede={`${sections.length} native .astro sections with scoped CSS, typed props and no client JavaScript. Add them with the shadcn CLI, or let the AI building your Site Boulder site add them for you.`}
+    actions={[
+      { label: "Browse the blocks", href: "#blocks" },
+      { label: "Read the source", href: `https://github.com/${catalog.repository}` },
+    ]}
+    facts={[`${sections.length} sections`, "No client JavaScript", "shadcn-compatible", "MIT licensed"]}
+  />
+
+  <section class="install" id="install" aria-labelledby="install-title">
+    <h2 id="install-title">Install</h2>
+    <div class="install-grid">
+      <div class="install-path">
+        <h3>Any Astro project</h3>
+        <p>The shadcn CLI copies the block and its dependencies into <code>src/components</code>. No Tailwind, React or <code>components.json</code> required.</p>
+        <CodeBlock code={example} label="Terminal" />
+      </div>
+      <div class="install-path">
+        <h3>A Site Boulder site</h3>
+        <p>
+          Ask the AI building your site to use Astro Blocks. It finds a block with <code>registry_search</code> and copies it into your private draft with <code>registry_add</code>, pinned to version {catalog.version}. Your copy never changes unless you change it.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="catalog" id="blocks" aria-labelledby="blocks-title">
+    <div class="catalog-head">
+      <h2 id="blocks-title">Blocks</h2>
+      <ThemePicker current={theme} />
+    </div>
+    <div class="filters">
+      <nav aria-label="Categories">
+        <ul>
+          {
+            categories.map(({ id, label }) => (
+              <li>
+                <a href={`#${id}`}>{label}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+      <label class="search" hidden data-search-field>
+        <span>Search</span>
+        <input type="search" placeholder="sticky, photography, timeline…" autocomplete="off" data-search-input />
+      </label>
+    </div>
+    <p class="empty" hidden data-search-empty>No blocks match that search.</p>
+    {
+      categories.map((category) => (
+        <section class="category" id={category.id} data-category-section aria-labelledby={`${category.id}-title`}>
+          <div class="category-head">
+            <h2 id={`${category.id}-title`}>{category.label}</h2>
+            <p>{category.blurb}</p>
+          </div>
+          <div class="cards">
+            {blocks
+              .filter((item) => item.category === category.id)
+              .map((item) => (
+                <BlockCard
+                  name={item.name}
+                  title={item.title}
+                  description={item.description}
+                  tags={item.tags}
+                  category={item.category}
+                  theme={theme}
+                  thumbnailHeight={heights[item.placement ?? "section"] ?? 760}
+                />
+              ))}
+          </div>
+        </section>
+      ))
+    }
+  </section>
+
+  <FeaturesEditorial
+    title="Optional by design"
+    intro="Astro Blocks is a toolbox, not a design system to comply with. The best site may use one block, five, or none."
+    items={[
+      { title: "Design for the site first", text: "Start from the audience, the material and the one thing the page must do. Reach for a block only when it is the quickest route to a structure you already want.", label: "Judgment" },
+      { title: "Copy, then own it", text: "An install is ordinary source with no runtime package and no updates pushed later. Rename it, restyle it, cut what you don't need or merge two blocks into one.", label: "Ownership" },
+      { title: "Tokens, not themes", text: "Every block reads your semantic tokens for color, type, space and shape. Change them once and every block follows; the four themes above are the same source.", label: "Styling" },
+      { title: "Accessible and fast by default", text: "Container queries, 44px targets, visible focus, one h1 per page, no client JavaScript, and menus built on the HTML popover attribute.", label: "Quality" },
+    ]}
+  />
+</Base>
+
+<script>
+  const field = document.querySelector<HTMLElement>("[data-search-field]");
+  const input = document.querySelector<HTMLInputElement>("[data-search-input]");
+  const empty = document.querySelector<HTMLElement>("[data-search-empty]");
+  if (field && input && empty) {
+    field.hidden = false;
+    input.addEventListener("input", () => {
+      const terms = input.value.toLowerCase().split(/\s+/).filter(Boolean);
+      let shown = 0;
+      for (const section of document.querySelectorAll<HTMLElement>("[data-category-section]")) {
+        let visible = 0;
+        for (const card of section.querySelectorAll<HTMLElement>("[data-card]")) {
+          const match = terms.every((term) => card.dataset.search?.includes(term));
+          card.hidden = !match;
+          if (match) visible += 1;
+        }
+        section.hidden = visible === 0;
+        shown += visible;
+      }
+      empty.hidden = shown > 0;
+    });
+  }
+</script>
+
+<style>
+  /* Site Boulder's Base gives the first section a large top margin; the hero brings its own space. */
+  :global(.site-main > .hero-typographic:first-child) {
+    margin-block-start: 0;
+  }
+  .install {
+    padding-block: clamp(2.5rem, 6vw, 4.5rem);
+    border-block-start: 1px solid color-mix(in oklab, var(--color-text) 14%, transparent);
+  }
+  .install h2,
+  .catalog-head h2 {
+    margin: 0;
+    font-size: var(--step-3);
+  }
+  .install-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr));
+    gap: 2rem clamp(2rem, 5vw, 4rem);
+    margin-block-start: 1.5rem;
+  }
+  .install-path h3 {
+    margin: 0;
+    font-size: var(--step-1);
+  }
+  .install-path p {
+    margin: 0.5rem 0 1.25rem;
+    color: var(--color-muted);
+  }
+  .install-path code {
+    font: 0.875em ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  .catalog {
+    padding-block: clamp(2.5rem, 6vw, 4.5rem);
+    border-block-start: 1px solid color-mix(in oklab, var(--color-text) 14%, transparent);
+  }
+  .catalog-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem 2rem;
+  }
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1rem 2rem;
+    margin-block: 1.5rem 0.5rem;
+  }
+  .filters ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 1.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .filters a {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: 44px;
+    color: var(--color-text);
+    font-weight: var(--weight-action);
+    text-underline-offset: 0.3em;
+  }
+  .search {
+    display: grid;
+    gap: 0.25rem;
+    color: var(--color-muted);
+    font-size: var(--step--1);
+    font-weight: var(--weight-action);
+  }
+  .search[hidden] {
+    display: none;
+  }
+  .search input {
+    inline-size: min(22rem, 100%);
+    min-block-size: 44px;
+    padding-inline: 0.875rem;
+    border: 1px solid color-mix(in oklab, var(--color-text) 30%, transparent);
+    border-radius: var(--radius-sm);
+    background: var(--color-bg);
+    color: var(--color-text);
+    font: inherit;
+    font-size: var(--step-0);
+    font-weight: 400;
+  }
+  .empty {
+    margin: 2rem 0;
+    color: var(--color-muted);
+  }
+  .category {
+    padding-block-start: clamp(2rem, 5vw, 3.5rem);
+    scroll-margin-block-start: 1rem;
+  }
+  .category[hidden] {
+    display: none;
+  }
+  .category-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.25rem 1.5rem;
+    margin-block-end: 1.25rem;
+    padding-block-start: 0.75rem;
+    border-block-start: 2px solid var(--color-text);
+  }
+  .category-head h2 {
+    margin: 0;
+    font-size: var(--step-2);
+  }
+  .category-head p {
+    margin: 0;
+    color: var(--color-muted);
+  }
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr));
+    gap: 2.5rem 1.75rem;
+  }
+  .cards :global([data-card][hidden]) {
+    display: none;
+  }
+</style>

@@ -1,0 +1,20 @@
+---
+// The gallery's header is a registry block. Base passes CMS menu items, whose links use url.
+import HeaderMinimal from "./blocks/HeaderMinimal.astro";
+
+interface Props {
+  name: string;
+  logo?: { url?: string; alt?: string } | null;
+  links: { label: string; url: string; target?: string | null }[];
+}
+
+const { name, logo, links } = Astro.props;
+---
+
+<HeaderMinimal
+  brand={name}
+  logo={logo?.url ? { src: logo.url, alt: logo.alt } : undefined}
+  links={links.map(({ label, url }) => ({ label, href: url }))}
+  action={{ label: "Install a block", href: "/#install" }}
+/>
+<slot />

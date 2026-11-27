@@ -1,6 +1,6 @@
 {
   "name": "astro-blocks",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "repository": "lambda-curry/astro-blocks",
   "items": [
     {
@@ -24,7 +24,7 @@
           "sha256": "580a43290e984c5aabc59934a08c9a06ee257e25bff23f60907f4e2289830547"
         }
       ],
-      "install": "npx shadcn@latest add lambda-curry/astro-blocks/tokens#v0.1.0"
+      "install": "npx shadcn@latest add lambda-curry/astro-blocks/tokens#v0.1.1"
     },
     {
       "name": "button",
@@ -79,7 +79,7 @@
       ],
       "clientScript": false,
       "usage": "---\nimport Button from \"../components/ui/Button.astro\";\n---\n\n<div style=\"display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.5rem; padding: 3rem 1.5rem;\">\n  <Button href=\"/start\">Book a visit</Button>\n  <Button href=\"/menu\" variant=\"outline\">See the menu</Button>\n  <Button href=\"/story\" variant=\"quiet\">Read our story</Button>\n  <Button size=\"lg\" href=\"/start\">Large solid</Button>\n  <Button type=\"submit\" variant=\"outline\">A real button</Button>\n</div>\n",
-      "install": "npx shadcn@latest add lambda-curry/astro-blocks/button#v0.1.0"
+      "install": "npx shadcn@latest add lambda-curry/astro-blocks/button#v0.1.1"
     },
     {
       "name": "header-floating",
@@ -160,8 +160,8 @@
       },
       "slots": [],
       "clientScript": false,
-      "usage": "---\nimport HeaderFloating from \"../components/blocks/HeaderFloating.astro\";\nimport HeroSplit from \"../components/blocks/HeroSplit.astro\";\n---\n\n<HeaderFloating\n  brand=\"Fernhill Studio\"\n  links={[\n    { label: \"Work\", href: \"/work\" },\n    { label: \"Practice\", href: \"/practice\" },\n    { label: \"Journal\", href: \"/journal\" },\n    { label: \"Contact\", href: \"/contact\" },\n  ]}\n  action={{ label: \"Start a project\", href: \"/contact\" }}\n/>\n<main style=\"inline-size: min(72rem, 100% - 2.5rem); margin-inline: auto;\">\n  <HeroSplit\n    title=\"Rooms that hold the light all day\"\n    lede=\"Fernhill is a four-person architecture studio designing homes and small workplaces around how sunlight moves through them.\"\n    actions={[{ label: \"See the work\", href: \"/work\" }, { label: \"How we work\", href: \"/practice\" }]}\n    image={{ src: \"/gallery/atelier.svg\", alt: \"Sunlit studio interior with a tall arched window\", width: 1200, height: 1500 }}\n  />\n</main>\n",
-      "install": "npx shadcn@latest add lambda-curry/astro-blocks/header-floating#v0.1.0"
+      "usage": "---\nimport HeaderFloating from \"../components/blocks/HeaderFloating.astro\";\n---\n\n<HeaderFloating\n  brand=\"Fernhill Studio\"\n  links={[\n    { label: \"Work\", href: \"/work\" },\n    { label: \"Practice\", href: \"/practice\" },\n    { label: \"Journal\", href: \"/journal\" },\n    { label: \"Contact\", href: \"/contact\" },\n  ]}\n  action={{ label: \"Start a project\", href: \"/contact\" }}\n/>\n",
+      "install": "npx shadcn@latest add lambda-curry/astro-blocks/header-floating#v0.1.1"
     },
     {
       "name": "header-editorial",
@@ -241,8 +241,8 @@
       },
       "slots": [],
       "clientScript": false,
-      "usage": "---\nimport HeaderEditorial from \"../components/blocks/HeaderEditorial.astro\";\nimport HeroTypographic from \"../components/blocks/HeroTypographic.astro\";\n---\n\n<HeaderEditorial\n  brand=\"Kestrel Review\"\n  tagline=\"Essays, fiction and criticism from the Pacific Northwest\"\n  meta=\"Issue 42 · Autumn 2026\"\n  links={[\n    { label: \"Essays\", href: \"/essays\" },\n    { label: \"Fiction\", href: \"/fiction\" },\n    { label: \"Poetry\", href: \"/poetry\" },\n    { label: \"Interviews\", href: \"/interviews\" },\n    { label: \"Archive\", href: \"/archive\" },\n  ]}\n  action={{ label: \"Subscribe\", href: \"/subscribe\" }}\n/>\n<main style=\"inline-size: min(72rem, 100% - 2.5rem); margin-inline: auto;\">\n  <HeroTypographic\n    title=\"The quiet economy of small presses\"\n    emphasis=\"small presses\"\n    lede=\"How a dozen two-person publishers keep regional writing in print, told by the people who run them.\"\n    actions={[{ label: \"Read the lead essay\", href: \"/essays/small-presses\" }]}\n    align=\"center\"\n    headingLevel={1}\n  />\n</main>\n",
-      "install": "npx shadcn@latest add lambda-curry/astro-blocks/header-editorial#v0.1.0"
+      "usage": "---\nimport HeaderEditorial from \"../components/blocks/HeaderEditorial.astro\";\n---\n\n<HeaderEditorial\n  brand=\"Kestrel Review\"\n  tagline=\"Essays, fiction and criticism from the Pacific Northwest\"\n  meta=\"Issue 42 · Autumn 2026\"\n  links={[\n    { label: \"Essays\", href: \"/essays\" },\n    { label: \"Fiction\", href: \"/fiction\" },\n    { label: \"Poetry\", href: \"/poetry\" },\n    { label: \"Interviews\", href: \"/interviews\" },\n    { label: \"Archive\", href: \"/archive\" },\n  ]}\n  action={{ label: \"Subscribe\", href: \"/subscribe\" }}\n/>\n",
+      "install": "npx shadcn@latest add lambda-curry/astro-blocks/header-editorial#v0.1.1"
     },
     {
       "name": "header-transparent",
@@ -330,8 +330,8 @@
       },
       "slots": [],
       "clientScript": false,
-      "usage": "---\nimport HeaderTransparent from \"../components/blocks/HeaderTransparent.astro\";\nimport HeroImmersive from \"../components/blocks/HeroImmersive.astro\";\n---\n\n<HeaderTransparent\n  brand=\"Dunewalk\"\n  links={[\n    { label: \"Trips\", href: \"/trips\" },\n    { label: \"Guides\", href: \"/guides\" },\n    { label: \"Journal\", href: \"/journal\" },\n  ]}\n  action={{ label: \"Plan a trip\", href: \"/plan\" }}\n/>\n<HeroImmersive\n  title=\"Walk the dunes at first light\"\n  lede=\"Small guided treks across the Kelso dunes, timed for the hour when the sand is cool and the shadows are long.\"\n  actions={[{ label: \"See spring dates\", href: \"/trips\" }, { label: \"Meet the guides\", href: \"/guides\" }]}\n  image={{ src: \"/gallery/dune.svg\", alt: \"Layered dunes under a low evening sun\", width: 1600, height: 1000 }}\n  position=\"60% 50%\"\n  height=\"screen\"\n/>\n",
-      "install": "npx shadcn@latest add lambda-curry/astro-blocks/header-transparent#v0.1.0"
+      "usage": "---\nimport HeaderTransparent from \"../components/blocks/HeaderTransparent.astro\";\n---\n\n<HeaderTransparent\n  brand=\"Dunewalk\"\n  links={[\n    { label: \"Trips\", href: \"/trips\" },\n    { label: \"Guides\", href: \"/guides\" },\n    { label: \"Journal\", href: \"/journal\" },\n  ]}\n  action={{ label: \"Plan a trip\", href: \"/plan\" }}\n/>\n",
+      "install": "npx shadcn@latest add lambda-curry/astro-blocks/header-transparent#v0.1.1"
     },
     {
       "name": "header-minimal",
@@ -404,8 +404,8 @@
       },
       "slots": [],
       "clientScript": false,
-      "usage": "---\nimport HeaderMinimal from \"../components/blocks/HeaderMinimal.astro\";\nimport HeroTypographic from \"../components/blocks/HeroTypographic.astro\";\n---\n\n<HeaderMinimal\n  brand=\"Quarry Bread\"\n  links={[\n    { label: \"Menu\", href: \"/menu\" },\n    { label: \"Wholesale\", href: \"/wholesale\" },\n    { label: \"Visit\", href: \"/visit\" },\n  ]}\n  action={{ label: \"Order for Saturday\", href: \"/order\" }}\n/>\n<main style=\"inline-size: min(72rem, 100% - 2.5rem); margin-inline: auto;\">\n  <HeroTypographic\n    title=\"Slow-fermented bread, baked before the street wakes up\"\n    emphasis=\"before the street wakes up\"\n    actions={[{ label: \"See this week's bakes\", href: \"/menu\" }]}\n    facts={[\"14 Mill Lane\", \"Wed–Sun · 7–2\", \"Since 2016\"]}\n  />\n</main>\n",
-      "install": "npx shadcn@latest add lambda-curry/astro-blocks/header-minimal#v0.1.0"
+      "usage": "---\nimport HeaderMinimal from \"../components/blocks/HeaderMinimal.astro\";\n---\n\n<HeaderMinimal\n  brand=\"Quarry Bread\"\n  links={[\n    { label: \"Menu\", href: \"/menu\" },\n    { label: \"Wholesale\", href: \"/wholesale\" },\n    { label: \"Visit\", href: \"/visit\" },\n  ]}\n  action={{ label: \"Order for Saturday\", href: \"/order\" }}\n/>\n",
+      "install": "npx shadcn@latest add lambda-curry/astro-blocks/header-minimal#v0.1.1"
     },
     {
       "name": "hero-split",
@@ -496,7 +496,7 @@
       ],
       "clientScript": false,
       "usage": "---\nimport HeroSplit from \"../components/blocks/HeroSplit.astro\";\n---\n\n<HeroSplit\n  title=\"Recover from injury with a plan you can follow\"\n  lede=\"Tidewater Physio pairs each patient with one clinician for the whole course of care, from the first assessment to the last session.\"\n  actions={[\n    { label: \"Book an assessment\", href: \"/book\" },\n    { label: \"Meet the clinicians\", href: \"/team\" },\n  ]}\n  image={{ src: \"/gallery/dune.svg\", alt: \"Dunes at dusk under a low sun\", width: 1600, height: 1000 }}\n  ratio=\"1 / 1\"\n>\n  <p slot=\"meta\">Same-week appointments · Most insurance accepted</p>\n</HeroSplit>\n",
-      "install": "npx shadcn@latest add lambda-curry/astro-blocks/hero-split#v0.1.0"
+      "install": "npx shadcn@latest add lambda-curry/astro-blocks/hero-split#v0.1.1"
     },
     {
       "name": "hero-immersive",
@@ -594,7 +594,7 @@
       ],
       "clientScript": false,
       "usage": "---\nimport HeroImmersive from \"../components/blocks/HeroImmersive.astro\";\n---\n\n<HeroImmersive\n  title=\"Learn to sail on the quietest water on the coast\"\n  lede=\"Saltmarsh Sailing runs small-boat courses in a sheltered estuary, two students to an instructor.\"\n  actions={[\n    { label: \"Book a taster evening\", href: \"/taster\" },\n    { label: \"Course dates\", href: \"/courses\" },\n  ]}\n  image={{ src: \"/gallery/tide.svg\", alt: \"A small sailboat on calm water at dusk\", width: 1600, height: 1000 }}\n  position=\"82% 58%\"\n>\n  <p slot=\"meta\">RYA recognised · April to October</p>\n</HeroImmersive>\n",
-      "install": "npx shadcn@latest add lambda-curry/astro-blocks/hero-immersive#v0.1.0"
+      "install": "npx shadcn@latest add lambda-curry/astro-blocks/hero-immersive#v0.1.1"
     },
     {
       "name": "hero-typographic",
@@ -676,7 +676,7 @@
       ],
       "clientScript": false,
       "usage": "---\nimport HeroTypographic from \"../components/blocks/HeroTypographic.astro\";\n---\n\n<HeroTypographic\n  title=\"Analytics your whole team can actually read\"\n  emphasis=\"actually read\"\n  lede=\"Orbit turns product events into one plain-language weekly report, so decisions stop waiting for the data team.\"\n  actions={[\n    { label: \"Start free\", href: \"/signup\" },\n    { label: \"Read a sample report\", href: \"/sample\" },\n  ]}\n  facts={[\"No SQL required\", \"SOC 2 Type II\", \"Setup in an afternoon\"]}\n/>\n",
-      "install": "npx shadcn@latest add lambda-curry/astro-blocks/hero-typographic#v0.1.0"
+      "install": "npx shadcn@latest add lambda-curry/astro-blocks/hero-typographic#v0.1.1"
     },
     {
       "name": "steps-numbered",
@@ -741,7 +741,7 @@
       "slots": [],
       "clientScript": false,
       "usage": "---\nimport StepsNumbered from \"../components/blocks/StepsNumbered.astro\";\n---\n\n<StepsNumbered\n  title=\"How a course of care works\"\n  intro=\"One clinician sees you through every step, so you never repeat your story.\"\n  steps={[\n    { title: \"Assessment\", text: \"A full hour to understand the injury, your history and what you want to get back to.\", detail: \"60 minutes\" },\n    { title: \"Plan\", text: \"A written plan with milestones you can check yourself, not just a list of exercises.\", detail: \"Same day\" },\n    { title: \"Treatment\", text: \"Hands-on sessions alongside a home programme sized to your week.\", detail: \"Weekly\" },\n    { title: \"Review\", text: \"We retest against your first assessment and decide together when you are done.\", detail: \"At week six\" },\n  ]}\n/>\n",
-      "install": "npx shadcn@latest add lambda-curry/astro-blocks/steps-numbered#v0.1.0"
+      "install": "npx shadcn@latest add lambda-curry/astro-blocks/steps-numbered#v0.1.1"
     },
     {
       "name": "timeline",
@@ -799,7 +799,7 @@
       "slots": [],
       "clientScript": false,
       "usage": "---\nimport Timeline from \"../components/blocks/Timeline.astro\";\n---\n\n<Timeline\n  title=\"From one borrowed oven to four\"\n  intro=\"Quarry Bread grew one bake at a time.\"\n  items={[\n    { label: \"2016\", title: \"A borrowed oven\", text: \"Weekend loaves baked overnight in a friend's restaurant kitchen and sold from a market table.\" },\n    { label: \"2018\", title: \"Mill Lane opens\", text: \"Our own shop and a wood-fired deck oven, open four mornings a week.\" },\n    { label: \"2021\", title: \"Wholesale\", text: \"Bread for twelve cafés within cycling distance, delivered before seven.\" },\n    { label: \"Now\", title: \"A second bakery\", text: \"A night-bake kitchen across town so the shop can open every day.\", current: true },\n  ]}\n/>\n",
-      "install": "npx shadcn@latest add lambda-curry/astro-blocks/timeline#v0.1.0"
+      "install": "npx shadcn@latest add lambda-curry/astro-blocks/timeline#v0.1.1"
     },
     {
       "name": "alternating-rows",
@@ -870,7 +870,7 @@
       "slots": [],
       "clientScript": false,
       "usage": "---\nimport AlternatingRows from \"../components/blocks/AlternatingRows.astro\";\n---\n\n<AlternatingRows\n  title=\"How a Fernhill project runs\"\n  intro=\"Three phases, each with a clear handover, so you always know what comes next.\"\n  rows={[\n    {\n      title: \"Survey and brief\",\n      text: \"We spend a morning and an evening in the space before drawing anything, recording where the light falls and how you use each room.\",\n      figure: \"2 visits\",\n      figureLabel: \"before the first sketch\",\n    },\n    {\n      title: \"Design\",\n      text: \"Drawings and a light study for every main room, revised with you until the plan feels obvious.\",\n      image: { src: \"/gallery/atelier.svg\", alt: \"A sunlit room with an arched window and a long table\", width: 1200, height: 1500 },\n      link: { label: \"See a finished study\", href: \"/work/light-study\" },\n    },\n    {\n      title: \"Build\",\n      text: \"We stay on as architects through construction, visiting site weekly and answering the builder's questions the same day.\",\n      image: { src: \"/gallery/field.svg\", alt: \"A small farmhouse in rolling green fields\", width: 1200, height: 900 },\n    },\n  ]}\n/>\n",
-      "install": "npx shadcn@latest add lambda-curry/astro-blocks/alternating-rows#v0.1.0"
+      "install": "npx shadcn@latest add lambda-curry/astro-blocks/alternating-rows#v0.1.1"
     },
     {
       "name": "features-bento",
@@ -929,7 +929,7 @@
       "slots": [],
       "clientScript": false,
       "usage": "---\nimport FeaturesBento from \"../components/blocks/FeaturesBento.astro\";\n---\n\n<FeaturesBento\n  title=\"What Orbit does each week\"\n  intro=\"Everything below runs automatically once your events are connected.\"\n  items={[\n    {\n      title: \"One plain-language report\",\n      text: \"Every Monday, the five changes that matter, written as sentences your whole team can act on.\",\n      image: { src: \"/gallery/field.svg\", alt: \"Abstract green fields under a yellow sun\", width: 1200, height: 900 },\n      size: \"large\",\n      href: \"/sample\",\n    },\n    { label: \"Saved per analyst each week\", title: \"4.2 hours\", tone: \"accent\" },\n    { label: \"Audited every year\", title: \"SOC 2\", tone: \"outline\" },\n    { title: \"Alerts that explain themselves\", text: \"Every alert names the segment, the size of the change and its likely cause, so nobody has to dig.\", size: \"wide\" },\n  ]}\n/>\n",
-      "install": "npx shadcn@latest add lambda-curry/astro-blocks/features-bento#v0.1.0"
+      "install": "npx shadcn@latest add lambda-curry/astro-blocks/features-bento#v0.1.1"
     },
     {
       "name": "features-editorial",
@@ -995,7 +995,7 @@
       "slots": [],
       "clientScript": false,
       "usage": "---\nimport FeaturesEditorial from \"../components/blocks/FeaturesEditorial.astro\";\n---\n\n<FeaturesEditorial\n  title=\"What we treat\"\n  intro=\"Most people come to us with one of these. If yours isn't here, ask; we will tell you honestly if we are the right clinic.\"\n  action={{ label: \"Ask about your injury\", href: \"/contact\" }}\n  items={[\n    { title: \"Sports injuries\", text: \"Sprains, strains and overuse injuries, with a return-to-play plan you can test yourself against.\", label: \"Most common\" },\n    { title: \"Back and neck pain\", text: \"Assessment of posture, load and work habits alongside hands-on treatment.\", href: \"/back-pain\" },\n    { title: \"After surgery\", text: \"Rehabilitation after joint replacement or ligament repair, coordinated with your surgeon.\" },\n    { title: \"Pelvic health\", text: \"Pre- and postnatal care with a specialist clinician in a private room.\", label: \"Women's health\" },\n  ]}\n/>\n",
-      "install": "npx shadcn@latest add lambda-curry/astro-blocks/features-editorial#v0.1.0"
+      "install": "npx shadcn@latest add lambda-curry/astro-blocks/features-editorial#v0.1.1"
     },
     {
       "name": "footer-minimal",
@@ -1060,7 +1060,7 @@
       "slots": [],
       "clientScript": false,
       "usage": "---\nimport FooterMinimal from \"../components/blocks/FooterMinimal.astro\";\n---\n\n<FooterMinimal\n  name=\"Quarry Bread\"\n  note=\"14 Mill Lane · Wed–Sun 7–2\"\n  links={[\n    { label: \"Instagram\", href: \"https://instagram.com/\" },\n    { label: \"Wholesale\", href: \"/wholesale\" },\n    { label: \"Careers\", href: \"/careers\" },\n  ]}\n  credit={{ label: \"Built with Site Boulder\", href: \"https://siteboulder.com/\" }}\n/>\n",
-      "install": "npx shadcn@latest add lambda-curry/astro-blocks/footer-minimal#v0.1.0"
+      "install": "npx shadcn@latest add lambda-curry/astro-blocks/footer-minimal#v0.1.1"
     },
     {
       "name": "footer-columns",
@@ -1151,7 +1151,7 @@
       "slots": [],
       "clientScript": false,
       "usage": "---\nimport FooterColumns from \"../components/blocks/FooterColumns.astro\";\n---\n\n<FooterColumns\n  name=\"Orbit\"\n  description=\"Plain-language product analytics for teams without a data department.\"\n  action={{ label: \"Start free\", href: \"/signup\" }}\n  columns={[\n    { title: \"Product\", links: [{ label: \"Weekly report\", href: \"/report\" }, { label: \"Alerts\", href: \"/alerts\" }, { label: \"Pricing\", href: \"/pricing\" }] },\n    { title: \"Company\", links: [{ label: \"About\", href: \"/about\" }, { label: \"Customers\", href: \"/customers\" }, { label: \"Careers\", href: \"/careers\" }] },\n    { title: \"Resources\", links: [{ label: \"Docs\", href: \"/docs\" }, { label: \"Security\", href: \"/security\" }, { label: \"Status\", href: \"/status\" }] },\n  ]}\n  legal={[\n    { label: \"Privacy\", href: \"/privacy\" },\n    { label: \"Terms\", href: \"/terms\" },\n  ]}\n  credit={{ label: \"Built with Site Boulder\", href: \"https://siteboulder.com/\" }}\n/>\n",
-      "install": "npx shadcn@latest add lambda-curry/astro-blocks/footer-columns#v0.1.0"
+      "install": "npx shadcn@latest add lambda-curry/astro-blocks/footer-columns#v0.1.1"
     },
     {
       "name": "footer-wordmark",
@@ -1230,7 +1230,7 @@
       "slots": [],
       "clientScript": false,
       "usage": "---\nimport FooterWordmark from \"../components/blocks/FooterWordmark.astro\";\n---\n\n<FooterWordmark\n  name=\"Fernhill\"\n  note=\"An architecture studio for homes and small workplaces, in Bristol and by appointment.\"\n  links={[\n    { label: \"Work\", href: \"/work\" },\n    { label: \"Practice\", href: \"/practice\" },\n    { label: \"Journal\", href: \"/journal\" },\n    { label: \"Contact\", href: \"/contact\" },\n  ]}\n/>\n",
-      "install": "npx shadcn@latest add lambda-curry/astro-blocks/footer-wordmark#v0.1.0"
+      "install": "npx shadcn@latest add lambda-curry/astro-blocks/footer-wordmark#v0.1.1"
     },
     {
       "name": "footer-cta",
@@ -1315,7 +1315,7 @@
       "slots": [],
       "clientScript": false,
       "usage": "---\nimport FooterCta from \"../components/blocks/FooterCta.astro\";\n---\n\n<FooterCta\n  title=\"Book your first assessment\"\n  text=\"Same-week appointments, and one clinician from the first session to the last.\"\n  actions={[\n    { label: \"Book online\", href: \"/book\" },\n    { label: \"Call 555-0142\", href: \"tel:+15555550142\" },\n  ]}\n  name=\"Tidewater Physio\"\n  links={[\n    { label: \"Clinicians\", href: \"/team\" },\n    { label: \"Prices\", href: \"/prices\" },\n    { label: \"Find us\", href: \"/visit\" },\n  ]}\n  credit={{ label: \"Built with Site Boulder\", href: \"https://siteboulder.com/\" }}\n/>\n",
-      "install": "npx shadcn@latest add lambda-curry/astro-blocks/footer-cta#v0.1.0"
+      "install": "npx shadcn@latest add lambda-curry/astro-blocks/footer-cta#v0.1.1"
     }
   ]
 }

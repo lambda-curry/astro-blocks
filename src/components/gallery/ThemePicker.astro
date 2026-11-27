@@ -1,0 +1,116 @@
+---
+// Theme links work as ordinary navigation; with JavaScript they restyle the live frames in place.
+import themes from "../../data/gallery-themes.json";
+
+interface Props {
+  current: string;
+}
+
+const { current } = Astro.props;
+---
+
+<nav class="theme-picker" aria-label="Preview theme" data-theme-picker>
+  <span class="label" aria-hidden="true">Theme</span>
+  <ul>
+    {
+      themes.map((theme) => (
+        <li>
+          <a href={theme.id === "default" ? "?" : `?theme=${theme.id}`} aria-current={theme.id === current ? "true" : undefined} data-theme={theme.id} title={theme.note}>
+            <span class:list={["swatch", `swatch-${theme.id}`]} aria-hidden="true" />
+            {theme.label}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+
+<script>
+  for (const picker of document.querySelectorAll<HTMLElement>("[data-theme-picker]")) {
+    picker.addEventListener("click", (event) => {
+      const link = (event.target as Element).closest<HTMLAnchorElement>("a[data-theme]");
+      if (!link) return;
+      event.preventDefault();
+      const theme = link.dataset.theme ?? "default";
+      const apply = (url: URL) => (theme === "default" ? url.searchParams.delete("theme") : url.searchParams.set("theme", theme));
+      for (const frame of document.querySelectorAll<HTMLIFrameElement>("iframe[data-frame]")) {
+        const url = new URL(frame.src, location.href);
+        apply(url);
+        frame.src = url.pathname + url.search;
+      }
+      for (const link of document.querySelectorAll<HTMLAnchorElement>("a[data-theme-link]")) {
+        const url = new URL(link.href, location.href);
+        apply(url);
+        link.href = url.pathname + url.search + url.hash;
+      }
+      for (const other of document.querySelectorAll<HTMLAnchorElement>("[data-theme-picker] a[data-theme]")) {
+        if (other.dataset.theme === theme) other.setAttribute("aria-current", "true");
+        else other.removeAttribute("aria-current");
+      }
+      const page = new URL(location.href);
+      apply(page);
+      history.replaceState(null, "", page);
+    });
+  }
+</script>
+
+<style>
+  .theme-picker {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.75rem;
+  }
+  .label {
+    color: var(--color-muted);
+    font-size: var(--step--1);
+    font-weight: var(--weight-action);
+  }
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-block-size: 44px;
+    padding-inline: 0.75rem 0.9rem;
+    border: 1px solid color-mix(in oklab, var(--color-text) 16%, transparent);
+    border-radius: 999px;
+    color: var(--color-text);
+    font-size: var(--step--1);
+    font-weight: var(--weight-action);
+    text-decoration: none;
+  }
+  a:hover {
+    border-color: var(--color-text);
+  }
+  a[aria-current="true"] {
+    border-color: var(--color-text);
+    background: var(--color-text);
+    color: var(--color-bg);
+  }
+  .swatch {
+    inline-size: 0.9rem;
+    block-size: 0.9rem;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.18);
+  }
+  .swatch-default {
+    background: linear-gradient(135deg, #ffffff 50%, #1f4f5f 50%);
+  }
+  .swatch-ink {
+    background: linear-gradient(135deg, #101213 50%, #c8f53a 50%);
+  }
+  .swatch-paper {
+    background: linear-gradient(135deg, #f3f1ea 50%, #2a3fd1 50%);
+  }
+  .swatch-grove {
+    background: linear-gradient(135deg, #163225 50%, #f2b134 50%);
+  }
+</style>

@@ -5,7 +5,7 @@
   "author": "Lambda Curry <https://github.com/lambda-curry>",
   "description": "A large heading and intro that stay in view beside a ruled list of offers, each with a title, a sentence or two and an optional label.",
   "registryDependencies": [
-    "lambda-curry/astro-blocks/button#v0.1.0"
+    "lambda-curry/astro-blocks/button#v0.1.1"
   ],
   "files": [
     {

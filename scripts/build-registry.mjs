@@ -120,7 +120,7 @@ const seenType = (name, props) => props.some(({ type }) => new RegExp(`\\b${name
 
 // Relative imports must resolve to files the install itself delivers.
 function relativeImports(target, source) {
-  return [...source.matchAll(/^import\s+[\s\S]*?from\s+"(\.{1,2}\/[^"]+)";?$/gm)].map(([, specifier]) =>
+  return [...source.matchAll(/^import\s+(?:[\s\S]*?\sfrom\s+)?["'](\.{1,2}\/[^"']+)["'];?$/gm)].map(([, specifier]) =>
     normalize(posix.join(posix.dirname(target), specifier)).split("\\").join("/"),
   );
 }
@@ -177,6 +177,10 @@ for (const item of registry.items) {
   const examplePath = `src/components/examples/${name}.astro`;
   const hasExample = existsSync(join(root, examplePath));
   if (category !== "foundation" && !hasExample) fail(`${name}: add a usage example at ${examplePath}`);
+  // The usage must work after installing only this item; page context belongs in <item>.stage.astro.
+  if (hasExample)
+    for (const imported of relativeImports(examplePath, read(examplePath)))
+      if (!delivered.has(imported)) fail(`${name}: its usage example imports ${imported}, which installing ${name} does not deliver. Move page context into ${name}.stage.astro.`);
   const main = files.find(({ component }) => component);
   catalog.push({
     name,

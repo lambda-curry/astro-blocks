@@ -5,7 +5,7 @@
   "author": "Lambda Curry <https://github.com/lambda-curry>",
   "description": "A single quiet row: name, two to five links and an optional action. Links wrap onto their own row on narrow screens instead of hiding in a menu.",
   "registryDependencies": [
-    "lambda-curry/astro-blocks/button#v0.1.0"
+    "lambda-curry/astro-blocks/button#v0.1.1"
   ],
   "files": [
     {

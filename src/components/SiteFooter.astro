@@ -1,0 +1,19 @@
+---
+// The gallery's footer is a registry block that keeps the linked Site Boulder credit.
+import FooterMinimal from "./blocks/FooterMinimal.astro";
+
+interface Props {
+  name: string;
+  note?: string;
+  links?: { label: string; url: string }[];
+}
+
+const { name, note, links = [] } = Astro.props;
+---
+
+<FooterMinimal
+  name={name}
+  note={note}
+  links={links.map(({ label, url }) => ({ label, href: url }))}
+  credit={{ label: "Built with Site Boulder", href: "https://siteboulder.com/" }}
+/>
