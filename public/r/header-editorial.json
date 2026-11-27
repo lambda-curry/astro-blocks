@@ -1,0 +1,38 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "header-editorial",
+  "title": "Editorial header",
+  "author": "Lambda Curry <https://github.com/lambda-curry>",
+  "description": "A magazine masthead: a centered wordmark with tagline, a top line for an issue or place, and section links between double rules that wrap instead of hiding.",
+  "registryDependencies": [
+    "lambda-curry/astro-blocks/button#v0.1.0"
+  ],
+  "files": [
+    {
+      "path": "src/components/blocks/HeaderEditorial.astro",
+      "content": "---\n// Astro Blocks — header-editorial — MIT — https://github.com/lambda-curry/astro-blocks\nimport Button from \"../ui/Button.astro\";\n\ninterface Link {\n  label: string;\n  href: string;\n}\ninterface Props {\n  /** Publication or site name, set as a large centered wordmark. */\n  brand: string;\n  homeHref?: string;\n  logo?: { src: string; alt?: string; width?: number; height?: number };\n  /** One line under the wordmark, such as what the publication covers. */\n  tagline?: string;\n  /** A short line at the top left, such as an issue, date or place. */\n  meta?: string;\n  /** Sections. They stay visible and wrap onto more lines on narrow screens. */\n  links?: Link[];\n  /** One action at the top right, such as Subscribe. */\n  action?: Link;\n}\n\nconst { brand, homeHref = \"/\", logo, tagline, meta, links = [], action } = Astro.props;\nconst trim = (path: string) => path.replace(/\\/$/, \"\") || \"/\";\nconst here = trim(Astro.url.pathname);\nconst isCurrent = (href: string) => (href.startsWith(\"/\") && !href.startsWith(\"//\") && trim(href) === here ? \"page\" : undefined);\n---\n\n<header class=\"header-editorial\">\n  <div class=\"shell\">\n    {\n      (meta || action) && (\n        <div class=\"topline\">\n          {meta && <p class=\"meta\">{meta}</p>}\n          {action && (\n            <Button class=\"action\" variant=\"quiet\" href={action.href}>\n              {action.label}\n            </Button>\n          )}\n        </div>\n      )\n    }\n    <div class=\"masthead\">\n      <a class=\"wordmark\" href={homeHref}>\n        {logo ? <img src={logo.src} alt={logo.alt ?? brand} width={logo.width} height={logo.height} /> : brand}\n      </a>\n      {tagline && <p class=\"tagline\">{tagline}</p>}\n    </div>\n    {\n      links.length > 0 && (\n        <nav aria-label=\"Sections\">\n          <ul>\n            {links.map(({ label, href }) => (\n              <li>\n                <a href={href} aria-current={isCurrent(href)}>\n                  {label}\n                </a>\n              </li>\n            ))}\n          </ul>\n        </nav>\n      )\n    }\n  </div>\n</header>\n\n<style>\n  .header-editorial {\n    container-type: inline-size;\n    color: var(--color-text, #1b1f22);\n  }\n  .shell {\n    inline-size: min(var(--width-content, 72rem), 100% - 2 * var(--space-gutter, clamp(1.25rem, 4vw, 4rem)));\n    margin-inline: auto;\n  }\n  .topline {\n    display: flex;\n    flex-wrap: wrap;\n    align-items: center;\n    justify-content: space-between;\n    gap: 0 1.5rem;\n    min-block-size: 3rem;\n    border-block-end: 1px solid color-mix(in oklab, currentColor 14%, transparent);\n    font-size: var(--step--1, clamp(0.875rem, 0.84rem + 0.16vw, 0.95rem));\n  }\n  .meta {\n    margin: 0;\n    color: var(--color-muted, #555c62);\n  }\n  .action {\n    margin-inline-start: auto;\n  }\n  .masthead {\n    display: grid;\n    justify-items: center;\n    gap: 0.5rem;\n    padding-block: clamp(1.25rem, 4cqi, 2.5rem) clamp(1rem, 3cqi, 1.75rem);\n    text-align: center;\n  }\n  .wordmark {\n    color: inherit;\n    font-family: var(--font-display, system-ui, sans-serif);\n    font-size: clamp(2.25rem, 0.9rem + 6.2cqi, 6rem);\n    font-weight: var(--weight-display, 650);\n    letter-spacing: var(--tracking-display, -0.022em);\n    line-height: 0.95;\n    text-decoration: none;\n    text-wrap: balance;\n  }\n  .wordmark img {\n    display: block;\n    max-block-size: clamp(3rem, 8cqi, 6rem);\n    inline-size: auto;\n  }\n  .tagline {\n    margin: 0;\n    max-inline-size: 48ch;\n    color: var(--color-muted, #555c62);\n    font-size: var(--step-0, clamp(1rem, 0.96rem + 0.2vw, 1.125rem));\n    text-wrap: balance;\n  }\n  nav {\n    border-block: 3px double color-mix(in oklab, currentColor 55%, transparent);\n  }\n  ul {\n    display: flex;\n    flex-wrap: wrap;\n    justify-content: center;\n    gap: 0 clamp(0.25rem, 2cqi, 1.5rem);\n    margin: 0;\n    padding: 0.25rem 0;\n    list-style: none;\n  }\n  nav a {\n    display: inline-flex;\n    align-items: center;\n    min-block-size: 44px;\n    padding-inline: 0.5rem;\n    color: inherit;\n    font-size: var(--step--1, clamp(0.875rem, 0.84rem + 0.16vw, 0.95rem));\n    font-weight: var(--weight-action, 600);\n    letter-spacing: 0.06em;\n    text-decoration: none;\n    text-transform: uppercase;\n  }\n  nav a:hover {\n    text-decoration: underline;\n    text-underline-offset: 0.4em;\n  }\n  nav a[aria-current=\"page\"] {\n    color: var(--color-accent, #1f4f5f);\n  }\n  :focus-visible {\n    outline: 3px solid var(--color-focus, #1f4f5f);\n    outline-offset: 2px;\n  }\n</style>\n",
+      "type": "registry:file",
+      "target": "~/src/components/blocks/HeaderEditorial.astro"
+    }
+  ],
+  "meta": {
+    "version": "0.1.0",
+    "tags": [
+      "navigation",
+      "masthead",
+      "editorial",
+      "publication",
+      "centered",
+      "no javascript",
+      "writing"
+    ],
+    "useWhen": "The site publishes writing or has distinct sections, and the name deserves to be the loudest thing at the top.",
+    "avoidWhen": "The site needs a primary action in the header more than a wordmark, or the name is long. Use header-floating or header-minimal.",
+    "placement": "page-start"
+  },
+  "docs": "Import from src/components/blocks/HeaderEditorial.astro.",
+  "categories": [
+    "header"
+  ],
+  "type": "registry:item"
+}

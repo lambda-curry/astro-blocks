@@ -1,0 +1,161 @@
+---
+// Astro Blocks — timeline — MIT — https://github.com/lambda-curry/astro-blocks
+interface Entry {
+  /** A date, year or phase name. */
+  label: string;
+  title: string;
+  text?: string;
+  /** Mark the entry happening now. */
+  current?: boolean;
+}
+interface Props {
+  title?: string;
+  intro?: string;
+  /** Entries in order, oldest or first first. */
+  items: Entry[];
+  headingLevel?: 2 | 3;
+}
+
+const { title, intro, items, headingLevel = 2 } = Astro.props;
+const Heading = `h${headingLevel}` as "h2" | "h3";
+const EntryHeading = `h${headingLevel + 1}` as "h3" | "h4";
+---
+
+<section class="timeline">
+  {
+    (title || intro) && (
+      <div class="intro">
+        {title && <Heading class="title">{title}</Heading>}
+        {intro && <p>{intro}</p>}
+      </div>
+    )
+  }
+  <ol class="entries">
+    {
+      items.map((entry) => (
+        <li class:list={["entry", { current: entry.current }]} aria-current={entry.current ? "step" : undefined}>
+          <p class="label">{entry.label}</p>
+          <span class="track" aria-hidden="true"><span class="marker" /></span>
+          <div class="body">
+            <EntryHeading class="entry-title">{entry.title}</EntryHeading>
+            {entry.text && <p class="entry-text">{entry.text}</p>}
+          </div>
+        </li>
+      ))
+    }
+  </ol>
+</section>
+
+<style>
+  .timeline {
+    --_rail: color-mix(in oklab, currentColor 18%, transparent);
+    container-type: inline-size;
+    padding-block: var(--section-gap, clamp(3rem, 8vw, 7rem));
+    color: var(--color-text, #1b1f22);
+  }
+  .intro {
+    max-inline-size: 40rem;
+    margin-block-end: clamp(2rem, 5cqi, 3.5rem);
+  }
+  .title {
+    margin: 0;
+    font-family: var(--font-display, system-ui, sans-serif);
+    font-size: var(--step-3, clamp(1.75rem, 1.35rem + 1.8vw, 2.75rem));
+    font-weight: var(--weight-display, 650);
+    letter-spacing: var(--tracking-display, -0.022em);
+    line-height: var(--leading-display, 1.08);
+  }
+  .intro p {
+    margin: 1rem 0 0;
+    color: var(--color-muted, #555c62);
+    font-size: var(--step-1, clamp(1.2rem, 1.1rem + 0.5vw, 1.5rem));
+    line-height: 1.45;
+  }
+  .entries {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .entry {
+    --_gap: clamp(2rem, 5cqi, 3rem);
+    display: grid;
+    grid-template-columns: 1.25rem minmax(0, 1fr);
+    grid-template-areas: "track label" "track body";
+    column-gap: 1.25rem;
+    padding-block-end: var(--_gap);
+  }
+  .track {
+    grid-area: track;
+    position: relative;
+    display: flex;
+    justify-content: center;
+  }
+  .entry:not(:last-child) .track::after {
+    content: "";
+    position: absolute;
+    inset-block: 1.35rem calc(-1 * var(--_gap));
+    inset-inline-start: calc(50% - 0.5px);
+    inline-size: 1px;
+    background: var(--_rail);
+  }
+  .label {
+    grid-area: label;
+    margin: 0;
+    color: var(--color-muted, #555c62);
+    font-size: var(--step--1, clamp(0.875rem, 0.84rem + 0.16vw, 0.95rem));
+    font-variant-numeric: tabular-nums;
+    font-weight: var(--weight-action, 600);
+    line-height: 1.6;
+  }
+  .marker {
+    flex: none;
+    inline-size: 0.75rem;
+    block-size: 0.75rem;
+    margin-block-start: 0.45rem;
+    border: 2px solid var(--color-accent, #1f4f5f);
+    border-radius: 50%;
+    background: var(--color-bg, #ffffff);
+  }
+  .current .marker {
+    background: var(--color-accent, #1f4f5f);
+    box-shadow: 0 0 0 5px color-mix(in oklab, var(--color-accent, #1f4f5f) 20%, transparent);
+  }
+  .current .label {
+    color: var(--color-accent, #1f4f5f);
+  }
+  .body {
+    grid-area: body;
+    min-inline-size: 0;
+  }
+  .entry-title {
+    margin: 0.25rem 0 0;
+    font-family: var(--font-display, system-ui, sans-serif);
+    font-size: var(--step-1, clamp(1.2rem, 1.1rem + 0.5vw, 1.5rem));
+    font-weight: var(--weight-display, 650);
+    letter-spacing: var(--tracking-display, -0.022em);
+    line-height: 1.2;
+  }
+  .entry-text {
+    margin: 0.5rem 0 0;
+    max-inline-size: 58ch;
+    color: var(--color-muted, #555c62);
+  }
+  @container (min-width: 44rem) {
+    .entry {
+      grid-template-columns: minmax(7rem, 11rem) 1.25rem minmax(0, 1fr);
+      grid-template-areas: "label track body";
+      column-gap: 1.75rem;
+    }
+    .label {
+      font-family: var(--font-display, system-ui, sans-serif);
+      font-size: var(--step-1, clamp(1.2rem, 1.1rem + 0.5vw, 1.5rem));
+      font-weight: var(--weight-display, 650);
+      letter-spacing: var(--tracking-display, -0.022em);
+      line-height: 1.2;
+      text-align: end;
+    }
+    .entry-title {
+      margin-block-start: 0;
+    }
+  }
+</style>

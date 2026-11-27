@@ -1,0 +1,35 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "features-bento",
+  "title": "Bento features",
+  "author": "Lambda Curry <https://github.com/lambda-curry>",
+  "description": "An asymmetric grid of related features with one large tile, wide and tall tiles, accent and outline tones, and whole-tile links.",
+  "files": [
+    {
+      "path": "src/components/blocks/FeaturesBento.astro",
+      "content": "---\n// Astro Blocks — features-bento — MIT — https://github.com/lambda-curry/astro-blocks\ninterface Tile {\n  title: string;\n  text?: string;\n  /** A small label above the title, such as a category or a number with its unit. */\n  label?: string;\n  image?: { src: string; alt: string; width?: number; height?: number };\n  /** large spans two columns and two rows on wide screens; wide spans two columns; tall spans two rows. */\n  size?: \"default\" | \"large\" | \"wide\" | \"tall\";\n  tone?: \"surface\" | \"accent\" | \"outline\";\n  href?: string;\n}\ninterface Props {\n  title?: string;\n  intro?: string;\n  /** Four to seven related items of different weight. Give the most important one size large. On wide screens a row holds four cells: large fills four (two by two), wide and tall two, default one, so pick sizes that fill whole rows. */\n  items: Tile[];\n  headingLevel?: 2 | 3;\n}\n\nconst { title, intro, items, headingLevel = 2 } = Astro.props;\nconst Heading = `h${headingLevel}` as \"h2\" | \"h3\";\nconst TileHeading = `h${headingLevel + 1}` as \"h3\" | \"h4\";\n---\n\n<section class=\"features-bento\">\n  {\n    (title || intro) && (\n      <div class=\"intro\">\n        {title && <Heading class=\"title\">{title}</Heading>}\n        {intro && <p>{intro}</p>}\n      </div>\n    )\n  }\n  <ul class=\"grid\">\n    {\n      items.map((tile) => (\n        <li class:list={[\"tile\", `size-${tile.size ?? \"default\"}`, `tone-${tile.tone ?? \"surface\"}`, { linked: tile.href, \"has-image\": tile.image }]}>\n          {tile.image && (\n            <div class=\"tile-media\">\n              <img src={tile.image.src} alt={tile.image.alt} width={tile.image.width} height={tile.image.height} loading=\"lazy\" decoding=\"async\" />\n            </div>\n          )}\n          <div class=\"tile-body\">\n            {tile.label && <p class=\"tile-label\">{tile.label}</p>}\n            <TileHeading class=\"tile-title\">{tile.href ? <a href={tile.href}>{tile.title}</a> : tile.title}</TileHeading>\n            {tile.text && <p class=\"tile-text\">{tile.text}</p>}\n          </div>\n        </li>\n      ))\n    }\n  </ul>\n</section>\n\n<style>\n  .features-bento {\n    container-type: inline-size;\n    padding-block: var(--section-gap, clamp(3rem, 8vw, 7rem));\n    color: var(--color-text, #1b1f22);\n  }\n  .intro {\n    max-inline-size: 40rem;\n    margin-block-end: clamp(2rem, 5cqi, 3.5rem);\n  }\n  .title {\n    margin: 0;\n    font-family: var(--font-display, system-ui, sans-serif);\n    font-size: var(--step-3, clamp(1.75rem, 1.35rem + 1.8vw, 2.75rem));\n    font-weight: var(--weight-display, 650);\n    letter-spacing: var(--tracking-display, -0.022em);\n    line-height: var(--leading-display, 1.08);\n  }\n  .intro p {\n    margin: 1rem 0 0;\n    color: var(--color-muted, #555c62);\n    font-size: var(--step-1, clamp(1.2rem, 1.1rem + 0.5vw, 1.5rem));\n    line-height: 1.45;\n  }\n  .grid {\n    display: grid;\n    gap: 0.75rem;\n    margin: 0;\n    padding: 0;\n    list-style: none;\n  }\n  .tile {\n    --_pad: clamp(1.25rem, 2.4cqi, 2rem);\n    --_muted: var(--color-muted, #555c62);\n    position: relative;\n    display: flex;\n    flex-direction: column;\n    justify-content: flex-end;\n    min-block-size: 8rem;\n    overflow: clip;\n    padding: var(--_pad);\n    border-radius: var(--radius-lg, 1rem);\n    background: var(--color-surface, #f3f4f1);\n  }\n  .tone-accent {\n    --_muted: color-mix(in oklab, var(--color-on-accent, #ffffff) 82%, transparent);\n    background: var(--color-accent, #1f4f5f);\n    color: var(--color-on-accent, #ffffff);\n  }\n  .tone-outline {\n    background: transparent;\n    box-shadow: inset 0 0 0 1px color-mix(in oklab, currentColor 18%, transparent);\n  }\n  .tile-media {\n    flex: 1 1 9rem;\n    min-block-size: 9rem;\n    margin: calc(-1 * var(--_pad)) calc(-1 * var(--_pad)) 1.25rem;\n  }\n  .tile-media img {\n    display: block;\n    inline-size: 100%;\n    block-size: 100%;\n    object-fit: cover;\n  }\n  .tile-label {\n    margin: 0 0 0.5rem;\n    color: var(--_muted);\n    font-size: var(--step--1, clamp(0.875rem, 0.84rem + 0.16vw, 0.95rem));\n    font-weight: var(--weight-action, 600);\n  }\n  .tile-title {\n    margin: 0;\n    font-family: var(--font-display, system-ui, sans-serif);\n    font-size: var(--step-1, clamp(1.2rem, 1.1rem + 0.5vw, 1.5rem));\n    font-weight: var(--weight-display, 650);\n    letter-spacing: var(--tracking-display, -0.022em);\n    line-height: 1.15;\n    text-wrap: balance;\n  }\n  .tile-title a {\n    color: inherit;\n    text-decoration: none;\n  }\n  .tile-title a::after {\n    content: \"\";\n    position: absolute;\n    inset: 0;\n    border-radius: inherit;\n  }\n  .linked:hover .tile-title a {\n    text-decoration: underline;\n    text-underline-offset: 0.2em;\n  }\n  .tile-title a:focus-visible {\n    outline: none;\n  }\n  .tile-title a:focus-visible::after {\n    outline: 3px solid var(--color-focus, #1f4f5f);\n    outline-offset: 3px;\n  }\n  .tile-text {\n    margin: 0.5rem 0 0;\n    max-inline-size: 46ch;\n    color: var(--_muted);\n  }\n  .size-large .tile-title,\n  .tile:not(:has(.tile-text)) .tile-title {\n    font-size: var(--step-3, clamp(1.75rem, 1.35rem + 1.8vw, 2.75rem));\n  }\n  @container (min-width: 36rem) {\n    .grid {\n      grid-template-columns: repeat(2, minmax(0, 1fr));\n    }\n    .tile {\n      min-block-size: 11rem;\n    }\n    .size-large,\n    .size-wide {\n      grid-column: span 2;\n    }\n  }\n  @container (min-width: 60rem) {\n    .grid {\n      grid-template-columns: repeat(4, minmax(0, 1fr));\n      grid-auto-rows: minmax(13rem, auto);\n      grid-auto-flow: dense;\n    }\n    .size-large {\n      grid-row: span 2;\n    }\n    .size-tall {\n      grid-row: span 2;\n    }\n  }\n</style>\n",
+      "type": "registry:file",
+      "target": "~/src/components/blocks/FeaturesBento.astro"
+    }
+  ],
+  "meta": {
+    "version": "0.1.0",
+    "tags": [
+      "features",
+      "grid",
+      "bento",
+      "product",
+      "software",
+      "stats",
+      "asymmetric"
+    ],
+    "useWhen": "Four to seven related capabilities differ in importance, and one deserves the largest tile.",
+    "avoidWhen": "The items are unrelated, equal in weight, or exactly three. A bento grid of unrelated boxes reads as filler; use features-editorial.",
+    "placement": "section"
+  },
+  "docs": "Import from src/components/blocks/FeaturesBento.astro. Give the most important item size large.",
+  "categories": [
+    "features"
+  ],
+  "type": "registry:item"
+}

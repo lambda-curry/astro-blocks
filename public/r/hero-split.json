@@ -1,0 +1,36 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "hero-split",
+  "title": "Split hero",
+  "author": "Lambda Curry <https://github.com/lambda-curry>",
+  "description": "Headline, lede and actions beside one framed image or artwork, stacking copy-first on narrow screens.",
+  "registryDependencies": [
+    "lambda-curry/astro-blocks/button#v0.1.0"
+  ],
+  "files": [
+    {
+      "path": "src/components/blocks/HeroSplit.astro",
+      "content": "---\n// Astro Blocks — hero-split — MIT — https://github.com/lambda-curry/astro-blocks\nimport Button from \"../ui/Button.astro\";\n\ninterface Action {\n  label: string;\n  href: string;\n  variant?: \"solid\" | \"outline\" | \"quiet\";\n}\ninterface Props {\n  title: string;\n  lede?: string;\n  /** The first action is the primary one; keep it to one or two. */\n  actions?: Action[];\n  /** One real image. Use the media slot instead for a picture, video or SVG artwork. */\n  image?: { src: string; alt: string; width?: number; height?: number };\n  mediaSide?: \"start\" | \"end\";\n  /** CSS aspect-ratio of the media frame on wide screens. */\n  ratio?: string;\n  /** Vertical alignment of the copy against the media. */\n  align?: \"center\" | \"end\";\n  headingLevel?: 1 | 2;\n}\n\nconst {\n  title,\n  lede,\n  actions = [],\n  image,\n  mediaSide = \"end\",\n  ratio = \"4 / 5\",\n  align = \"center\",\n  headingLevel = 1,\n} = Astro.props;\nconst Heading = `h${headingLevel}` as \"h1\" | \"h2\";\nconst hasMedia = Boolean(image) || Astro.slots.has(\"media\");\n---\n\n<section class:list={[\"hero-split\", `media-${mediaSide}`, `align-${align}`, { \"has-media\": hasMedia }]} style={`--_ratio: ${ratio}`}>\n  <div class=\"inner\">\n    <div class=\"copy\">\n      <Heading class=\"title\">{title}</Heading>\n      {lede && <p class=\"lede\">{lede}</p>}\n      <slot />\n      {\n        actions.length > 0 && (\n          <div class=\"actions\">\n            {actions.map(({ label, href, variant }, index) => (\n              <Button href={href} size=\"lg\" variant={variant ?? (index === 0 ? \"solid\" : \"quiet\")}>\n                {label}\n              </Button>\n            ))}\n          </div>\n        )\n      }\n      {Astro.slots.has(\"meta\") && <div class=\"meta\"><slot name=\"meta\" /></div>}\n    </div>\n    {\n      hasMedia && (\n        <div class=\"media\">\n          <slot name=\"media\">\n            {image && (\n              <img src={image.src} alt={image.alt} width={image.width} height={image.height} loading=\"eager\" fetchpriority=\"high\" decoding=\"async\" />\n            )}\n          </slot>\n        </div>\n      )\n    }\n  </div>\n</section>\n\n<style>\n  .hero-split {\n    container-type: inline-size;\n    padding-block: clamp(2rem, 6vw, 6rem);\n    color: var(--color-text, #1b1f22);\n  }\n  .inner {\n    display: grid;\n    gap: clamp(2rem, 5cqi, 4.5rem);\n  }\n  .copy {\n    min-inline-size: 0;\n  }\n  .title {\n    margin: 0;\n    max-inline-size: 15ch;\n    font-family: var(--font-display, system-ui, sans-serif);\n    font-size: clamp(2.4rem, 1.3rem + 4.6cqi, 5.4rem);\n    font-weight: var(--weight-display, 650);\n    letter-spacing: var(--tracking-display, -0.022em);\n    line-height: 1;\n    text-wrap: balance;\n  }\n  .lede {\n    margin: 1.25rem 0 0;\n    max-inline-size: 36ch;\n    color: var(--color-muted, #555c62);\n    font-size: var(--step-1, clamp(1.2rem, 1.1rem + 0.5vw, 1.5rem));\n    line-height: 1.45;\n    text-wrap: pretty;\n  }\n  .actions {\n    display: flex;\n    flex-wrap: wrap;\n    align-items: center;\n    gap: 0.75rem 1.75rem;\n    margin-block-start: 2rem;\n  }\n  .meta {\n    margin-block-start: 2.25rem;\n    padding-block-start: 1rem;\n    border-block-start: 1px solid color-mix(in oklab, currentColor 14%, transparent);\n    color: var(--color-muted, #555c62);\n    font-size: var(--step--1, clamp(0.875rem, 0.84rem + 0.16vw, 0.95rem));\n  }\n  .meta > :global(:first-child) {\n    margin-block-start: 0;\n  }\n  .meta > :global(:last-child) {\n    margin-block-end: 0;\n  }\n  .media {\n    overflow: clip;\n    aspect-ratio: 4 / 3;\n    border-radius: var(--radius-lg, 1rem);\n    background: var(--color-surface, #f3f4f1);\n  }\n  .media > :global(*) {\n    display: block;\n    inline-size: 100%;\n    block-size: 100%;\n    object-fit: cover;\n  }\n  @container (min-width: 52rem) {\n    .has-media .inner {\n      grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr);\n      align-items: center;\n    }\n    .align-end .inner {\n      align-items: end;\n    }\n    .media-start .media {\n      order: -1;\n    }\n    .media {\n      aspect-ratio: var(--_ratio, 4 / 5);\n    }\n  }\n</style>\n",
+      "type": "registry:file",
+      "target": "~/src/components/blocks/HeroSplit.astro"
+    }
+  ],
+  "meta": {
+    "version": "0.1.0",
+    "tags": [
+      "opening",
+      "image",
+      "two column",
+      "service",
+      "practice",
+      "product"
+    ],
+    "useWhen": "There is one strong, real image or artwork that shows the actual work, and a clear first action.",
+    "avoidWhen": "There is no genuine image. Use hero-typographic rather than a stock or decorative picture."
+  },
+  "docs": "Import from src/components/blocks/HeroSplit.astro. Pass image, or use the media slot for a picture, video or SVG.",
+  "categories": [
+    "hero"
+  ],
+  "type": "registry:item"
+}

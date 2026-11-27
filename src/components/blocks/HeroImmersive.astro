@@ -1,0 +1,164 @@
+---
+// Astro Blocks — hero-immersive — MIT — https://github.com/lambda-curry/astro-blocks
+import Button from "../ui/Button.astro";
+
+interface Action {
+  label: string;
+  href: string;
+  variant?: "solid" | "outline" | "quiet";
+}
+interface Props {
+  title: string;
+  lede?: string;
+  actions?: Action[];
+  /** A full-bleed photograph or artwork. Use the media slot instead for a picture or video element. */
+  image?: { src: string; alt: string; width?: number; height?: number };
+  /** CSS object-position for the image, to keep the subject in frame as the crop changes. */
+  position?: string;
+  height?: "screen" | "tall" | "medium";
+  /** How strongly the image darkens behind the text. Keep strong unless the image is already dark at the bottom. */
+  scrim?: "strong" | "soft";
+  align?: "start" | "center";
+  headingLevel?: 1 | 2;
+}
+
+const {
+  title,
+  lede,
+  actions = [],
+  image,
+  position = "center",
+  height = "tall",
+  scrim = "strong",
+  align = "start",
+  headingLevel = 1,
+} = Astro.props;
+const Heading = `h${headingLevel}` as "h1" | "h2";
+---
+
+<section class:list={["hero-immersive", `height-${height}`, `scrim-${scrim}`, `align-${align}`]} style={`--_position: ${position}`}>
+  <div class="media">
+    <slot name="media">
+      {image && <img src={image.src} alt={image.alt} width={image.width} height={image.height} loading="eager" fetchpriority="high" decoding="async" />}
+    </slot>
+  </div>
+  <div class="content">
+    <Heading class="title">{title}</Heading>
+    {lede && <p class="lede">{lede}</p>}
+    <slot />
+    {
+      actions.length > 0 && (
+        <div class="actions">
+          {actions.map(({ label, href, variant }, index) => (
+            <Button href={href} size="lg" variant={variant ?? (index === 0 ? "solid" : "outline")}>
+              {label}
+            </Button>
+          ))}
+        </div>
+      )
+    }
+    {Astro.slots.has("meta") && <div class="meta"><slot name="meta" /></div>}
+  </div>
+</section>
+
+<style>
+  /* Full bleed from inside any centered column. Clipping the page's horizontal overflow
+     keeps classic scrollbars from adding a sideways scroll. */
+  :global(body) {
+    overflow-x: clip;
+  }
+  .hero-immersive.hero-immersive {
+    margin-block: 0;
+  }
+  .hero-immersive {
+    --_height: min(88svh, 54rem);
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    align-items: end;
+    min-block-size: var(--_height);
+    margin-inline: calc(50% - 50vw);
+    overflow: clip;
+    background: var(--color-text, #1b1f22);
+    color: #ffffff;
+  }
+  .height-screen {
+    --_height: max(32rem, 100svh);
+  }
+  .height-medium {
+    --_height: min(68svh, 40rem);
+  }
+  .media {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+  }
+  .media > :global(*) {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    max-inline-size: none;
+    object-fit: cover;
+    object-position: var(--_position, center);
+  }
+  .hero-immersive::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(to top, rgb(0 0 0 / 0.8) 0%, rgb(0 0 0 / 0.5) 45%, rgb(0 0 0 / 0.14) 100%);
+  }
+  .scrim-soft::before {
+    background: linear-gradient(to top, rgb(0 0 0 / 0.6) 0%, rgb(0 0 0 / 0.22) 50%, transparent 100%);
+  }
+  .content {
+    container-type: inline-size;
+    inline-size: min(var(--width-content, 72rem), 100% - 2 * var(--space-gutter, clamp(1.25rem, 4vw, 4rem)));
+    margin-inline: auto;
+    padding-block: clamp(7rem, 22svh, 12rem) clamp(2.75rem, 8vw, 5.5rem);
+    text-shadow: 0 1px 28px rgb(0 0 0 / 0.28);
+  }
+  .align-center .content {
+    display: grid;
+    justify-items: center;
+    text-align: center;
+  }
+  .title {
+    margin: 0;
+    max-inline-size: 16ch;
+    font-family: var(--font-display, system-ui, sans-serif);
+    font-size: clamp(2.6rem, 1.2rem + 6cqi, 6.75rem);
+    font-weight: var(--weight-display, 650);
+    letter-spacing: var(--tracking-display, -0.022em);
+    line-height: 0.98;
+    text-wrap: balance;
+  }
+  .lede {
+    margin: 1.25rem 0 0;
+    max-inline-size: 40ch;
+    color: rgb(255 255 255 / 0.88);
+    font-size: var(--step-1, clamp(1.2rem, 1.1rem + 0.5vw, 1.5rem));
+    line-height: 1.45;
+    text-wrap: pretty;
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1rem;
+    margin-block-start: 2.25rem;
+    text-shadow: none;
+    --color-focus: #ffffff;
+  }
+  .align-center .actions {
+    justify-content: center;
+  }
+  .meta {
+    margin-block-start: 2.5rem;
+    color: rgb(255 255 255 / 0.8);
+    font-size: var(--step--1, clamp(0.875rem, 0.84rem + 0.16vw, 0.95rem));
+  }
+  .meta > :global(*) {
+    margin: 0;
+  }
+</style>

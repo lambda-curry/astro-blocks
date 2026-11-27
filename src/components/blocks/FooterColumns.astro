@@ -1,0 +1,187 @@
+---
+// Astro Blocks — footer-columns — MIT — https://github.com/lambda-curry/astro-blocks
+import Button from "../ui/Button.astro";
+
+interface Link {
+  label: string;
+  href: string;
+}
+interface Props {
+  name: string;
+  homeHref?: string;
+  /** One or two sentences about the organization. */
+  description?: string;
+  action?: Link;
+  /** Two to four titled groups of links. */
+  columns: { title: string; links: Link[] }[];
+  /** Small links in the bottom bar, such as privacy and terms. */
+  legal?: Link[];
+  /** A small credit link kept in the bottom bar, such as the site builder's. */
+  credit?: Link;
+  year?: number;
+  tone?: "surface" | "plain";
+}
+
+const { name, homeHref = "/", description, action, columns, legal = [], credit, year = new Date().getFullYear(), tone = "surface" } = Astro.props;
+---
+
+<footer class:list={["footer-columns", `tone-${tone}`]}>
+  <div class="shell">
+    <div class="top">
+      <div class="brand">
+        <a class="name" href={homeHref}>{name}</a>
+        {description && <p class="description">{description}</p>}
+        {
+          action && (
+            <Button class="action" variant="outline" href={action.href}>
+              {action.label}
+            </Button>
+          )
+        }
+      </div>
+      <div class="columns">
+        {
+          columns.map((column) => (
+            <nav aria-label={column.title}>
+              <h2 class="column-title">{column.title}</h2>
+              <ul>
+                {column.links.map(({ label, href }) => (
+                  <li>
+                    <a href={href}>{label}</a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          ))
+        }
+      </div>
+    </div>
+    <div class="bottom">
+      <p>© {year} {name}</p>
+      {
+        legal.length > 0 && (
+          <ul class="legal">
+            {legal.map(({ label, href }) => (
+              <li>
+                <a href={href}>{label}</a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+      {
+        credit && (
+          <p class="credit">
+            <a href={credit.href}>{credit.label}</a>
+          </p>
+        )
+      }
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer-columns {
+    container-type: inline-size;
+    color: var(--color-text, #1b1f22);
+  }
+  .tone-surface {
+    background: var(--color-surface, #f3f4f1);
+  }
+  .tone-plain {
+    border-block-start: 1px solid color-mix(in oklab, currentColor 14%, transparent);
+  }
+  .shell {
+    inline-size: min(var(--width-content, 72rem), 100% - 2 * var(--space-gutter, clamp(1.25rem, 4vw, 4rem)));
+    margin-inline: auto;
+  }
+  .top {
+    display: grid;
+    gap: 2.5rem;
+    padding-block: clamp(2.5rem, 6cqi, 4.5rem);
+  }
+  .name {
+    color: inherit;
+    font-family: var(--font-display, system-ui, sans-serif);
+    font-size: var(--step-2, clamp(1.45rem, 1.2rem + 1vw, 2rem));
+    font-weight: var(--weight-display, 650);
+    letter-spacing: var(--tracking-display, -0.022em);
+    line-height: 1.1;
+    text-decoration: none;
+  }
+  .description {
+    margin: 0.75rem 0 0;
+    max-inline-size: 36ch;
+    color: var(--color-muted, #555c62);
+  }
+  .action {
+    margin-block-start: 1.5rem;
+  }
+  .columns {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 9.5rem), 1fr));
+    gap: 2rem 1.5rem;
+  }
+  .column-title {
+    margin: 0 0 0.5rem;
+    color: var(--color-muted, #555c62);
+    font-family: var(--font-body, system-ui, sans-serif);
+    font-size: var(--step--1, clamp(0.875rem, 0.84rem + 0.16vw, 0.95rem));
+    font-weight: var(--weight-action, 600);
+    letter-spacing: 0;
+  }
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .columns a {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: 44px;
+    color: inherit;
+    text-decoration: none;
+  }
+  .columns a:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+  }
+  .bottom {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem 1.5rem;
+    padding-block: 1rem;
+    border-block-start: 1px solid color-mix(in oklab, currentColor 14%, transparent);
+    color: var(--color-muted, #555c62);
+    font-size: var(--step--1, clamp(0.875rem, 0.84rem + 0.16vw, 0.95rem));
+  }
+  .bottom p {
+    margin: 0;
+  }
+  .legal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 1.25rem;
+  }
+  .bottom a {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: 44px;
+    color: inherit;
+    text-underline-offset: 0.25em;
+  }
+  a:focus-visible {
+    outline: 3px solid var(--color-focus, #1f4f5f);
+    outline-offset: 2px;
+  }
+  @container (min-width: 52rem) {
+    .top {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr);
+      gap: clamp(2rem, 6cqi, 6rem);
+    }
+    .bottom .credit {
+      margin-inline-start: auto;
+    }
+  }
+</style>

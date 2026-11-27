@@ -1,0 +1,20 @@
+---
+import FeaturesBento from "../blocks/FeaturesBento.astro";
+---
+
+<FeaturesBento
+  title="What Orbit does each week"
+  intro="Everything below runs automatically once your events are connected."
+  items={[
+    {
+      title: "One plain-language report",
+      text: "Every Monday, the five changes that matter, written as sentences your whole team can act on.",
+      image: { src: "/gallery/field.svg", alt: "Abstract green fields under a yellow sun", width: 1200, height: 900 },
+      size: "large",
+      href: "/sample",
+    },
+    { label: "Saved per analyst each week", title: "4.2 hours", tone: "accent" },
+    { label: "Audited every year", title: "SOC 2", tone: "outline" },
+    { title: "Alerts that explain themselves", text: "Every alert names the segment, the size of the change and its likely cause, so nobody has to dig.", size: "wide" },
+  ]}
+/>

@@ -1,0 +1,31 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "button",
+  "title": "Button",
+  "author": "Lambda Curry <https://github.com/lambda-curry>",
+  "description": "A link or button with solid, outline and quiet variants that read the accent, radius and action-weight tokens.",
+  "files": [
+    {
+      "path": "src/components/ui/Button.astro",
+      "content": "---\n// Astro Blocks — button — MIT — https://github.com/lambda-curry/astro-blocks\nimport type { HTMLAttributes } from \"astro/types\";\n\ntype Look = {\n  /** solid: filled with the accent. outline: a quiet border in the current text color. quiet: an underlined text link with an arrow. */\n  variant?: \"solid\" | \"outline\" | \"quiet\";\n  size?: \"md\" | \"lg\";\n};\ntype Props = Look &\n  (\n    | ({\n        /** Renders a link. Omit it to render a button. */\n        href: string;\n      } & Omit<HTMLAttributes<\"a\">, \"href\">)\n    | ({ href?: undefined } & HTMLAttributes<\"button\">)\n  );\n\nconst { variant = \"solid\", size = \"md\", class: className, ...attributes } = Astro.props;\nconst classes = [\"ab-button\", variant, size, className];\nconst link = typeof attributes.href === \"string\" ? (attributes as HTMLAttributes<\"a\">) : null;\n---\n\n{\n  link ? (\n    <a {...link} class:list={classes}>\n      <slot />\n    </a>\n  ) : (\n    <button type=\"button\" {...(attributes as HTMLAttributes<\"button\">)} class:list={classes}>\n      <slot />\n    </button>\n  )\n}\n\n<style>\n  .ab-button {\n    --_bg: var(--color-accent, #1f4f5f);\n    --_fg: var(--color-on-accent, #ffffff);\n    display: inline-flex;\n    align-items: center;\n    justify-content: center;\n    gap: 0.5em;\n    min-block-size: 44px;\n    padding: 0.62em 1.15em;\n    border: 1px solid transparent;\n    border-radius: var(--radius-sm, 0.375rem);\n    background: var(--_bg);\n    color: var(--_fg);\n    font: inherit;\n    font-weight: var(--weight-action, 600);\n    line-height: 1.2;\n    text-align: center;\n    text-decoration: none;\n    cursor: pointer;\n    transition:\n      background-color var(--duration, 160ms) var(--ease, cubic-bezier(0.2, 0.7, 0.2, 1)),\n      border-color var(--duration, 160ms) var(--ease, cubic-bezier(0.2, 0.7, 0.2, 1)),\n      translate var(--duration, 160ms) var(--ease, cubic-bezier(0.2, 0.7, 0.2, 1));\n  }\n  .solid:hover {\n    background: color-mix(in oklab, var(--_bg) 84%, #000);\n  }\n  .outline {\n    --_bg: transparent;\n    --_fg: currentColor;\n    border-color: color-mix(in oklab, currentColor 40%, transparent);\n  }\n  .outline:hover {\n    border-color: currentColor;\n    background: color-mix(in oklab, currentColor 7%, transparent);\n  }\n  .quiet {\n    --_bg: transparent;\n    --_fg: inherit;\n    padding-inline: 0;\n    text-decoration: underline;\n    text-decoration-thickness: 1px;\n    text-underline-offset: 0.28em;\n  }\n  .quiet::after {\n    content: \"→\";\n    content: \"→\" / \"\";\n    transition: translate var(--duration, 160ms) var(--ease, cubic-bezier(0.2, 0.7, 0.2, 1));\n  }\n  .quiet:hover::after {\n    translate: 0.2em 0;\n  }\n  .lg {\n    min-block-size: 52px;\n    padding: 0.8em 1.45em;\n    font-size: 1.0625em;\n  }\n  .quiet.lg {\n    padding-inline: 0;\n  }\n  .ab-button:focus-visible {\n    outline: 3px solid var(--color-focus, #1f4f5f);\n    outline-offset: 3px;\n  }\n  button.ab-button:disabled {\n    opacity: 0.55;\n    cursor: not-allowed;\n  }\n</style>\n",
+      "type": "registry:file",
+      "target": "~/src/components/ui/Button.astro"
+    }
+  ],
+  "meta": {
+    "version": "0.1.0",
+    "tags": [
+      "action",
+      "cta",
+      "link"
+    ],
+    "useWhen": "You need consistent primary and secondary actions across sections.",
+    "avoidWhen": "A plain text link reads better, such as inside running prose.",
+    "placement": "inline"
+  },
+  "docs": "Import from src/components/ui/Button.astro. Pass href for a link; omit it for a button.",
+  "categories": [
+    "primitive"
+  ],
+  "type": "registry:item"
+}

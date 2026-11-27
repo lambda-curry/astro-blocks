@@ -1,0 +1,16 @@
+---
+import HeroImmersive from "../blocks/HeroImmersive.astro";
+---
+
+<HeroImmersive
+  title="Learn to sail on the quietest water on the coast"
+  lede="Saltmarsh Sailing runs small-boat courses in a sheltered estuary, two students to an instructor."
+  actions={[
+    { label: "Book a taster evening", href: "/taster" },
+    { label: "Course dates", href: "/courses" },
+  ]}
+  image={{ src: "/gallery/tide.svg", alt: "A small sailboat on calm water at dusk", width: 1600, height: 1000 }}
+  position="82% 58%"
+>
+  <p slot="meta">RYA recognised · April to October</p>
+</HeroImmersive>

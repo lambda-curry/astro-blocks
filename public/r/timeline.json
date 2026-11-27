@@ -1,0 +1,34 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "timeline",
+  "title": "Timeline",
+  "author": "Lambda Curry <https://github.com/lambda-curry>",
+  "description": "A vertical timeline of dated entries on a rail, with an optional current entry and labels in their own column on wide screens.",
+  "files": [
+    {
+      "path": "src/components/blocks/Timeline.astro",
+      "content": "---\n// Astro Blocks — timeline — MIT — https://github.com/lambda-curry/astro-blocks\ninterface Entry {\n  /** A date, year or phase name. */\n  label: string;\n  title: string;\n  text?: string;\n  /** Mark the entry happening now. */\n  current?: boolean;\n}\ninterface Props {\n  title?: string;\n  intro?: string;\n  /** Entries in order, oldest or first first. */\n  items: Entry[];\n  headingLevel?: 2 | 3;\n}\n\nconst { title, intro, items, headingLevel = 2 } = Astro.props;\nconst Heading = `h${headingLevel}` as \"h2\" | \"h3\";\nconst EntryHeading = `h${headingLevel + 1}` as \"h3\" | \"h4\";\n---\n\n<section class=\"timeline\">\n  {\n    (title || intro) && (\n      <div class=\"intro\">\n        {title && <Heading class=\"title\">{title}</Heading>}\n        {intro && <p>{intro}</p>}\n      </div>\n    )\n  }\n  <ol class=\"entries\">\n    {\n      items.map((entry) => (\n        <li class:list={[\"entry\", { current: entry.current }]} aria-current={entry.current ? \"step\" : undefined}>\n          <p class=\"label\">{entry.label}</p>\n          <span class=\"track\" aria-hidden=\"true\"><span class=\"marker\" /></span>\n          <div class=\"body\">\n            <EntryHeading class=\"entry-title\">{entry.title}</EntryHeading>\n            {entry.text && <p class=\"entry-text\">{entry.text}</p>}\n          </div>\n        </li>\n      ))\n    }\n  </ol>\n</section>\n\n<style>\n  .timeline {\n    --_rail: color-mix(in oklab, currentColor 18%, transparent);\n    container-type: inline-size;\n    padding-block: var(--section-gap, clamp(3rem, 8vw, 7rem));\n    color: var(--color-text, #1b1f22);\n  }\n  .intro {\n    max-inline-size: 40rem;\n    margin-block-end: clamp(2rem, 5cqi, 3.5rem);\n  }\n  .title {\n    margin: 0;\n    font-family: var(--font-display, system-ui, sans-serif);\n    font-size: var(--step-3, clamp(1.75rem, 1.35rem + 1.8vw, 2.75rem));\n    font-weight: var(--weight-display, 650);\n    letter-spacing: var(--tracking-display, -0.022em);\n    line-height: var(--leading-display, 1.08);\n  }\n  .intro p {\n    margin: 1rem 0 0;\n    color: var(--color-muted, #555c62);\n    font-size: var(--step-1, clamp(1.2rem, 1.1rem + 0.5vw, 1.5rem));\n    line-height: 1.45;\n  }\n  .entries {\n    margin: 0;\n    padding: 0;\n    list-style: none;\n  }\n  .entry {\n    --_gap: clamp(2rem, 5cqi, 3rem);\n    display: grid;\n    grid-template-columns: 1.25rem minmax(0, 1fr);\n    grid-template-areas: \"track label\" \"track body\";\n    column-gap: 1.25rem;\n    padding-block-end: var(--_gap);\n  }\n  .track {\n    grid-area: track;\n    position: relative;\n    display: flex;\n    justify-content: center;\n  }\n  .entry:not(:last-child) .track::after {\n    content: \"\";\n    position: absolute;\n    inset-block: 1.35rem calc(-1 * var(--_gap));\n    inset-inline-start: calc(50% - 0.5px);\n    inline-size: 1px;\n    background: var(--_rail);\n  }\n  .label {\n    grid-area: label;\n    margin: 0;\n    color: var(--color-muted, #555c62);\n    font-size: var(--step--1, clamp(0.875rem, 0.84rem + 0.16vw, 0.95rem));\n    font-variant-numeric: tabular-nums;\n    font-weight: var(--weight-action, 600);\n    line-height: 1.6;\n  }\n  .marker {\n    flex: none;\n    inline-size: 0.75rem;\n    block-size: 0.75rem;\n    margin-block-start: 0.45rem;\n    border: 2px solid var(--color-accent, #1f4f5f);\n    border-radius: 50%;\n    background: var(--color-bg, #ffffff);\n  }\n  .current .marker {\n    background: var(--color-accent, #1f4f5f);\n    box-shadow: 0 0 0 5px color-mix(in oklab, var(--color-accent, #1f4f5f) 20%, transparent);\n  }\n  .current .label {\n    color: var(--color-accent, #1f4f5f);\n  }\n  .body {\n    grid-area: body;\n    min-inline-size: 0;\n  }\n  .entry-title {\n    margin: 0.25rem 0 0;\n    font-family: var(--font-display, system-ui, sans-serif);\n    font-size: var(--step-1, clamp(1.2rem, 1.1rem + 0.5vw, 1.5rem));\n    font-weight: var(--weight-display, 650);\n    letter-spacing: var(--tracking-display, -0.022em);\n    line-height: 1.2;\n  }\n  .entry-text {\n    margin: 0.5rem 0 0;\n    max-inline-size: 58ch;\n    color: var(--color-muted, #555c62);\n  }\n  @container (min-width: 44rem) {\n    .entry {\n      grid-template-columns: minmax(7rem, 11rem) 1.25rem minmax(0, 1fr);\n      grid-template-areas: \"label track body\";\n      column-gap: 1.75rem;\n    }\n    .label {\n      font-family: var(--font-display, system-ui, sans-serif);\n      font-size: var(--step-1, clamp(1.2rem, 1.1rem + 0.5vw, 1.5rem));\n      font-weight: var(--weight-display, 650);\n      letter-spacing: var(--tracking-display, -0.022em);\n      line-height: 1.2;\n      text-align: end;\n    }\n    .entry-title {\n      margin-block-start: 0;\n    }\n  }\n</style>\n",
+      "type": "registry:file",
+      "target": "~/src/components/blocks/Timeline.astro"
+    }
+  ],
+  "meta": {
+    "version": "0.1.0",
+    "tags": [
+      "history",
+      "milestones",
+      "dates",
+      "story",
+      "roadmap",
+      "phases"
+    ],
+    "useWhen": "Dates or phases carry the meaning: a company history, a project schedule or an event programme.",
+    "avoidWhen": "There are fewer than three entries, or the dates add nothing. A paragraph is clearer.",
+    "placement": "section"
+  },
+  "docs": "Import from src/components/blocks/Timeline.astro.",
+  "categories": [
+    "walkthrough"
+  ],
+  "type": "registry:item"
+}

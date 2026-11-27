@@ -1,0 +1,45 @@
+/* Gallery base styles for canvas frames and the local workbench layout.
+   Site Boulder drafts keep their own global.css for every other page. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+body {
+  margin: 0;
+  min-block-size: 100svh;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font: var(--step-0) / var(--leading-body) var(--font-body);
+}
+img,
+svg,
+video {
+  display: block;
+  max-inline-size: 100%;
+}
+img,
+video {
+  block-size: auto;
+}
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  letter-spacing: var(--tracking-display);
+  line-height: var(--leading-display);
+  text-wrap: balance;
+}
+a {
+  color: var(--color-link);
+  text-underline-offset: 0.2em;
+}
+:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 3px;
+}

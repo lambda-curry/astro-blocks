@@ -1,0 +1,37 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "footer-cta",
+  "title": "Call-to-action footer",
+  "author": "Lambda Curry <https://github.com/lambda-curry>",
+  "description": "A closing band with one invitation and up to two actions, merged with a compact footer row, in inverse, accent or surface tone.",
+  "registryDependencies": [
+    "lambda-curry/astro-blocks/button#v0.1.0"
+  ],
+  "files": [
+    {
+      "path": "src/components/blocks/FooterCta.astro",
+      "content": "---\n// Astro Blocks — footer-cta — MIT — https://github.com/lambda-curry/astro-blocks\nimport Button from \"../ui/Button.astro\";\n\ninterface Link {\n  label: string;\n  href: string;\n}\ninterface Action extends Link {\n  variant?: \"solid\" | \"outline\" | \"quiet\";\n}\ninterface Props {\n  /** The closing invitation, named by what actually happens next. */\n  title: string;\n  text?: string;\n  /** One or two actions; the first is primary. */\n  actions: Action[];\n  name: string;\n  links?: Link[];\n  /** A small credit link kept in the bottom row, such as the site builder's. */\n  credit?: Link;\n  year?: number;\n  tone?: \"inverse\" | \"accent\" | \"surface\";\n}\n\nconst { title, text, actions, name, links = [], credit, year = new Date().getFullYear(), tone = \"inverse\" } = Astro.props;\n---\n\n<footer class:list={[\"footer-cta\", `tone-${tone}`]}>\n  <div class=\"shell\">\n    <div class=\"cta\">\n      <h2 class=\"title\">{title}</h2>\n      {text && <p class=\"text\">{text}</p>}\n      <div class=\"actions\">\n        {\n          actions.map(({ label, href, variant }, index) => (\n            <Button href={href} size=\"lg\" variant={variant ?? (index === 0 ? \"solid\" : \"outline\")}>\n              {label}\n            </Button>\n          ))\n        }\n      </div>\n    </div>\n    <div class=\"bottom\">\n      <p class=\"copyright\">© {year} {name}</p>\n      {\n        links.length > 0 && (\n          <nav aria-label=\"Footer\">\n            <ul>\n              {links.map(({ label, href }) => (\n                <li>\n                  <a href={href}>{label}</a>\n                </li>\n              ))}\n            </ul>\n          </nav>\n        )\n      }\n      {\n        credit && (\n          <p class=\"credit\">\n            <a href={credit.href}>{credit.label}</a>\n          </p>\n        )\n      }\n    </div>\n  </div>\n</footer>\n\n<style>\n  .footer-cta {\n    --_muted: color-mix(in oklab, currentColor 72%, transparent);\n    container-type: inline-size;\n  }\n  /* Capture the band's colors here, so the actions below can swap them without\n     referring to their own overrides. */\n  .tone-inverse {\n    --_band: var(--color-text, #1b1f22);\n    --_ink: var(--color-bg, #ffffff);\n  }\n  .tone-accent {\n    --_band: var(--color-accent, #1f4f5f);\n    --_ink: var(--color-on-accent, #ffffff);\n  }\n  .tone-inverse,\n  .tone-accent {\n    --color-focus: var(--_ink);\n    background: var(--_band);\n    color: var(--_ink);\n  }\n  /* On a dark or accent band the primary button inverts, so it stays the strongest shape in any theme. */\n  .tone-inverse .actions,\n  .tone-accent .actions {\n    --color-accent: var(--_ink);\n    --color-on-accent: var(--_band);\n  }\n  .tone-surface {\n    background: var(--color-surface, #f3f4f1);\n    color: var(--color-text, #1b1f22);\n  }\n  .shell {\n    inline-size: min(var(--width-content, 72rem), 100% - 2 * var(--space-gutter, clamp(1.25rem, 4vw, 4rem)));\n    margin-inline: auto;\n  }\n  .cta {\n    padding-block: clamp(3.5rem, 10cqi, 7.5rem) clamp(3rem, 8cqi, 6rem);\n  }\n  .title {\n    margin: 0;\n    max-inline-size: 18ch;\n    font-family: var(--font-display, system-ui, sans-serif);\n    font-size: clamp(2.25rem, 1rem + 5cqi, 5rem);\n    font-weight: var(--weight-display, 650);\n    letter-spacing: var(--tracking-display, -0.022em);\n    line-height: 1;\n    text-wrap: balance;\n  }\n  .text {\n    margin: 1.25rem 0 0;\n    max-inline-size: 44ch;\n    color: var(--_muted);\n    font-size: var(--step-1, clamp(1.2rem, 1.1rem + 0.5vw, 1.5rem));\n    line-height: 1.45;\n  }\n  .actions {\n    display: flex;\n    flex-wrap: wrap;\n    gap: 0.75rem 1rem;\n    margin-block-start: 2.25rem;\n  }\n  .bottom {\n    display: flex;\n    flex-wrap: wrap;\n    align-items: center;\n    gap: 0.25rem 1.75rem;\n    padding-block: 1rem;\n    border-block-start: 1px solid color-mix(in oklab, currentColor 18%, transparent);\n    color: var(--_muted);\n    font-size: var(--step--1, clamp(0.875rem, 0.84rem + 0.16vw, 0.95rem));\n  }\n  .bottom p {\n    margin: 0;\n  }\n  ul {\n    display: flex;\n    flex-wrap: wrap;\n    gap: 0 1.25rem;\n    margin: 0;\n    padding: 0;\n    list-style: none;\n  }\n  .bottom a {\n    display: inline-flex;\n    align-items: center;\n    min-block-size: 44px;\n    color: inherit;\n    text-underline-offset: 0.25em;\n  }\n  .bottom a:focus-visible {\n    outline: 3px solid var(--color-focus, #1f4f5f);\n    outline-offset: 2px;\n  }\n  @container (min-width: 40rem) {\n    .bottom .credit {\n      margin-inline-start: auto;\n    }\n  }\n</style>\n",
+      "type": "registry:file",
+      "target": "~/src/components/blocks/FooterCta.astro"
+    }
+  ],
+  "meta": {
+    "version": "0.1.0",
+    "tags": [
+      "footer",
+      "call to action",
+      "closing",
+      "booking",
+      "conversion",
+      "service"
+    ],
+    "useWhen": "Every page should end by offering the same next step, such as booking or getting in touch.",
+    "avoidWhen": "The page already ends with a strong call to action, or there is no concrete next step to offer.",
+    "placement": "page-end"
+  },
+  "docs": "Import from src/components/blocks/FooterCta.astro. In a Site Boulder site, render it from SiteFooter.astro and pass the existing credit link.",
+  "categories": [
+    "footer"
+  ],
+  "type": "registry:item"
+}

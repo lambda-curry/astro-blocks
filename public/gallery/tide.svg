@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0f2233"/><stop offset=".6" stop-color="#5b7c8f"/><stop offset="1" stop-color="#d9c6a5"/></linearGradient>
+    <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3e5f72"/><stop offset="1" stop-color="#0c1c28"/></linearGradient>
+    <linearGradient id="glint" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f3dfb8" stop-opacity=".75"/><stop offset="1" stop-color="#f3dfb8" stop-opacity="0"/></linearGradient>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#sky)"/>
+  <circle cx="420" cy="560" r="70" fill="#f6e4c2" opacity=".9"/>
+  <rect y="600" width="1600" height="400" fill="url(#sea)"/>
+  <path d="M370 600 h100 l60 400 h-220z" fill="url(#glint)"/>
+  <path d="M0 700 Q200 690 400 702 T800 698 T1200 704 T1600 699" fill="none" stroke="#9fb6c2" stroke-opacity=".35" stroke-width="3"/>
+  <path d="M0 800 Q260 785 520 803 T1040 796 T1600 801" fill="none" stroke="#9fb6c2" stroke-opacity=".25" stroke-width="3"/>
+  <path d="M1080 600 l90 -260 l8 260z" fill="#e9e1d1"/>
+  <path d="M1184 600 l4 -200 l70 200z" fill="#cfc6b4"/>
+  <path d="M1040 606 h250 l-30 34 h-190z" fill="#1d2b35"/>
+</svg>

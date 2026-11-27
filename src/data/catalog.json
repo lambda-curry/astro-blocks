@@ -1,0 +1,1321 @@
+{
+  "name": "astro-blocks",
+  "version": "0.1.0",
+  "repository": "lambda-curry/astro-blocks",
+  "items": [
+    {
+      "name": "tokens",
+      "title": "Semantic tokens",
+      "description": "The color, type, space, shape and motion custom properties every block reads, with neutral defaults.",
+      "category": "foundation",
+      "version": "0.1.0",
+      "tags": [
+        "theme",
+        "tokens",
+        "css variables"
+      ],
+      "useWhen": "A project has no theme yet and you want one place to set colors, fonts, type scale, spacing and radius for every block.",
+      "avoidWhen": "The site already defines these roles, as every Site Boulder starter does. Keep the site's own tokens.",
+      "dependencies": [],
+      "files": [
+        {
+          "target": "src/styles/tokens.css",
+          "bytes": 1765,
+          "sha256": "580a43290e984c5aabc59934a08c9a06ee257e25bff23f60907f4e2289830547"
+        }
+      ],
+      "install": "npx shadcn@latest add lambda-curry/astro-blocks/tokens#v0.1.0"
+    },
+    {
+      "name": "button",
+      "title": "Button",
+      "description": "A link or button with solid, outline and quiet variants that read the accent, radius and action-weight tokens.",
+      "category": "primitive",
+      "version": "0.1.0",
+      "tags": [
+        "action",
+        "cta",
+        "link"
+      ],
+      "useWhen": "You need consistent primary and secondary actions across sections.",
+      "avoidWhen": "A plain text link reads better, such as inside running prose.",
+      "placement": "inline",
+      "dependencies": [],
+      "files": [
+        {
+          "target": "src/components/ui/Button.astro",
+          "bytes": 2934,
+          "sha256": "c2cf816f31180ae69398aa88afa3034d0b7a916a2218f3fd34fa5259aa8c4fa8"
+        }
+      ],
+      "import": "../components/ui/Button.astro",
+      "props": [
+        {
+          "name": "variant",
+          "type": "\"solid\" | \"outline\" | \"quiet\"",
+          "required": false,
+          "default": "\"solid\"",
+          "description": "solid: filled with the accent. outline: a quiet border in the current text color. quiet: an underlined text link with an arrow."
+        },
+        {
+          "name": "size",
+          "type": "\"md\" | \"lg\"",
+          "required": false,
+          "default": "\"md\""
+        },
+        {
+          "name": "href",
+          "type": "string",
+          "required": false,
+          "description": "Renders a link. Omit it to render a button."
+        }
+      ],
+      "passthrough": [
+        "a",
+        "button"
+      ],
+      "slots": [
+        "default"
+      ],
+      "clientScript": false,
+      "usage": "---\nimport Button from \"../components/ui/Button.astro\";\n---\n\n<div style=\"display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.5rem; padding: 3rem 1.5rem;\">\n  <Button href=\"/start\">Book a visit</Button>\n  <Button href=\"/menu\" variant=\"outline\">See the menu</Button>\n  <Button href=\"/story\" variant=\"quiet\">Read our story</Button>\n  <Button size=\"lg\" href=\"/start\">Large solid</Button>\n  <Button type=\"submit\" variant=\"outline\">A real button</Button>\n</div>\n",
+      "install": "npx shadcn@latest add lambda-curry/astro-blocks/button#v0.1.0"
+    },
+    {
+      "name": "header-floating",
+      "title": "Floating header",
+      "description": "A detached, rounded navigation bar that floats below the top edge with a translucent surface and a native popover menu on narrow screens.",
+      "category": "header",
+      "version": "0.1.0",
+      "tags": [
+        "navigation",
+        "floating",
+        "sticky",
+        "translucent",
+        "popover menu",
+        "product",
+        "studio"
+      ],
+      "useWhen": "The site has four to six destinations plus one primary action, and the page below has imagery or color the bar can float over.",
+      "avoidWhen": "The site is a quiet single page, or the brand needs a large masthead. Use header-minimal or header-editorial instead.",
+      "placement": "page-start",
+      "dependencies": [
+        "button"
+      ],
+      "files": [
+        {
+          "target": "src/components/blocks/HeaderFloating.astro",
+          "bytes": 6479,
+          "sha256": "8aa10c0ed6ea2c7faf88e5946ad681f0c2db9cc6fca44fa02ebf68b347e55b57"
+        }
+      ],
+      "import": "../components/blocks/HeaderFloating.astro",
+      "props": [
+        {
+          "name": "brand",
+          "type": "string",
+          "required": true,
+          "description": "Site name. Used as the home link text, or as the logo's alt text."
+        },
+        {
+          "name": "homeHref",
+          "type": "string",
+          "required": false,
+          "default": "\"/\""
+        },
+        {
+          "name": "logo",
+          "type": "{ src: string; alt?: string; width?: number; height?: number }",
+          "required": false
+        },
+        {
+          "name": "links",
+          "type": "Link[]",
+          "required": false,
+          "default": "[]"
+        },
+        {
+          "name": "action",
+          "type": "Link",
+          "required": false,
+          "description": "One primary action. It sits in the bar and moves into the menu on the narrowest screens."
+        },
+        {
+          "name": "sticky",
+          "type": "boolean",
+          "required": false,
+          "default": "true",
+          "description": "Keep the bar pinned below the top edge while scrolling."
+        },
+        {
+          "name": "menuId",
+          "type": "string",
+          "required": false,
+          "default": "\"site-menu\"",
+          "description": "Unique id for the narrow-screen menu when a page has two headers."
+        }
+      ],
+      "types": {
+        "Link": "{ label: string; href: string }"
+      },
+      "slots": [],
+      "clientScript": false,
+      "usage": "---\nimport HeaderFloating from \"../components/blocks/HeaderFloating.astro\";\nimport HeroSplit from \"../components/blocks/HeroSplit.astro\";\n---\n\n<HeaderFloating\n  brand=\"Fernhill Studio\"\n  links={[\n    { label: \"Work\", href: \"/work\" },\n    { label: \"Practice\", href: \"/practice\" },\n    { label: \"Journal\", href: \"/journal\" },\n    { label: \"Contact\", href: \"/contact\" },\n  ]}\n  action={{ label: \"Start a project\", href: \"/contact\" }}\n/>\n<main style=\"inline-size: min(72rem, 100% - 2.5rem); margin-inline: auto;\">\n  <HeroSplit\n    title=\"Rooms that hold the light all day\"\n    lede=\"Fernhill is a four-person architecture studio designing homes and small workplaces around how sunlight moves through them.\"\n    actions={[{ label: \"See the work\", href: \"/work\" }, { label: \"How we work\", href: \"/practice\" }]}\n    image={{ src: \"/gallery/atelier.svg\", alt: \"Sunlit studio interior with a tall arched window\", width: 1200, height: 1500 }}\n  />\n</main>\n",
+      "install": "npx shadcn@latest add lambda-curry/astro-blocks/header-floating#v0.1.0"
+    },
+    {
+      "name": "header-editorial",
+      "title": "Editorial header",
+      "description": "A magazine masthead: a centered wordmark with tagline, a top line for an issue or place, and section links between double rules that wrap instead of hiding.",
+      "category": "header",
+      "version": "0.1.0",
+      "tags": [
+        "navigation",
+        "masthead",
+        "editorial",
+        "publication",
+        "centered",
+        "no javascript",
+        "writing"
+      ],
+      "useWhen": "The site publishes writing or has distinct sections, and the name deserves to be the loudest thing at the top.",
+      "avoidWhen": "The site needs a primary action in the header more than a wordmark, or the name is long. Use header-floating or header-minimal.",
+      "placement": "page-start",
+      "dependencies": [
+        "button"
+      ],
+      "files": [
+        {
+          "target": "src/components/blocks/HeaderEditorial.astro",
+          "bytes": 4441,
+          "sha256": "249e6425bd5e86dddf632c94e1befd9aafc7d620b3d86c1c1995bd87f3544cf5"
+        }
+      ],
+      "import": "../components/blocks/HeaderEditorial.astro",
+      "props": [
+        {
+          "name": "brand",
+          "type": "string",
+          "required": true,
+          "description": "Publication or site name, set as a large centered wordmark."
+        },
+        {
+          "name": "homeHref",
+          "type": "string",
+          "required": false,
+          "default": "\"/\""
+        },
+        {
+          "name": "logo",
+          "type": "{ src: string; alt?: string; width?: number; height?: number }",
+          "required": false
+        },
+        {
+          "name": "tagline",
+          "type": "string",
+          "required": false,
+          "description": "One line under the wordmark, such as what the publication covers."
+        },
+        {
+          "name": "meta",
+          "type": "string",
+          "required": false,
+          "description": "A short line at the top left, such as an issue, date or place."
+        },
+        {
+          "name": "links",
+          "type": "Link[]",
+          "required": false,
+          "default": "[]",
+          "description": "Sections. They stay visible and wrap onto more lines on narrow screens."
+        },
+        {
+          "name": "action",
+          "type": "Link",
+          "required": false,
+          "description": "One action at the top right, such as Subscribe."
+        }
+      ],
+      "types": {
+        "Link": "{ label: string; href: string }"
+      },
+      "slots": [],
+      "clientScript": false,
+      "usage": "---\nimport HeaderEditorial from \"../components/blocks/HeaderEditorial.astro\";\nimport HeroTypographic from \"../components/blocks/HeroTypographic.astro\";\n---\n\n<HeaderEditorial\n  brand=\"Kestrel Review\"\n  tagline=\"Essays, fiction and criticism from the Pacific Northwest\"\n  meta=\"Issue 42 · Autumn 2026\"\n  links={[\n    { label: \"Essays\", href: \"/essays\" },\n    { label: \"Fiction\", href: \"/fiction\" },\n    { label: \"Poetry\", href: \"/poetry\" },\n    { label: \"Interviews\", href: \"/interviews\" },\n    { label: \"Archive\", href: \"/archive\" },\n  ]}\n  action={{ label: \"Subscribe\", href: \"/subscribe\" }}\n/>\n<main style=\"inline-size: min(72rem, 100% - 2.5rem); margin-inline: auto;\">\n  <HeroTypographic\n    title=\"The quiet economy of small presses\"\n    emphasis=\"small presses\"\n    lede=\"How a dozen two-person publishers keep regional writing in print, told by the people who run them.\"\n    actions={[{ label: \"Read the lead essay\", href: \"/essays/small-presses\" }]}\n    align=\"center\"\n    headingLevel={1}\n  />\n</main>\n",
+      "install": "npx shadcn@latest add lambda-curry/astro-blocks/header-editorial#v0.1.0"
+    },
+    {
+      "name": "header-transparent",
+      "title": "Transparent header",
+      "description": "A header that overlays the opening image in light or dark ink, with a native popover menu on narrow screens and, where supported, a solid surface that fades in while scrolling.",
+      "category": "header",
+      "version": "0.1.0",
+      "tags": [
+        "navigation",
+        "transparent",
+        "overlay",
+        "immersive",
+        "popover menu",
+        "photography",
+        "hospitality",
+        "travel"
+      ],
+      "useWhen": "The page opens with a full-bleed photograph or artwork that should start at the very top.",
+      "avoidWhen": "The opening is text on a plain background, or the image is busy where the header sits. Use header-minimal or header-floating.",
+      "placement": "page-start",
+      "dependencies": [
+        "button"
+      ],
+      "files": [
+        {
+          "target": "src/components/blocks/HeaderTransparent.astro",
+          "bytes": 6284,
+          "sha256": "b1f726ed7532258f8c82ab3c91038900f86ca245530454b9722386bd6ccf611c"
+        }
+      ],
+      "import": "../components/blocks/HeaderTransparent.astro",
+      "props": [
+        {
+          "name": "brand",
+          "type": "string",
+          "required": true,
+          "description": "Site name. Used as the home link text, or as the logo's alt text."
+        },
+        {
+          "name": "homeHref",
+          "type": "string",
+          "required": false,
+          "default": "\"/\""
+        },
+        {
+          "name": "logo",
+          "type": "{ src: string; alt?: string; width?: number; height?: number }",
+          "required": false
+        },
+        {
+          "name": "links",
+          "type": "Link[]",
+          "required": false,
+          "default": "[]"
+        },
+        {
+          "name": "action",
+          "type": "Link",
+          "required": false
+        },
+        {
+          "name": "tone",
+          "type": "\"light\" | \"dark\"",
+          "required": false,
+          "default": "\"light\"",
+          "description": "light: white text for dark imagery. dark: text color for light imagery."
+        },
+        {
+          "name": "solidOnScroll",
+          "type": "boolean",
+          "required": false,
+          "default": "true",
+          "description": "Pin the header and fade in a solid surface while scrolling, where the browser supports scroll-driven animation."
+        },
+        {
+          "name": "menuId",
+          "type": "string",
+          "required": false,
+          "default": "\"site-menu\"",
+          "description": "Unique id for the narrow-screen menu when a page has two headers."
+        }
+      ],
+      "types": {
+        "Link": "{ label: string; href: string }"
+      },
+      "slots": [],
+      "clientScript": false,
+      "usage": "---\nimport HeaderTransparent from \"../components/blocks/HeaderTransparent.astro\";\nimport HeroImmersive from \"../components/blocks/HeroImmersive.astro\";\n---\n\n<HeaderTransparent\n  brand=\"Dunewalk\"\n  links={[\n    { label: \"Trips\", href: \"/trips\" },\n    { label: \"Guides\", href: \"/guides\" },\n    { label: \"Journal\", href: \"/journal\" },\n  ]}\n  action={{ label: \"Plan a trip\", href: \"/plan\" }}\n/>\n<HeroImmersive\n  title=\"Walk the dunes at first light\"\n  lede=\"Small guided treks across the Kelso dunes, timed for the hour when the sand is cool and the shadows are long.\"\n  actions={[{ label: \"See spring dates\", href: \"/trips\" }, { label: \"Meet the guides\", href: \"/guides\" }]}\n  image={{ src: \"/gallery/dune.svg\", alt: \"Layered dunes under a low evening sun\", width: 1600, height: 1000 }}\n  position=\"60% 50%\"\n  height=\"screen\"\n/>\n",
+      "install": "npx shadcn@latest add lambda-curry/astro-blocks/header-transparent#v0.1.0"
+    },
+    {
+      "name": "header-minimal",
+      "title": "Minimal header",
+      "description": "A single quiet row: name, two to five links and an optional action. Links wrap onto their own row on narrow screens instead of hiding in a menu.",
+      "category": "header",
+      "version": "0.1.0",
+      "tags": [
+        "navigation",
+        "minimal",
+        "quiet",
+        "no javascript",
+        "local business",
+        "personal"
+      ],
+      "useWhen": "There are only a few destinations and every one should stay visible, especially on phones.",
+      "avoidWhen": "There are more than five links, or the header should overlay imagery.",
+      "placement": "page-start",
+      "dependencies": [
+        "button"
+      ],
+      "files": [
+        {
+          "target": "src/components/blocks/HeaderMinimal.astro",
+          "bytes": 3620,
+          "sha256": "152afe814c217f4cbbd9759ee84464c99dddbc60f184cb071e2a93888e3bf43f"
+        }
+      ],
+      "import": "../components/blocks/HeaderMinimal.astro",
+      "props": [
+        {
+          "name": "brand",
+          "type": "string",
+          "required": true,
+          "description": "Site name. Used as the home link text, or as the logo's alt text."
+        },
+        {
+          "name": "homeHref",
+          "type": "string",
+          "required": false,
+          "default": "\"/\""
+        },
+        {
+          "name": "logo",
+          "type": "{ src: string; alt?: string; width?: number; height?: number }",
+          "required": false
+        },
+        {
+          "name": "links",
+          "type": "Link[]",
+          "required": false,
+          "default": "[]",
+          "description": "Two to five links. They wrap onto their own row on narrow screens instead of hiding in a menu."
+        },
+        {
+          "name": "action",
+          "type": "Link",
+          "required": false
+        },
+        {
+          "name": "divider",
+          "type": "boolean",
+          "required": false,
+          "default": "true",
+          "description": "Draw a hairline under the header."
+        }
+      ],
+      "types": {
+        "Link": "{ label: string; href: string }"
+      },
+      "slots": [],
+      "clientScript": false,
+      "usage": "---\nimport HeaderMinimal from \"../components/blocks/HeaderMinimal.astro\";\nimport HeroTypographic from \"../components/blocks/HeroTypographic.astro\";\n---\n\n<HeaderMinimal\n  brand=\"Quarry Bread\"\n  links={[\n    { label: \"Menu\", href: \"/menu\" },\n    { label: \"Wholesale\", href: \"/wholesale\" },\n    { label: \"Visit\", href: \"/visit\" },\n  ]}\n  action={{ label: \"Order for Saturday\", href: \"/order\" }}\n/>\n<main style=\"inline-size: min(72rem, 100% - 2.5rem); margin-inline: auto;\">\n  <HeroTypographic\n    title=\"Slow-fermented bread, baked before the street wakes up\"\n    emphasis=\"before the street wakes up\"\n    actions={[{ label: \"See this week's bakes\", href: \"/menu\" }]}\n    facts={[\"14 Mill Lane\", \"Wed–Sun · 7–2\", \"Since 2016\"]}\n  />\n</main>\n",
+      "install": "npx shadcn@latest add lambda-curry/astro-blocks/header-minimal#v0.1.0"
+    },
+    {
+      "name": "hero-split",
+      "title": "Split hero",
+      "description": "Headline, lede and actions beside one framed image or artwork, stacking copy-first on narrow screens.",
+      "category": "hero",
+      "version": "0.1.0",
+      "tags": [
+        "opening",
+        "image",
+        "two column",
+        "service",
+        "practice",
+        "product"
+      ],
+      "useWhen": "There is one strong, real image or artwork that shows the actual work, and a clear first action.",
+      "avoidWhen": "There is no genuine image. Use hero-typographic rather than a stock or decorative picture.",
+      "placement": "section",
+      "dependencies": [
+        "button"
+      ],
+      "files": [
+        {
+          "target": "src/components/blocks/HeroSplit.astro",
+          "bytes": 4006,
+          "sha256": "b995f6af9ea20f1e7a04c6b137163103ad0b4aff6f4ea6a0c34bf006d9353619"
+        }
+      ],
+      "import": "../components/blocks/HeroSplit.astro",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "lede",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "actions",
+          "type": "Action[]",
+          "required": false,
+          "default": "[]",
+          "description": "The first action is the primary one; keep it to one or two."
+        },
+        {
+          "name": "image",
+          "type": "{ src: string; alt: string; width?: number; height?: number }",
+          "required": false,
+          "description": "One real image. Use the media slot instead for a picture, video or SVG artwork."
+        },
+        {
+          "name": "mediaSide",
+          "type": "\"start\" | \"end\"",
+          "required": false,
+          "default": "\"end\""
+        },
+        {
+          "name": "ratio",
+          "type": "string",
+          "required": false,
+          "default": "\"4 / 5\"",
+          "description": "CSS aspect-ratio of the media frame on wide screens."
+        },
+        {
+          "name": "align",
+          "type": "\"center\" | \"end\"",
+          "required": false,
+          "default": "\"center\"",
+          "description": "Vertical alignment of the copy against the media."
+        },
+        {
+          "name": "headingLevel",
+          "type": "1 | 2",
+          "required": false,
+          "default": "1"
+        }
+      ],
+      "types": {
+        "Action": "{ label: string; href: string; variant?: \"solid\" | \"outline\" | \"quiet\" }"
+      },
+      "slots": [
+        "default",
+        "meta",
+        "media"
+      ],
+      "clientScript": false,
+      "usage": "---\nimport HeroSplit from \"../components/blocks/HeroSplit.astro\";\n---\n\n<HeroSplit\n  title=\"Recover from injury with a plan you can follow\"\n  lede=\"Tidewater Physio pairs each patient with one clinician for the whole course of care, from the first assessment to the last session.\"\n  actions={[\n    { label: \"Book an assessment\", href: \"/book\" },\n    { label: \"Meet the clinicians\", href: \"/team\" },\n  ]}\n  image={{ src: \"/gallery/dune.svg\", alt: \"Dunes at dusk under a low sun\", width: 1600, height: 1000 }}\n  ratio=\"1 / 1\"\n>\n  <p slot=\"meta\">Same-week appointments · Most insurance accepted</p>\n</HeroSplit>\n",
+      "install": "npx shadcn@latest add lambda-curry/astro-blocks/hero-split#v0.1.0"
+    },
+    {
+      "name": "hero-immersive",
+      "title": "Immersive hero",
+      "description": "A full-bleed photograph or artwork with the headline, lede and actions set in white over a contrast-safe gradient scrim.",
+      "category": "hero",
+      "version": "0.1.0",
+      "tags": [
+        "opening",
+        "full bleed",
+        "photography",
+        "image led",
+        "dark",
+        "travel",
+        "hospitality",
+        "events"
+      ],
+      "useWhen": "There is a striking, high-quality photograph or artwork of the real place, product or experience.",
+      "avoidWhen": "The image is a stock photo, low resolution, or bright across the bottom third. Use hero-split, which frames the image beside the text.",
+      "placement": "section",
+      "dependencies": [
+        "button"
+      ],
+      "files": [
+        {
+          "target": "src/components/blocks/HeroImmersive.astro",
+          "bytes": 4645,
+          "sha256": "63810bedfd54a1918a7ec8d5603f19d10d77a026385b432693c228187e0a8440"
+        }
+      ],
+      "import": "../components/blocks/HeroImmersive.astro",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "lede",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "actions",
+          "type": "Action[]",
+          "required": false,
+          "default": "[]"
+        },
+        {
+          "name": "image",
+          "type": "{ src: string; alt: string; width?: number; height?: number }",
+          "required": false,
+          "description": "A full-bleed photograph or artwork. Use the media slot instead for a picture or video element."
+        },
+        {
+          "name": "position",
+          "type": "string",
+          "required": false,
+          "default": "\"center\"",
+          "description": "CSS object-position for the image, to keep the subject in frame as the crop changes."
+        },
+        {
+          "name": "height",
+          "type": "\"screen\" | \"tall\" | \"medium\"",
+          "required": false,
+          "default": "\"tall\""
+        },
+        {
+          "name": "scrim",
+          "type": "\"strong\" | \"soft\"",
+          "required": false,
+          "default": "\"strong\"",
+          "description": "How strongly the image darkens behind the text. Keep strong unless the image is already dark at the bottom."
+        },
+        {
+          "name": "align",
+          "type": "\"start\" | \"center\"",
+          "required": false,
+          "default": "\"start\""
+        },
+        {
+          "name": "headingLevel",
+          "type": "1 | 2",
+          "required": false,
+          "default": "1"
+        }
+      ],
+      "types": {
+        "Action": "{ label: string; href: string; variant?: \"solid\" | \"outline\" | \"quiet\" }"
+      },
+      "slots": [
+        "media",
+        "default",
+        "meta"
+      ],
+      "clientScript": false,
+      "usage": "---\nimport HeroImmersive from \"../components/blocks/HeroImmersive.astro\";\n---\n\n<HeroImmersive\n  title=\"Learn to sail on the quietest water on the coast\"\n  lede=\"Saltmarsh Sailing runs small-boat courses in a sheltered estuary, two students to an instructor.\"\n  actions={[\n    { label: \"Book a taster evening\", href: \"/taster\" },\n    { label: \"Course dates\", href: \"/courses\" },\n  ]}\n  image={{ src: \"/gallery/tide.svg\", alt: \"A small sailboat on calm water at dusk\", width: 1600, height: 1000 }}\n  position=\"82% 58%\"\n>\n  <p slot=\"meta\">RYA recognised · April to October</p>\n</HeroImmersive>\n",
+      "install": "npx shadcn@latest add lambda-curry/astro-blocks/hero-immersive#v0.1.0"
+    },
+    {
+      "name": "hero-typographic",
+      "title": "Typographic hero",
+      "description": "A large statement headline with one accented phrase, an optional lede and actions, and a ruled row of short facts.",
+      "category": "hero",
+      "version": "0.1.0",
+      "tags": [
+        "opening",
+        "type led",
+        "statement",
+        "no image",
+        "editorial",
+        "software"
+      ],
+      "useWhen": "The positioning sentence is the strongest material, or there is no imagery yet.",
+      "avoidWhen": "The headline runs past about fourteen words, or a photo of the real work would say more.",
+      "placement": "section",
+      "dependencies": [
+        "button"
+      ],
+      "files": [
+        {
+          "target": "src/components/blocks/HeroTypographic.astro",
+          "bytes": 3378,
+          "sha256": "87e4e6bf48e3262ffcff86a5cb3170013cb327cce289ac34f43cf5ec38d6f7c7"
+        }
+      ],
+      "import": "../components/blocks/HeroTypographic.astro",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "required": true,
+          "description": "One statement sentence. The headline is the hero, so keep it under about 14 words."
+        },
+        {
+          "name": "emphasis",
+          "type": "string",
+          "required": false,
+          "description": "A word or phrase from the title to set in the accent color."
+        },
+        {
+          "name": "lede",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "actions",
+          "type": "Action[]",
+          "required": false,
+          "default": "[]"
+        },
+        {
+          "name": "facts",
+          "type": "string[]",
+          "required": false,
+          "default": "[]",
+          "description": "Two to four short facts shown on a ruled line, such as place, hours or founding year."
+        },
+        {
+          "name": "align",
+          "type": "\"start\" | \"center\"",
+          "required": false,
+          "default": "\"start\""
+        },
+        {
+          "name": "headingLevel",
+          "type": "1 | 2",
+          "required": false,
+          "default": "1"
+        }
+      ],
+      "types": {
+        "Action": "{ label: string; href: string; variant?: \"solid\" | \"outline\" | \"quiet\" }"
+      },
+      "slots": [
+        "default"
+      ],
+      "clientScript": false,
+      "usage": "---\nimport HeroTypographic from \"../components/blocks/HeroTypographic.astro\";\n---\n\n<HeroTypographic\n  title=\"Analytics your whole team can actually read\"\n  emphasis=\"actually read\"\n  lede=\"Orbit turns product events into one plain-language weekly report, so decisions stop waiting for the data team.\"\n  actions={[\n    { label: \"Start free\", href: \"/signup\" },\n    { label: \"Read a sample report\", href: \"/sample\" },\n  ]}\n  facts={[\"No SQL required\", \"SOC 2 Type II\", \"Setup in an afternoon\"]}\n/>\n",
+      "install": "npx shadcn@latest add lambda-curry/astro-blocks/hero-typographic#v0.1.0"
+    },
+    {
+      "name": "steps-numbered",
+      "title": "Numbered steps",
+      "description": "An ordered list of two to five steps with large numerals, set side by side on wide screens or one per line for longer text.",
+      "category": "walkthrough",
+      "version": "0.1.0",
+      "tags": [
+        "process",
+        "how it works",
+        "sequence",
+        "onboarding",
+        "booking",
+        "service"
+      ],
+      "useWhen": "Visitors need to understand a real sequence, such as how booking, a project or a course of care unfolds.",
+      "avoidWhen": "The items have no inherent order. Numbering unordered features is decoration; use features-editorial instead.",
+      "placement": "section",
+      "dependencies": [],
+      "files": [
+        {
+          "target": "src/components/blocks/StepsNumbered.astro",
+          "bytes": 4363,
+          "sha256": "60ec2d47c1a134afee2c071e105f93a982e304bae5aae75533b729e6afe2777b"
+        }
+      ],
+      "import": "../components/blocks/StepsNumbered.astro",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "intro",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "steps",
+          "type": "Step[]",
+          "required": true,
+          "description": "Two to five steps of a real sequence. Numbers carry meaning here, so don't use this for unordered features."
+        },
+        {
+          "name": "layout",
+          "type": "\"row\" | \"list\"",
+          "required": false,
+          "default": "\"row\"",
+          "description": "row: steps side by side on wide screens. list: one step per line, for longer step text."
+        },
+        {
+          "name": "headingLevel",
+          "type": "2 | 3",
+          "required": false,
+          "default": "2"
+        }
+      ],
+      "types": {
+        "Step": "{ title: string; text: string; detail?: string }"
+      },
+      "slots": [],
+      "clientScript": false,
+      "usage": "---\nimport StepsNumbered from \"../components/blocks/StepsNumbered.astro\";\n---\n\n<StepsNumbered\n  title=\"How a course of care works\"\n  intro=\"One clinician sees you through every step, so you never repeat your story.\"\n  steps={[\n    { title: \"Assessment\", text: \"A full hour to understand the injury, your history and what you want to get back to.\", detail: \"60 minutes\" },\n    { title: \"Plan\", text: \"A written plan with milestones you can check yourself, not just a list of exercises.\", detail: \"Same day\" },\n    { title: \"Treatment\", text: \"Hands-on sessions alongside a home programme sized to your week.\", detail: \"Weekly\" },\n    { title: \"Review\", text: \"We retest against your first assessment and decide together when you are done.\", detail: \"At week six\" },\n  ]}\n/>\n",
+      "install": "npx shadcn@latest add lambda-curry/astro-blocks/steps-numbered#v0.1.0"
+    },
+    {
+      "name": "timeline",
+      "title": "Timeline",
+      "description": "A vertical timeline of dated entries on a rail, with an optional current entry and labels in their own column on wide screens.",
+      "category": "walkthrough",
+      "version": "0.1.0",
+      "tags": [
+        "history",
+        "milestones",
+        "dates",
+        "story",
+        "roadmap",
+        "phases"
+      ],
+      "useWhen": "Dates or phases carry the meaning: a company history, a project schedule or an event programme.",
+      "avoidWhen": "There are fewer than three entries, or the dates add nothing. A paragraph is clearer.",
+      "placement": "section",
+      "dependencies": [],
+      "files": [
+        {
+          "target": "src/components/blocks/Timeline.astro",
+          "bytes": 4541,
+          "sha256": "43fa3c5f4515f8105086ccd9a78b6ce7d3c08de168f075cba2cfe2fe115f06b6"
+        }
+      ],
+      "import": "../components/blocks/Timeline.astro",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "intro",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "items",
+          "type": "Entry[]",
+          "required": true,
+          "description": "Entries in order, oldest or first first."
+        },
+        {
+          "name": "headingLevel",
+          "type": "2 | 3",
+          "required": false,
+          "default": "2"
+        }
+      ],
+      "types": {
+        "Entry": "{ label: string; title: string; text?: string; current?: boolean }"
+      },
+      "slots": [],
+      "clientScript": false,
+      "usage": "---\nimport Timeline from \"../components/blocks/Timeline.astro\";\n---\n\n<Timeline\n  title=\"From one borrowed oven to four\"\n  intro=\"Quarry Bread grew one bake at a time.\"\n  items={[\n    { label: \"2016\", title: \"A borrowed oven\", text: \"Weekend loaves baked overnight in a friend's restaurant kitchen and sold from a market table.\" },\n    { label: \"2018\", title: \"Mill Lane opens\", text: \"Our own shop and a wood-fired deck oven, open four mornings a week.\" },\n    { label: \"2021\", title: \"Wholesale\", text: \"Bread for twelve cafés within cycling distance, delivered before seven.\" },\n    { label: \"Now\", title: \"A second bakery\", text: \"A night-bake kitchen across town so the shop can open every day.\", current: true },\n  ]}\n/>\n",
+      "install": "npx shadcn@latest add lambda-curry/astro-blocks/timeline#v0.1.0"
+    },
+    {
+      "name": "alternating-rows",
+      "title": "Alternating rows",
+      "description": "Rows that pair an image, or a large typographic figure, with a short text, alternating sides on wide screens.",
+      "category": "walkthrough",
+      "version": "0.1.0",
+      "tags": [
+        "walkthrough",
+        "zigzag",
+        "image and text",
+        "services",
+        "phases",
+        "figures"
+      ],
+      "useWhen": "Each point has its own real image or one striking number, and the points read in order.",
+      "avoidWhen": "The rows would all use similar stock images, or there are more than five rows.",
+      "placement": "section",
+      "dependencies": [],
+      "files": [
+        {
+          "target": "src/components/blocks/AlternatingRows.astro",
+          "bytes": 5661,
+          "sha256": "c4c294cd78dc7f3a809407dc702b87cadbbc138d1b9483830731324dc6210266"
+        }
+      ],
+      "import": "../components/blocks/AlternatingRows.astro",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "intro",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "rows",
+          "type": "Row[]",
+          "required": true
+        },
+        {
+          "name": "start",
+          "type": "\"media\" | \"text\"",
+          "required": false,
+          "default": "\"media\"",
+          "description": "Which side the first row's media sits on wide screens."
+        },
+        {
+          "name": "ratio",
+          "type": "string",
+          "required": false,
+          "default": "\"4 / 3\"",
+          "description": "CSS aspect-ratio of each media frame."
+        },
+        {
+          "name": "headingLevel",
+          "type": "2 | 3",
+          "required": false,
+          "default": "2"
+        }
+      ],
+      "types": {
+        "Row": "{ title: string; text: string; image?: { src: string; alt: string; width?: number; height?: number }; figure?: string; figureLabel?: string; link?: { label: string; href: string } }"
+      },
+      "slots": [],
+      "clientScript": false,
+      "usage": "---\nimport AlternatingRows from \"../components/blocks/AlternatingRows.astro\";\n---\n\n<AlternatingRows\n  title=\"How a Fernhill project runs\"\n  intro=\"Three phases, each with a clear handover, so you always know what comes next.\"\n  rows={[\n    {\n      title: \"Survey and brief\",\n      text: \"We spend a morning and an evening in the space before drawing anything, recording where the light falls and how you use each room.\",\n      figure: \"2 visits\",\n      figureLabel: \"before the first sketch\",\n    },\n    {\n      title: \"Design\",\n      text: \"Drawings and a light study for every main room, revised with you until the plan feels obvious.\",\n      image: { src: \"/gallery/atelier.svg\", alt: \"A sunlit room with an arched window and a long table\", width: 1200, height: 1500 },\n      link: { label: \"See a finished study\", href: \"/work/light-study\" },\n    },\n    {\n      title: \"Build\",\n      text: \"We stay on as architects through construction, visiting site weekly and answering the builder's questions the same day.\",\n      image: { src: \"/gallery/field.svg\", alt: \"A small farmhouse in rolling green fields\", width: 1200, height: 900 },\n    },\n  ]}\n/>\n",
+      "install": "npx shadcn@latest add lambda-curry/astro-blocks/alternating-rows#v0.1.0"
+    },
+    {
+      "name": "features-bento",
+      "title": "Bento features",
+      "description": "An asymmetric grid of related features with one large tile, wide and tall tiles, accent and outline tones, and whole-tile links.",
+      "category": "features",
+      "version": "0.1.0",
+      "tags": [
+        "features",
+        "grid",
+        "bento",
+        "product",
+        "software",
+        "stats",
+        "asymmetric"
+      ],
+      "useWhen": "Four to seven related capabilities differ in importance, and one deserves the largest tile.",
+      "avoidWhen": "The items are unrelated, equal in weight, or exactly three. A bento grid of unrelated boxes reads as filler; use features-editorial.",
+      "placement": "section",
+      "dependencies": [],
+      "files": [
+        {
+          "target": "src/components/blocks/FeaturesBento.astro",
+          "bytes": 5562,
+          "sha256": "ad80e68b8398010c2cdc2e733aea5403dc57d24e0c7c003d61241cf018d9c6cf"
+        }
+      ],
+      "import": "../components/blocks/FeaturesBento.astro",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "intro",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "items",
+          "type": "Tile[]",
+          "required": true,
+          "description": "Four to seven related items of different weight. Give the most important one size large. On wide screens a row holds four cells: large fills four (two by two), wide and tall two, default one, so pick sizes that fill whole rows."
+        },
+        {
+          "name": "headingLevel",
+          "type": "2 | 3",
+          "required": false,
+          "default": "2"
+        }
+      ],
+      "types": {
+        "Tile": "{ title: string; text?: string; label?: string; image?: { src: string; alt: string; width?: number; height?: number }; size?: \"default\" | \"large\" | \"wide\" | \"tall\"; tone?: \"surface\" | \"accent\" | \"outline\"; href?: string }"
+      },
+      "slots": [],
+      "clientScript": false,
+      "usage": "---\nimport FeaturesBento from \"../components/blocks/FeaturesBento.astro\";\n---\n\n<FeaturesBento\n  title=\"What Orbit does each week\"\n  intro=\"Everything below runs automatically once your events are connected.\"\n  items={[\n    {\n      title: \"One plain-language report\",\n      text: \"Every Monday, the five changes that matter, written as sentences your whole team can act on.\",\n      image: { src: \"/gallery/field.svg\", alt: \"Abstract green fields under a yellow sun\", width: 1200, height: 900 },\n      size: \"large\",\n      href: \"/sample\",\n    },\n    { label: \"Saved per analyst each week\", title: \"4.2 hours\", tone: \"accent\" },\n    { label: \"Audited every year\", title: \"SOC 2\", tone: \"outline\" },\n    { title: \"Alerts that explain themselves\", text: \"Every alert names the segment, the size of the change and its likely cause, so nobody has to dig.\", size: \"wide\" },\n  ]}\n/>\n",
+      "install": "npx shadcn@latest add lambda-curry/astro-blocks/features-bento#v0.1.0"
+    },
+    {
+      "name": "features-editorial",
+      "title": "Editorial features",
+      "description": "A large heading and intro that stay in view beside a ruled list of offers, each with a title, a sentence or two and an optional label.",
+      "category": "features",
+      "version": "0.1.0",
+      "tags": [
+        "features",
+        "services",
+        "list",
+        "editorial",
+        "sticky",
+        "practice",
+        "menu"
+      ],
+      "useWhen": "Services or offers need a sentence each, and reading them in order matters more than visual variety.",
+      "avoidWhen": "There are only one or two items, or each needs an image. Use alternating-rows.",
+      "placement": "section",
+      "dependencies": [
+        "button"
+      ],
+      "files": [
+        {
+          "target": "src/components/blocks/FeaturesEditorial.astro",
+          "bytes": 4166,
+          "sha256": "369fa4ecdc0d74d7bc5c2519b07df7d4bf50da63f811bdc5f82769ef56470978"
+        }
+      ],
+      "import": "../components/blocks/FeaturesEditorial.astro",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "intro",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "action",
+          "type": "{ label: string; href: string }",
+          "required": false
+        },
+        {
+          "name": "items",
+          "type": "Item[]",
+          "required": true,
+          "description": "Three to seven offers or services, each with a sentence or two."
+        },
+        {
+          "name": "headingLevel",
+          "type": "2 | 3",
+          "required": false,
+          "default": "2"
+        }
+      ],
+      "types": {
+        "Item": "{ title: string; text: string; label?: string; href?: string }"
+      },
+      "slots": [],
+      "clientScript": false,
+      "usage": "---\nimport FeaturesEditorial from \"../components/blocks/FeaturesEditorial.astro\";\n---\n\n<FeaturesEditorial\n  title=\"What we treat\"\n  intro=\"Most people come to us with one of these. If yours isn't here, ask; we will tell you honestly if we are the right clinic.\"\n  action={{ label: \"Ask about your injury\", href: \"/contact\" }}\n  items={[\n    { title: \"Sports injuries\", text: \"Sprains, strains and overuse injuries, with a return-to-play plan you can test yourself against.\", label: \"Most common\" },\n    { title: \"Back and neck pain\", text: \"Assessment of posture, load and work habits alongside hands-on treatment.\", href: \"/back-pain\" },\n    { title: \"After surgery\", text: \"Rehabilitation after joint replacement or ligament repair, coordinated with your surgeon.\" },\n    { title: \"Pelvic health\", text: \"Pre- and postnatal care with a specialist clinician in a private room.\", label: \"Women's health\" },\n  ]}\n/>\n",
+      "install": "npx shadcn@latest add lambda-curry/astro-blocks/features-editorial#v0.1.0"
+    },
+    {
+      "name": "footer-minimal",
+      "title": "Minimal footer",
+      "description": "One quiet line: copyright, a short note such as an address or hours, a few links and an optional credit.",
+      "category": "footer",
+      "version": "0.1.0",
+      "tags": [
+        "footer",
+        "minimal",
+        "quiet",
+        "local business",
+        "personal"
+      ],
+      "useWhen": "The site is small, and the footer only needs to answer where, when and who.",
+      "avoidWhen": "The site has many pages that visitors look for at the bottom. Use footer-columns.",
+      "placement": "page-end",
+      "dependencies": [],
+      "files": [
+        {
+          "target": "src/components/blocks/FooterMinimal.astro",
+          "bytes": 2296,
+          "sha256": "14e33acc10c0a88a7ef52dd2ec7dc191654692bbf694cc7283a7aad9867f3542"
+        }
+      ],
+      "import": "../components/blocks/FooterMinimal.astro",
+      "props": [
+        {
+          "name": "name",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "links",
+          "type": "Link[]",
+          "required": false,
+          "default": "[]"
+        },
+        {
+          "name": "note",
+          "type": "string",
+          "required": false,
+          "description": "One short line, such as an address or opening hours."
+        },
+        {
+          "name": "credit",
+          "type": "Link",
+          "required": false,
+          "description": "A small credit link kept at the end of the row, such as the site builder's."
+        },
+        {
+          "name": "year",
+          "type": "number",
+          "required": false,
+          "default": "new Date().getFullYear()",
+          "description": "The copyright year. Defaults to the current year."
+        }
+      ],
+      "types": {
+        "Link": "{ label: string; href: string }"
+      },
+      "slots": [],
+      "clientScript": false,
+      "usage": "---\nimport FooterMinimal from \"../components/blocks/FooterMinimal.astro\";\n---\n\n<FooterMinimal\n  name=\"Quarry Bread\"\n  note=\"14 Mill Lane · Wed–Sun 7–2\"\n  links={[\n    { label: \"Instagram\", href: \"https://instagram.com/\" },\n    { label: \"Wholesale\", href: \"/wholesale\" },\n    { label: \"Careers\", href: \"/careers\" },\n  ]}\n  credit={{ label: \"Built with Site Boulder\", href: \"https://siteboulder.com/\" }}\n/>\n",
+      "install": "npx shadcn@latest add lambda-curry/astro-blocks/footer-minimal#v0.1.0"
+    },
+    {
+      "name": "footer-columns",
+      "title": "Column footer",
+      "description": "A brand block with description and action beside titled link columns, over a bottom bar for copyright, legal links and a credit.",
+      "category": "footer",
+      "version": "0.1.0",
+      "tags": [
+        "footer",
+        "columns",
+        "sitemap",
+        "organization",
+        "product",
+        "software"
+      ],
+      "useWhen": "The site has enough pages that a footer sitemap genuinely helps visitors.",
+      "avoidWhen": "There are fewer than six links in total. Use footer-minimal.",
+      "placement": "page-end",
+      "dependencies": [
+        "button"
+      ],
+      "files": [
+        {
+          "target": "src/components/blocks/FooterColumns.astro",
+          "bytes": 4810,
+          "sha256": "edf15d0db3777b54236c02a89086cba22de782243eb76c05edf2541fb7abfcdb"
+        }
+      ],
+      "import": "../components/blocks/FooterColumns.astro",
+      "props": [
+        {
+          "name": "name",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "homeHref",
+          "type": "string",
+          "required": false,
+          "default": "\"/\""
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "required": false,
+          "description": "One or two sentences about the organization."
+        },
+        {
+          "name": "action",
+          "type": "Link",
+          "required": false
+        },
+        {
+          "name": "columns",
+          "type": "{ title: string; links: Link[] }[]",
+          "required": true,
+          "description": "Two to four titled groups of links."
+        },
+        {
+          "name": "legal",
+          "type": "Link[]",
+          "required": false,
+          "default": "[]",
+          "description": "Small links in the bottom bar, such as privacy and terms."
+        },
+        {
+          "name": "credit",
+          "type": "Link",
+          "required": false,
+          "description": "A small credit link kept in the bottom bar, such as the site builder's."
+        },
+        {
+          "name": "year",
+          "type": "number",
+          "required": false,
+          "default": "new Date().getFullYear()"
+        },
+        {
+          "name": "tone",
+          "type": "\"surface\" | \"plain\"",
+          "required": false,
+          "default": "\"surface\""
+        }
+      ],
+      "types": {
+        "Link": "{ label: string; href: string }"
+      },
+      "slots": [],
+      "clientScript": false,
+      "usage": "---\nimport FooterColumns from \"../components/blocks/FooterColumns.astro\";\n---\n\n<FooterColumns\n  name=\"Orbit\"\n  description=\"Plain-language product analytics for teams without a data department.\"\n  action={{ label: \"Start free\", href: \"/signup\" }}\n  columns={[\n    { title: \"Product\", links: [{ label: \"Weekly report\", href: \"/report\" }, { label: \"Alerts\", href: \"/alerts\" }, { label: \"Pricing\", href: \"/pricing\" }] },\n    { title: \"Company\", links: [{ label: \"About\", href: \"/about\" }, { label: \"Customers\", href: \"/customers\" }, { label: \"Careers\", href: \"/careers\" }] },\n    { title: \"Resources\", links: [{ label: \"Docs\", href: \"/docs\" }, { label: \"Security\", href: \"/security\" }, { label: \"Status\", href: \"/status\" }] },\n  ]}\n  legal={[\n    { label: \"Privacy\", href: \"/privacy\" },\n    { label: \"Terms\", href: \"/terms\" },\n  ]}\n  credit={{ label: \"Built with Site Boulder\", href: \"https://siteboulder.com/\" }}\n/>\n",
+      "install": "npx shadcn@latest add lambda-curry/astro-blocks/footer-columns#v0.1.0"
+    },
+    {
+      "name": "footer-wordmark",
+      "title": "Wordmark footer",
+      "description": "Footer links and a note above the site name set across the full width, sized from its length, with an inverse or plain tone.",
+      "category": "footer",
+      "version": "0.1.0",
+      "tags": [
+        "footer",
+        "wordmark",
+        "oversized",
+        "brand",
+        "expressive",
+        "studio",
+        "portfolio"
+      ],
+      "useWhen": "The name is short and the rest of the site is quiet, so the footer can be the one expressive brand moment.",
+      "avoidWhen": "The header already shows a large wordmark, or the name runs past about sixteen characters. A repeated giant wordmark reads as filler.",
+      "placement": "page-end",
+      "dependencies": [],
+      "files": [
+        {
+          "target": "src/components/blocks/FooterWordmark.astro",
+          "bytes": 4358,
+          "sha256": "a1560efde2f823388f7472df4d8063ea76e2fe55e622fc9b2067cb8f49fcd846"
+        }
+      ],
+      "import": "../components/blocks/FooterWordmark.astro",
+      "props": [
+        {
+          "name": "name",
+          "type": "string",
+          "required": true,
+          "description": "A short name. It is set across the full width, so names over about 16 characters get small."
+        },
+        {
+          "name": "links",
+          "type": "Link[]",
+          "required": false,
+          "default": "[]"
+        },
+        {
+          "name": "note",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "credit",
+          "type": "Link",
+          "required": false,
+          "description": "A small credit link kept in the bottom row, such as the site builder's."
+        },
+        {
+          "name": "year",
+          "type": "number",
+          "required": false,
+          "default": "new Date().getFullYear()"
+        },
+        {
+          "name": "tone",
+          "type": "\"inverse\" | \"plain\"",
+          "required": false,
+          "default": "\"inverse\""
+        },
+        {
+          "name": "fit",
+          "type": "number",
+          "required": false,
+          "default": "0.92",
+          "description": "Share of the width the name should fill. Lower it if a wide display face overflows."
+        }
+      ],
+      "types": {
+        "Link": "{ label: string; href: string }"
+      },
+      "slots": [],
+      "clientScript": false,
+      "usage": "---\nimport FooterWordmark from \"../components/blocks/FooterWordmark.astro\";\n---\n\n<FooterWordmark\n  name=\"Fernhill\"\n  note=\"An architecture studio for homes and small workplaces, in Bristol and by appointment.\"\n  links={[\n    { label: \"Work\", href: \"/work\" },\n    { label: \"Practice\", href: \"/practice\" },\n    { label: \"Journal\", href: \"/journal\" },\n    { label: \"Contact\", href: \"/contact\" },\n  ]}\n/>\n",
+      "install": "npx shadcn@latest add lambda-curry/astro-blocks/footer-wordmark#v0.1.0"
+    },
+    {
+      "name": "footer-cta",
+      "title": "Call-to-action footer",
+      "description": "A closing band with one invitation and up to two actions, merged with a compact footer row, in inverse, accent or surface tone.",
+      "category": "footer",
+      "version": "0.1.0",
+      "tags": [
+        "footer",
+        "call to action",
+        "closing",
+        "booking",
+        "conversion",
+        "service"
+      ],
+      "useWhen": "Every page should end by offering the same next step, such as booking or getting in touch.",
+      "avoidWhen": "The page already ends with a strong call to action, or there is no concrete next step to offer.",
+      "placement": "page-end",
+      "dependencies": [
+        "button"
+      ],
+      "files": [
+        {
+          "target": "src/components/blocks/FooterCta.astro",
+          "bytes": 4404,
+          "sha256": "554127cf5aff74db5c8f9331d2d37a037b1dd8ee272fbed69e3ed340444be0d0"
+        }
+      ],
+      "import": "../components/blocks/FooterCta.astro",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "required": true,
+          "description": "The closing invitation, named by what actually happens next."
+        },
+        {
+          "name": "text",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "actions",
+          "type": "Action[]",
+          "required": true,
+          "description": "One or two actions; the first is primary."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "links",
+          "type": "Link[]",
+          "required": false,
+          "default": "[]"
+        },
+        {
+          "name": "credit",
+          "type": "Link",
+          "required": false,
+          "description": "A small credit link kept in the bottom row, such as the site builder's."
+        },
+        {
+          "name": "year",
+          "type": "number",
+          "required": false,
+          "default": "new Date().getFullYear()"
+        },
+        {
+          "name": "tone",
+          "type": "\"inverse\" | \"accent\" | \"surface\"",
+          "required": false,
+          "default": "\"inverse\""
+        }
+      ],
+      "types": {
+        "Link": "{ label: string; href: string }",
+        "Action": "{ variant?: \"solid\" | \"outline\" | \"quiet\" }"
+      },
+      "slots": [],
+      "clientScript": false,
+      "usage": "---\nimport FooterCta from \"../components/blocks/FooterCta.astro\";\n---\n\n<FooterCta\n  title=\"Book your first assessment\"\n  text=\"Same-week appointments, and one clinician from the first session to the last.\"\n  actions={[\n    { label: \"Book online\", href: \"/book\" },\n    { label: \"Call 555-0142\", href: \"tel:+15555550142\" },\n  ]}\n  name=\"Tidewater Physio\"\n  links={[\n    { label: \"Clinicians\", href: \"/team\" },\n    { label: \"Prices\", href: \"/prices\" },\n    { label: \"Find us\", href: \"/visit\" },\n  ]}\n  credit={{ label: \"Built with Site Boulder\", href: \"https://siteboulder.com/\" }}\n/>\n",
+      "install": "npx shadcn@latest add lambda-curry/astro-blocks/footer-cta#v0.1.0"
+    }
+  ]
+}

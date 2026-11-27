@@ -1,0 +1,168 @@
+---
+// Astro Blocks — footer-cta — MIT — https://github.com/lambda-curry/astro-blocks
+import Button from "../ui/Button.astro";
+
+interface Link {
+  label: string;
+  href: string;
+}
+interface Action extends Link {
+  variant?: "solid" | "outline" | "quiet";
+}
+interface Props {
+  /** The closing invitation, named by what actually happens next. */
+  title: string;
+  text?: string;
+  /** One or two actions; the first is primary. */
+  actions: Action[];
+  name: string;
+  links?: Link[];
+  /** A small credit link kept in the bottom row, such as the site builder's. */
+  credit?: Link;
+  year?: number;
+  tone?: "inverse" | "accent" | "surface";
+}
+
+const { title, text, actions, name, links = [], credit, year = new Date().getFullYear(), tone = "inverse" } = Astro.props;
+---
+
+<footer class:list={["footer-cta", `tone-${tone}`]}>
+  <div class="shell">
+    <div class="cta">
+      <h2 class="title">{title}</h2>
+      {text && <p class="text">{text}</p>}
+      <div class="actions">
+        {
+          actions.map(({ label, href, variant }, index) => (
+            <Button href={href} size="lg" variant={variant ?? (index === 0 ? "solid" : "outline")}>
+              {label}
+            </Button>
+          ))
+        }
+      </div>
+    </div>
+    <div class="bottom">
+      <p class="copyright">© {year} {name}</p>
+      {
+        links.length > 0 && (
+          <nav aria-label="Footer">
+            <ul>
+              {links.map(({ label, href }) => (
+                <li>
+                  <a href={href}>{label}</a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        )
+      }
+      {
+        credit && (
+          <p class="credit">
+            <a href={credit.href}>{credit.label}</a>
+          </p>
+        )
+      }
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer-cta {
+    --_muted: color-mix(in oklab, currentColor 72%, transparent);
+    container-type: inline-size;
+  }
+  /* Capture the band's colors here, so the actions below can swap them without
+     referring to their own overrides. */
+  .tone-inverse {
+    --_band: var(--color-text, #1b1f22);
+    --_ink: var(--color-bg, #ffffff);
+  }
+  .tone-accent {
+    --_band: var(--color-accent, #1f4f5f);
+    --_ink: var(--color-on-accent, #ffffff);
+  }
+  .tone-inverse,
+  .tone-accent {
+    --color-focus: var(--_ink);
+    background: var(--_band);
+    color: var(--_ink);
+  }
+  /* On a dark or accent band the primary button inverts, so it stays the strongest shape in any theme. */
+  .tone-inverse .actions,
+  .tone-accent .actions {
+    --color-accent: var(--_ink);
+    --color-on-accent: var(--_band);
+  }
+  .tone-surface {
+    background: var(--color-surface, #f3f4f1);
+    color: var(--color-text, #1b1f22);
+  }
+  .shell {
+    inline-size: min(var(--width-content, 72rem), 100% - 2 * var(--space-gutter, clamp(1.25rem, 4vw, 4rem)));
+    margin-inline: auto;
+  }
+  .cta {
+    padding-block: clamp(3.5rem, 10cqi, 7.5rem) clamp(3rem, 8cqi, 6rem);
+  }
+  .title {
+    margin: 0;
+    max-inline-size: 18ch;
+    font-family: var(--font-display, system-ui, sans-serif);
+    font-size: clamp(2.25rem, 1rem + 5cqi, 5rem);
+    font-weight: var(--weight-display, 650);
+    letter-spacing: var(--tracking-display, -0.022em);
+    line-height: 1;
+    text-wrap: balance;
+  }
+  .text {
+    margin: 1.25rem 0 0;
+    max-inline-size: 44ch;
+    color: var(--_muted);
+    font-size: var(--step-1, clamp(1.2rem, 1.1rem + 0.5vw, 1.5rem));
+    line-height: 1.45;
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1rem;
+    margin-block-start: 2.25rem;
+  }
+  .bottom {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem 1.75rem;
+    padding-block: 1rem;
+    border-block-start: 1px solid color-mix(in oklab, currentColor 18%, transparent);
+    color: var(--_muted);
+    font-size: var(--step--1, clamp(0.875rem, 0.84rem + 0.16vw, 0.95rem));
+  }
+  .bottom p {
+    margin: 0;
+  }
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 1.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .bottom a {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: 44px;
+    color: inherit;
+    text-underline-offset: 0.25em;
+  }
+  .bottom a:focus-visible {
+    outline: 3px solid var(--color-focus, #1f4f5f);
+    outline-offset: 2px;
+  }
+  @container (min-width: 40rem) {
+    .bottom .credit {
+      margin-inline-start: auto;
+    }
+  }
+</style>
