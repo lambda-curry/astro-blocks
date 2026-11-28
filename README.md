@@ -45,7 +45,7 @@ Each item in [`registry.json`](registry.json) says when to use it and, as import
 
 ## Design
 
-- **Tokens, not themes.** Blocks read semantic custom properties: `--color-bg`, `--color-surface`, `--color-text`, `--color-muted`, `--color-accent`, `--color-on-accent`, `--font-display`, `--font-body`, the `--step-*` type scale, `--space-*`, `--radius-sm` and `--radius-lg`. Set them once, in your own theme, and every block follows. Each block also falls back to the neutral defaults in [`tokens.css`](src/styles/tokens.css) (`npx shadcn@latest add lambda-curry/astro-blocks/tokens#v0.1.2`), so nothing breaks without them.
+- **Tokens, not themes.** Blocks read semantic custom properties: `--color-bg`, `--color-surface`, `--color-text`, `--color-muted`, `--color-accent`, `--color-on-accent`, `--font-display`, `--font-body`, the `--step-*` type scale, `--space-gutter`, `--section-gap`, `--radius-sm` and `--radius-lg`. Set them once, in your own theme, and every block follows. Each block also falls back to the neutral defaults in [`tokens.css`](src/styles/tokens.css) (`npx shadcn@latest add lambda-curry/astro-blocks/tokens#v0.1.2`), so nothing breaks without them.
 - **Container queries.** Blocks lay out from the width they are given, so they work full-width or inside a narrow column.
 - **No client JavaScript.** Narrow-screen menus use the HTML `popover` attribute. The transparent header turns solid while scrolling through CSS scroll-driven animation where supported. The wordmark footer sizes the name with container units.
 - **Accessible by default.** One `h1` per page (heroes take `headingLevel`), visible focus, 44px targets, landmarks, alt text through props, and motion that respects `prefers-reduced-motion`.
@@ -62,9 +62,10 @@ npm ci
 npm run dev        # the gallery and workbench at http://localhost:4321
 npm run registry   # validate, build public/r with shadcn, and derive src/data/catalog.json
 npm run check      # generated files current, plus astro check
+npm run shots -- --themes default,paper,ink --sheet --interact --stress   # contact sheets and QA checks into qa/
 ```
 
-[`AGENTS.md`](AGENTS.md) lists the conventions the build enforces and the release steps.
+[`AGENTS.md`](AGENTS.md) lists the conventions the build enforces and the release steps. Quality is judged with [`docs/quality-playbook.md`](docs/quality-playbook.md), and the latest per-block verdicts are in [`docs/blocks-audit.md`](docs/blocks-audit.md).
 
 ## License
 
