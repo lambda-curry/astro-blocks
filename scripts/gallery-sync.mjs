@@ -1,8 +1,9 @@
 // Sync the gallery into a Site Boulder draft through the same MCP tools a customer's AI uses.
 //
 //   node scripts/gallery-sync.mjs login --mcp https://siteboulder.com/api/mcp [--resume | --code-url <redirected url>]
-//   node scripts/gallery-sync.mjs sync --mcp https://siteboulder.com/api/mcp --create "Astro Blocks" [--preview] [--dry-run]
-//   node scripts/gallery-sync.mjs sync --mcp https://siteboulder.com/api/mcp --site <site id> [--preview]
+//   node scripts/gallery-sync.mjs sites --mcp https://siteboulder.com/api/mcp [--query <name>]
+//   node scripts/gallery-sync.mjs sync --mcp https://siteboulder.com/api/mcp --create "Astro Blocks" [--preview [--capture <dir>]]
+//   node scripts/gallery-sync.mjs sync --mcp https://siteboulder.com/api/mcp --site <site id> [--preview [--capture <dir>]] [--dry-run]
 //
 // Blocks are installed with registry_add, pinned to this repository's version, so the draft
 // renders the exact registry files. Gallery files are written with revisioned edit_site batches.
@@ -158,14 +159,14 @@ async function accessToken() {
   return fresh.accessToken;
 }
 
-let bearer;
+// Draft and preview access tokens can live only minutes, so every call refreshes when needed.
 async function tool(name, args) {
   const id = ++receipt.calls;
   const body = JSON.stringify({ jsonrpc: "2.0", id, method: "tools/call", params: { name, arguments: args } });
   receipt.requestBytes += Buffer.byteLength(body);
   const response = await fetch(mcpUrl, {
     method: "POST",
-    headers: { "Content-Type": "application/json", Accept: "application/json, text/event-stream", "MCP-Protocol-Version": "2025-11-25", Authorization: `Bearer ${bearer}` },
+    headers: { "Content-Type": "application/json", Accept: "application/json, text/event-stream", "MCP-Protocol-Version": "2025-11-25", Authorization: `Bearer ${await accessToken()}` },
     body,
   });
   const text = await response.text();
@@ -185,7 +186,7 @@ async function tool(name, args) {
   if (!message) throw new Error(`${name}: no JSON-RPC response for request ${id}`);
   if (message.error) throw new Error(`${name}: ${message.error.message}`);
   const result = message.result.structuredContent ?? JSON.parse(message.result.content[0].text);
-  return { ...result, isError: Boolean(message.result.isError) };
+  return { ...result, isError: Boolean(message.result.isError), images: message.result.content.filter(({ type }) => type === "image") };
 }
 
 async function phase(name, run) {
@@ -200,8 +201,14 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const bytes = (text) => Buffer.byteLength(text);
 const maxBatchBytes = 120 * 1024;
 
+async function sites() {
+  const listed = await tool("list_sites", { ...(option("--query") && { query: option("--query") }), limit: 50 });
+  if (listed.isError) throw new Error(`list_sites: ${listed.error} ${listed.message ?? ""}`);
+  for (const site of listed.sites) console.log([site.id, site.name, site.slug, site.status].filter(Boolean).join("  "));
+  console.log(`${listed.sites.length} site(s)${listed.hasMore ? ", more not shown" : ""}.`);
+}
+
 async function sync() {
-  bearer = await accessToken();
   const dryRun = flag("--dry-run");
   const catalog = JSON.parse(await readFile(join(root, "src/data/catalog.json"), "utf8"));
   let siteId = option("--site");
@@ -283,14 +290,30 @@ async function sync() {
         await sleep(5000);
         preview = await tool("preview_site", { siteId, request: { action: "poll", releaseId: preview.releaseId } });
       }
-      console.log(`preview_site: ${preview.status ?? preview.error}${preview.preview?.url ? ` ${preview.preview.url}` : ""}`);
+      console.log(`preview_site: ${[preview.status, preview.error].filter(Boolean).join(" ")}${preview.preview?.url ? ` ${preview.preview.url}` : ""}`);
+      // The platform's own visual QA: 390px and 1440px captures and findings for this release.
+      const captureDir = option("--capture");
+      if (!captureDir || preview.status !== "ready") return;
+      let capture;
+      for (let attempt = 0; attempt < 3; attempt += 1) {
+        capture = await tool("preview_site", { siteId, request: { action: "poll", releaseId: preview.releaseId, capture: true } });
+        if (capture.browser?.status !== "pending") break;
+        await sleep(5000);
+      }
+      await mkdir(captureDir, { recursive: true });
+      for (const [index, image] of capture.images.entries())
+        await writeFile(join(captureDir, `preview-${capture.browser?.widths?.[index] ?? index}.${image.mimeType.split("/")[1]}`), Buffer.from(image.data, "base64"));
+      console.log(`capture: ${JSON.stringify(capture.browser ?? capture.error).slice(0, 1200)}; saved ${capture.images.length} image(s) to ${captureDir}`);
     });
   console.log(JSON.stringify({ siteId, ...receipt }, null, 2));
 }
 
 if (command === "login") await login();
+else if (command === "sites") await sites();
 else if (command === "sync") await sync();
 else {
-  console.log("Usage: node scripts/gallery-sync.mjs login --mcp <url> [--resume | --code-url <redirected url>]\n       node scripts/gallery-sync.mjs sync --mcp <url> [--site <id> | --create <name>] [--preview] [--dry-run]");
+  console.log(
+    "Usage: node scripts/gallery-sync.mjs login --mcp <url> [--resume | --code-url <redirected url>]\n       node scripts/gallery-sync.mjs sites --mcp <url> [--query <name>]\n       node scripts/gallery-sync.mjs sync --mcp <url> [--site <id> | --create <name>] [--preview [--capture <dir>]] [--dry-run]",
+  );
   process.exitCode = 1;
 }
