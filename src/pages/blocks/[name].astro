@@ -1,5 +1,6 @@
 ---
 import Base from "../../layouts/Base.astro";
+import BlockSources from "../../components/gallery/BlockSources.astro";
 import CodeBlock from "../../components/gallery/CodeBlock.astro";
 import Frame from "../../components/gallery/Frame.astro";
 import PropsTable from "../../components/gallery/PropsTable.astro";
@@ -25,11 +26,6 @@ type CatalogItem = {
   install: string;
 };
 
-// The exact installed files, read as text, so the source shown is the source rendered.
-const sources = {
-  ...import.meta.glob<string>("../../components/blocks/*.astro", { query: "?raw", import: "default", eager: true }),
-  ...import.meta.glob<string>("../../components/ui/*.astro", { query: "?raw", import: "default", eager: true }),
-};
 const items = catalog.items as CatalogItem[];
 const blocks = items.filter(({ usage }) => usage);
 const index = blocks.findIndex(({ name }) => name === Astro.params.name);
@@ -43,7 +39,6 @@ const heights: Record<string, number> = { "page-start": 820, section: 760, "page
 const height = heights[item.placement ?? "section"] ?? 760;
 const categoryLabels: Record<string, string> = { header: "Headers", hero: "Heroes", walkthrough: "Walkthroughs", features: "Features", footer: "Footers", primitive: "Primitives" };
 const installs = [...new Set(items.filter(({ name }) => name === item.name || item.dependencies.includes(name)).flatMap(({ files }) => files.map(({ target }) => target)))];
-const files = item.files.map(({ target }) => ({ target, code: sources[`../../${target.replace(/^src\//, "")}`] }));
 const previous = blocks[(index - 1 + blocks.length) % blocks.length];
 const next = blocks[(index + 1) % blocks.length];
 ---
@@ -115,7 +110,7 @@ const next = blocks[(index + 1) % blocks.length];
     <section class="source" aria-labelledby="source-title">
       <h2 id="source-title">Source</h2>
       <p class="note">Exactly the files an install writes. Edit them freely once they are in your project.</p>
-      {files.map(({ target, code }) => code && <CodeBlock code={code} label={target} collapsed />)}
+      <BlockSources targets={item.files.map(({ target }) => target)} />
     </section>
 
     <nav class="pager" aria-label="More blocks">
