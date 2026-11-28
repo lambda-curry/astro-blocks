@@ -74,7 +74,7 @@
       ],
       "docs": "Import from src/components/blocks/HeaderFloating.astro. The narrow-screen menu uses the HTML popover attribute and needs no JavaScript.",
       "meta": {
-        "version": "0.1.0",
+        "version": "0.1.1",
         "tags": [
           "navigation",
           "floating",

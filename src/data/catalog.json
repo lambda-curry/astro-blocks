@@ -86,7 +86,7 @@
       "title": "Floating header",
       "description": "A detached, rounded navigation bar that floats below the top edge with a translucent surface and a native popover menu on narrow screens.",
       "category": "header",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "tags": [
         "navigation",
         "floating",
@@ -105,8 +105,8 @@
       "files": [
         {
           "target": "src/components/blocks/HeaderFloating.astro",
-          "bytes": 6479,
-          "sha256": "8aa10c0ed6ea2c7faf88e5946ad681f0c2db9cc6fca44fa02ebf68b347e55b57"
+          "bytes": 6983,
+          "sha256": "bf29984d14f074e40824c86cd14089a200935de1041a301984017dd5e08d1168"
         }
       ],
       "import": "../components/blocks/HeaderFloating.astro",

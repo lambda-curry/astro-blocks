@@ -31,8 +31,11 @@ Design rules the build cannot check:
 
 - Lay out with container queries, so a block adapts to the column it is placed in.
 - Use no client JavaScript unless the platform cannot do it. The popover attribute, `<details>` and CSS cover menus and disclosure.
-- Give every target at least 44px, keep visible focus, and respect `prefers-reduced-motion` through `--duration`. Use one `h1` per page; heroes expose `headingLevel`.
+- Give every target at least 44px, including brand links, and keep visible focus. A ring inside a clipping card needs a negative offset. Respect `prefers-reduced-motion` through `--duration`. Use one `h1` per page; heroes expose `headingLevel`.
+- Set `overflow-wrap: anywhere` on a block's root, so a pasted URL or email wraps instead of overflowing. `break-word` doesn't shrink flex or grid items.
+- Nest shapes concentrically. A container's radius is its children's radius plus the inset between them, and it stays square when the theme is square, whether written as `0` or `0px`. Never add a constant to a radius token.
 - Props carry content (agents fill them reliably). Slots carry rich media.
+- Before changing a block's defaults, follow [`docs/quality-playbook.md`](docs/quality-playbook.md) and update its row in [`docs/blocks-audit.md`](docs/blocks-audit.md).
 
 ## Commands
 
@@ -42,7 +45,7 @@ npm run dev          # workbench and gallery at http://localhost:4321
 npm run registry     # validate, shadcn build, derive catalog
 npm run check        # generated files current + astro check
 npm run validate     # shadcn registry validate
-npm run shots -- --themes default,ink   # 390px and 1440px screenshots into qa/ (dev server running)
+npm run shots -- --themes default,paper,ink --sheet --interact --stress   # 390/1440 renders, contact sheets, focus/target/menu/overflow checks into qa/ (dev server running)
 ```
 
 Release: set `version` in `package.json`, update every `#v…` dependency ref and changed `meta.version` in `registry.json`, run `npm run registry`, merge, then tag `v<version>`. Site Boulder pins a release with its own reviewed `sync-astro-blocks.mjs --ref v<version>`.
