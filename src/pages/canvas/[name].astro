@@ -1,16 +1,13 @@
 ---
 // Renders one example exactly as a site would. The gallery frames this page at real widths.
 import Canvas from "../../layouts/Canvas.astro";
+import BlockExample from "../../components/gallery/BlockExample.astro";
 import catalog from "../../data/catalog.json";
 
-const examples = import.meta.glob<{ default: (props: Record<string, never>) => unknown }>("../../components/examples/*.astro", { eager: true });
 const name = Astro.params.name ?? "";
 const item = catalog.items.find((entry) => entry.name === name);
-// A stage file renders the usage example in page context (a header above an opening); prefer it for previews.
-const match =
-  Object.entries(examples).find(([path]) => path.endsWith(`/${name}.stage.astro`)) ?? Object.entries(examples).find(([path]) => path.endsWith(`/${name}.astro`));
-if (!item || !match) return new Response("Not found", { status: 404 });
-const Example = match[1].default;
+// Every item with a usage example has a canvas.
+if (!item?.usage) return new Response("Not found", { status: 404 });
 // Sections and inline pieces sit inside a page's content column; headers and footers span the page.
 const shell = item.placement === "section" || item.placement === "inline";
 ---
@@ -19,10 +16,10 @@ const shell = item.placement === "section" || item.placement === "inline";
   {
     shell ? (
       <main class="canvas-shell">
-        <Example />
+        <BlockExample name={name} />
       </main>
     ) : (
-      <Example />
+      <BlockExample name={name} />
     )
   }
 </Canvas>
