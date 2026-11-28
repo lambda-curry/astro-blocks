@@ -303,7 +303,11 @@ async function sync() {
       await mkdir(captureDir, { recursive: true });
       for (const [index, image] of capture.images.entries())
         await writeFile(join(captureDir, `preview-${capture.browser?.widths?.[index] ?? index}.${image.mimeType.split("/")[1]}`), Buffer.from(image.data, "base64"));
-      console.log(`capture: ${JSON.stringify(capture.browser ?? capture.error).slice(0, 1200)}; saved ${capture.images.length} image(s) to ${captureDir}`);
+      await writeFile(join(captureDir, "capture.json"), `${JSON.stringify(capture.browser ?? { error: capture.error }, null, 2)}\n`);
+      const { status, releaseId, pages = [], warnings = [] } = capture.browser ?? {};
+      console.log(`capture: ${status ?? capture.error} ${releaseId ?? ""}; ${pages.map(({ width, httpStatus, title }) => `${width}px ${httpStatus} "${title}"`).join(", ")}`);
+      console.log(`capture warnings (${warnings.length}): ${warnings.map(({ width, message }) => `${width}px ${message}`).join(" | ") || "none"}`);
+      console.log(`saved ${capture.images.length} image(s) and capture.json to ${captureDir}`);
     });
   console.log(JSON.stringify({ siteId, ...receipt }, null, 2));
 }
