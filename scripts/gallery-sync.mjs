@@ -301,6 +301,9 @@ async function sync() {
         await sleep(5000);
       }
       await mkdir(captureDir, { recursive: true });
+      // Clear this script's previous capture, so an earlier release's images never sit beside a new capture.json.
+      for (const name of await readdir(captureDir))
+        if (name === "capture.json" || /^preview-[\w-]+\.(jpeg|jpg|png|webp)$/.test(name)) await rm(join(captureDir, name), { force: true });
       for (const [index, image] of capture.images.entries())
         await writeFile(join(captureDir, `preview-${capture.browser?.widths?.[index] ?? index}.${image.mimeType.split("/")[1]}`), Buffer.from(image.data, "base64"));
       await writeFile(join(captureDir, "capture.json"), `${JSON.stringify(capture.browser ?? { error: capture.error }, null, 2)}\n`);
