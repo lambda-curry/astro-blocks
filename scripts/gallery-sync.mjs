@@ -1,6 +1,6 @@
 // Sync the gallery into a Site Boulder draft through the same MCP tools a customer's AI uses.
 //
-//   node scripts/gallery-sync.mjs login --mcp https://siteboulder.com/api/mcp
+//   node scripts/gallery-sync.mjs login --mcp https://siteboulder.com/api/mcp [--resume | --code-url <redirected url>]
 //   node scripts/gallery-sync.mjs sync --mcp https://siteboulder.com/api/mcp --create "Astro Blocks" [--preview] [--dry-run]
 //   node scripts/gallery-sync.mjs sync --mcp https://siteboulder.com/api/mcp --site <site id> [--preview]
 //
@@ -69,9 +69,12 @@ async function login() {
   const server = await discover();
   const codeUrl = option("--code-url");
   // A browser on another machine can't reach the loopback redirect. Its final URL, pasted
-  // with --code-url, completes the authorization started by the previous login run.
-  const pending = codeUrl ? JSON.parse(await readFile(pendingFile, "utf8").catch(() => "null")) : await startAuthorization(server);
-  if (!pending) throw new Error("No pending authorization. Run login without --code-url first.");
+  // with --code-url, completes the authorization started by the previous login run, and
+  // --resume waits on the loopback again for that same authorization and client.
+  const reuse = codeUrl || flag("--resume");
+  const pending = reuse ? JSON.parse(await readFile(pendingFile, "utf8").catch(() => "null")) : await register(server);
+  if (!pending) throw new Error("No pending authorization. Run login without --code-url or --resume first.");
+  if (!codeUrl) announce(server, pending);
   const callback = codeUrl
     ? new URL(codeUrl)
     : await new Promise((resolve) => {
@@ -99,7 +102,7 @@ async function login() {
   console.log(`Saved access for ${mcpUrl.origin} to ${tokenFile}.`);
 }
 
-async function startAuthorization(server) {
+async function register(server) {
   const redirect = `http://127.0.0.1:${Number(option("--port") ?? 8766)}/callback`;
   const registration = await fetch(server.registration_endpoint, {
     method: "POST",
@@ -117,11 +120,15 @@ async function startAuthorization(server) {
   if (!registration.ok) throw new Error(`Client registration failed: HTTP ${registration.status} ${await registration.text()}`);
   const pending = { clientId: (await registration.json()).client_id, verifier: randomBytes(48).toString("base64url"), state: randomBytes(16).toString("hex"), redirect };
   await saveSecret(pendingFile, pending);
+  return pending;
+}
+
+function announce(server, pending) {
   const authorize = new URL(server.authorization_endpoint);
   for (const [key, value] of Object.entries({
     response_type: "code",
     client_id: pending.clientId,
-    redirect_uri: redirect,
+    redirect_uri: pending.redirect,
     scope,
     state: pending.state,
     resource: server.resource,
@@ -130,8 +137,7 @@ async function startAuthorization(server) {
   }))
     authorize.searchParams.set(key, value);
   console.log(`Open this URL, sign in and approve access:\n\n${authorize}\n`);
-  console.log(`Waiting on ${redirect}. If the browser is on another machine, stop this and run login again with --code-url "<the URL it was redirected to>".`);
-  return pending;
+  console.log(`Waiting on ${pending.redirect}. If the browser is on another machine, stop this and run login --code-url "<the URL it was redirected to>" within 10 minutes of approving.`);
 }
 
 async function tokenRequest(server, form) {
@@ -285,6 +291,6 @@ async function sync() {
 if (command === "login") await login();
 else if (command === "sync") await sync();
 else {
-  console.log("Usage: node scripts/gallery-sync.mjs login|sync --mcp <url> [--site <id> | --create <name>] [--preview] [--dry-run]");
+  console.log("Usage: node scripts/gallery-sync.mjs login --mcp <url> [--resume | --code-url <redirected url>]\n       node scripts/gallery-sync.mjs sync --mcp <url> [--site <id> | --create <name>] [--preview] [--dry-run]");
   process.exitCode = 1;
 }
